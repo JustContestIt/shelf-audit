@@ -1,0 +1,718 @@
+{
+ "exp1": [
+  {
+   "idx": 0,
+   "canon": "Буратино гранат",
+   "brand": "Буратино",
+   "variant": "base",
+   "file": "refs/00__buratino_granat__base.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 1,
+   "canon": "Буратино дыня-мята",
+   "brand": "Буратино",
+   "variant": "base",
+   "file": "refs/01__buratino_dsnx_mxta__base.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 2,
+   "canon": "Буратино классический",
+   "brand": "Буратино",
+   "variant": "base",
+   "file": "refs/02__buratino_klassiceskij__base.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 3,
+   "canon": "Компотай вишневый",
+   "brand": "Компотай",
+   "variant": "base",
+   "file": "refs/03__kompotaj_vihnevsj__base.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 4,
+   "canon": "Компотай вишневый",
+   "brand": "Компотай",
+   "variant": "can",
+   "file": "refs/04__kompotaj_vihnevsj__can.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 5,
+   "canon": "Компотай вишневый",
+   "brand": "Компотай",
+   "variant": "sleever",
+   "file": "refs/05__kompotaj_vihnevsj__sleever.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 6,
+   "canon": "Компотай гранатовый",
+   "brand": "Компотай",
+   "variant": "base",
+   "file": "refs/06__kompotaj_granatovsj__base.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 7,
+   "canon": "Компотай гранатовый",
+   "brand": "Компотай",
+   "variant": "can",
+   "file": "refs/07__kompotaj_granatovsj__can.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 8,
+   "canon": "Компотай гранатовый",
+   "brand": "Компотай",
+   "variant": "sleever",
+   "file": "refs/08__kompotaj_granatovsj__sleever.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 9,
+   "canon": "Компотай классический",
+   "brand": "Компотай",
+   "variant": "base",
+   "file": "refs/09__kompotaj_klassiceskij__base.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 10,
+   "canon": "Компотай классический",
+   "brand": "Компотай",
+   "variant": "can",
+   "file": "refs/10__kompotaj_klassiceskij__can.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 11,
+   "canon": "Компотай классический",
+   "brand": "Компотай",
+   "variant": "sleever",
+   "file": "refs/11__kompotaj_klassiceskij__sleever.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 12,
+   "canon": "Компотай сливовый",
+   "brand": "Компотай",
+   "variant": "base",
+   "file": "refs/12__kompotaj_slivovsj__base.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 13,
+   "canon": "Компотай сливовый",
+   "brand": "Компотай",
+   "variant": "can",
+   "file": "refs/13__kompotaj_slivovsj__can.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 14,
+   "canon": "Компотай сливовый",
+   "brand": "Компотай",
+   "variant": "sleever",
+   "file": "refs/14__kompotaj_slivovsj__sleever.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 15,
+   "canon": "Компотай ягодный",
+   "brand": "Компотай",
+   "variant": "base",
+   "file": "refs/15__kompotaj_xgodnsj__base.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 16,
+   "canon": "Компотай ягодный",
+   "brand": "Компотай",
+   "variant": "can",
+   "file": "refs/16__kompotaj_xgodnsj__can.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 17,
+   "canon": "Компотай ягодный",
+   "brand": "Компотай",
+   "variant": "sleever",
+   "file": "refs/17__kompotaj_xgodnsj__sleever.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 18,
+   "canon": "AI TEA гуава-тропики",
+   "brand": "AI TEA",
+   "variant": "base",
+   "file": "refs/18__ai_tea_guava_tropiki__base.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 19,
+   "canon": "AI TEA гуава-тропики",
+   "brand": "AI TEA",
+   "variant": "kz",
+   "file": "refs/19__ai_tea_guava_tropiki__kz.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 20,
+   "canon": "AI TEA гуава-тропики",
+   "brand": "AI TEA",
+   "variant": "rot",
+   "file": "refs/20__ai_tea_guava_tropiki__rot.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 21,
+   "canon": "AI TEA клубника-киви",
+   "brand": "AI TEA",
+   "variant": "base",
+   "file": "refs/21__ai_tea_klubnika_kivi__base.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 22,
+   "canon": "AI TEA клубника-киви",
+   "brand": "AI TEA",
+   "variant": "kz",
+   "file": "refs/22__ai_tea_klubnika_kivi__kz.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 23,
+   "canon": "AI TEA клубника-киви",
+   "brand": "AI TEA",
+   "variant": "pet05_ru",
+   "file": "refs/23__ai_tea_klubnika_kivi__pet05_ru.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 24,
+   "canon": "AI TEA клубника-киви",
+   "brand": "AI TEA",
+   "variant": "rot",
+   "file": "refs/24__ai_tea_klubnika_kivi__rot.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 25,
+   "canon": "AI TEA лимон-лайм-жасмин",
+   "brand": "AI TEA",
+   "variant": "base",
+   "file": "refs/25__ai_tea_limon_lajm_jasmin__base.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 26,
+   "canon": "AI TEA лимон-лайм-жасмин",
+   "brand": "AI TEA",
+   "variant": "pet05_ru",
+   "file": "refs/26__ai_tea_limon_lajm_jasmin__pet05_ru.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 27,
+   "canon": "AI TEA малина",
+   "brand": "AI TEA",
+   "variant": "base",
+   "file": "refs/27__ai_tea_malina__base.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 28,
+   "canon": "AI TEA малина",
+   "brand": "AI TEA",
+   "variant": "pet05_ru",
+   "file": "refs/28__ai_tea_malina__pet05_ru.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 29,
+   "canon": "AI TEA манго-маракуйя",
+   "brand": "AI TEA",
+   "variant": "base",
+   "file": "refs/29__ai_tea_mango_marakujx__base.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 30,
+   "canon": "AI TEA манго-маракуйя",
+   "brand": "AI TEA",
+   "variant": "pet05_ru",
+   "file": "refs/30__ai_tea_mango_marakujx__pet05_ru.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 31,
+   "canon": "AI TEA мандарин-лаванда",
+   "brand": "AI TEA",
+   "variant": "base",
+   "file": "refs/31__ai_tea_mandarin_lavanda__base.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 32,
+   "canon": "AI TEA персик-жасмин",
+   "brand": "AI TEA",
+   "variant": "base",
+   "file": "refs/32__ai_tea_persik_jasmin__base.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 33,
+   "canon": "AI TEA персик-жасмин",
+   "brand": "AI TEA",
+   "variant": "pet05_ru",
+   "file": "refs/33__ai_tea_persik_jasmin__pet05_ru.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 34,
+   "canon": "AI TEA помело-цветок апельсина",
+   "brand": "AI TEA",
+   "variant": "base",
+   "file": "refs/34__ai_tea_pomelo_cvetok_apelhsina__base.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 35,
+   "canon": "AI TEA помело-цветок апельсина",
+   "brand": "AI TEA",
+   "variant": "kz",
+   "file": "refs/35__ai_tea_pomelo_cvetok_apelhsina__kz.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 36,
+   "canon": "AI TEA помело-цветок апельсина",
+   "brand": "AI TEA",
+   "variant": "pet05_ru",
+   "file": "refs/36__ai_tea_pomelo_cvetok_apelhsina__pet05_ru.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 37,
+   "canon": "AI TEA помело-цветок апельсина",
+   "brand": "AI TEA",
+   "variant": "rot",
+   "file": "refs/37__ai_tea_pomelo_cvetok_apelhsina__rot.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 38,
+   "canon": "AI TEA ревень",
+   "brand": "AI TEA",
+   "variant": "base",
+   "file": "refs/38__ai_tea_revenh__base.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 39,
+   "canon": "AI TEA ревень",
+   "brand": "AI TEA",
+   "variant": "kz",
+   "file": "refs/39__ai_tea_revenh__kz.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 40,
+   "canon": "AI TEA ревень",
+   "brand": "AI TEA",
+   "variant": "rot",
+   "file": "refs/40__ai_tea_revenh__rot.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 41,
+   "canon": "Chino Bellini",
+   "brand": "Chino",
+   "variant": "base",
+   "file": "refs/41__chino_bellini__base.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 42,
+   "canon": "Chino Mimosa",
+   "brand": "Chino",
+   "variant": "base",
+   "file": "refs/42__chino_mimosa__base.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 43,
+   "canon": "Chino Rossini",
+   "brand": "Chino",
+   "variant": "base",
+   "file": "refs/43__chino_rossini__base.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 44,
+   "canon": "Chino Tintoretto",
+   "brand": "Chino",
+   "variant": "base",
+   "file": "refs/44__chino_tintoretto__base.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 45,
+   "canon": "Tamga",
+   "brand": "Tamga",
+   "variant": "base",
+   "file": "refs/45__tamga__base.jpg",
+   "source": "harness_exp1"
+  }
+ ],
+ "current": [
+  {
+   "idx": 0,
+   "canon": "Буратино гранат",
+   "brand": "Буратино",
+   "variant": "base",
+   "file": "refs/00__buratino_granat__base.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 1,
+   "canon": "Буратино дыня-мята",
+   "brand": "Буратино",
+   "variant": "base",
+   "file": "refs/01__buratino_dsnx_mxta__base.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 2,
+   "canon": "Буратино классический",
+   "brand": "Буратино",
+   "variant": "base",
+   "file": "refs/02__buratino_klassiceskij__base.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 3,
+   "canon": "Компотай вишневый",
+   "brand": "Компотай",
+   "variant": "base",
+   "file": "refs/03__kompotaj_vihnevsj__base.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 4,
+   "canon": "Компотай вишневый",
+   "brand": "Компотай",
+   "variant": "can",
+   "file": "refs/04__kompotaj_vihnevsj__can.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 5,
+   "canon": "Компотай вишневый",
+   "brand": "Компотай",
+   "variant": "sleever",
+   "file": "refs/05__kompotaj_vihnevsj__sleever.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 6,
+   "canon": "Компотай гранатовый",
+   "brand": "Компотай",
+   "variant": "base",
+   "file": "refs/06__kompotaj_granatovsj__base.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 7,
+   "canon": "Компотай гранатовый",
+   "brand": "Компотай",
+   "variant": "can",
+   "file": "refs/07__kompotaj_granatovsj__can.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 8,
+   "canon": "Компотай гранатовый",
+   "brand": "Компотай",
+   "variant": "sleever",
+   "file": "refs/08__kompotaj_granatovsj__sleever.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 9,
+   "canon": "Компотай классический",
+   "brand": "Компотай",
+   "variant": "base",
+   "file": "refs/09__kompotaj_klassiceskij__base.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 10,
+   "canon": "Компотай классический",
+   "brand": "Компотай",
+   "variant": "can",
+   "file": "refs/10__kompotaj_klassiceskij__can.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 11,
+   "canon": "Компотай классический",
+   "brand": "Компотай",
+   "variant": "sleever",
+   "file": "refs/11__kompotaj_klassiceskij__sleever.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 12,
+   "canon": "Компотай сливовый",
+   "brand": "Компотай",
+   "variant": "base",
+   "file": "refs/12__kompotaj_slivovsj__base.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 13,
+   "canon": "Компотай сливовый",
+   "brand": "Компотай",
+   "variant": "can",
+   "file": "refs/13__kompotaj_slivovsj__can.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 14,
+   "canon": "Компотай сливовый",
+   "brand": "Компотай",
+   "variant": "sleever",
+   "file": "refs/14__kompotaj_slivovsj__sleever.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 15,
+   "canon": "Компотай ягодный",
+   "brand": "Компотай",
+   "variant": "base",
+   "file": "refs/15__kompotaj_xgodnsj__base.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 16,
+   "canon": "Компотай ягодный",
+   "brand": "Компотай",
+   "variant": "can",
+   "file": "refs/16__kompotaj_xgodnsj__can.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 17,
+   "canon": "Компотай ягодный",
+   "brand": "Компотай",
+   "variant": "sleever",
+   "file": "refs/17__kompotaj_xgodnsj__sleever.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 18,
+   "canon": "AI TEA гуава-тропики",
+   "brand": "AI TEA",
+   "variant": "base",
+   "file": "refs/18__ai_tea_guava_tropiki__base.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 20,
+   "canon": "AI TEA гуава-тропики",
+   "brand": "AI TEA",
+   "variant": "rot",
+   "file": "refs/20__ai_tea_guava_tropiki__rot.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 21,
+   "canon": "AI TEA клубника-киви",
+   "brand": "AI TEA",
+   "variant": "base",
+   "file": "refs_field/aitea_klubnika_kivi__FIELD_can045.png",
+   "source": "H2_field"
+  },
+  {
+   "idx": 23,
+   "canon": "AI TEA клубника-киви",
+   "brand": "AI TEA",
+   "variant": "pet05_ru",
+   "file": "refs/23__ai_tea_klubnika_kivi__pet05_ru.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 24,
+   "canon": "AI TEA клубника-киви",
+   "brand": "AI TEA",
+   "variant": "rot",
+   "file": "refs/24__ai_tea_klubnika_kivi__rot.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 25,
+   "canon": "AI TEA лимон-лайм-жасмин",
+   "brand": "AI TEA",
+   "variant": "base",
+   "file": "refs/25__ai_tea_limon_lajm_jasmin__base.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 26,
+   "canon": "AI TEA лимон-лайм-жасмин",
+   "brand": "AI TEA",
+   "variant": "pet05_ru",
+   "file": "refs/26__ai_tea_limon_lajm_jasmin__pet05_ru.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 27,
+   "canon": "AI TEA малина",
+   "brand": "AI TEA",
+   "variant": "base",
+   "file": "refs/27__ai_tea_malina__base.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 28,
+   "canon": "AI TEA малина",
+   "brand": "AI TEA",
+   "variant": "pet05_ru",
+   "file": "refs/28__ai_tea_malina__pet05_ru.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 29,
+   "canon": "AI TEA манго-маракуйя",
+   "brand": "AI TEA",
+   "variant": "base",
+   "file": "refs/29__ai_tea_mango_marakujx__base.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 30,
+   "canon": "AI TEA манго-маракуйя",
+   "brand": "AI TEA",
+   "variant": "pet05_ru",
+   "file": "refs/30__ai_tea_mango_marakujx__pet05_ru.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 31,
+   "canon": "AI TEA мандарин-лаванда",
+   "brand": "AI TEA",
+   "variant": "base",
+   "file": "refs/31__ai_tea_mandarin_lavanda__base.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 32,
+   "canon": "AI TEA персик-жасмин",
+   "brand": "AI TEA",
+   "variant": "base",
+   "file": "refs_field/aitea_persik_zhasmin__FIELD_can045.png",
+   "source": "H2_field"
+  },
+  {
+   "idx": 33,
+   "canon": "AI TEA персик-жасмин",
+   "brand": "AI TEA",
+   "variant": "pet05_ru",
+   "file": "refs/33__ai_tea_persik_jasmin__pet05_ru.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 34,
+   "canon": "AI TEA помело-цветок апельсина",
+   "brand": "AI TEA",
+   "variant": "base",
+   "file": "refs_field/aitea_pomelo__FIELD_can045.png",
+   "source": "H2_field"
+  },
+  {
+   "idx": 36,
+   "canon": "AI TEA помело-цветок апельсина",
+   "brand": "AI TEA",
+   "variant": "pet05_ru",
+   "file": "refs/36__ai_tea_pomelo_cvetok_apelhsina__pet05_ru.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 37,
+   "canon": "AI TEA помело-цветок апельсина",
+   "brand": "AI TEA",
+   "variant": "rot",
+   "file": "refs/37__ai_tea_pomelo_cvetok_apelhsina__rot.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 38,
+   "canon": "AI TEA ревень",
+   "brand": "AI TEA",
+   "variant": "base",
+   "file": "refs/38__ai_tea_revenh__base.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 40,
+   "canon": "AI TEA ревень",
+   "brand": "AI TEA",
+   "variant": "rot",
+   "file": "refs/40__ai_tea_revenh__rot.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 41,
+   "canon": "Chino Bellini",
+   "brand": "Chino",
+   "variant": "base",
+   "file": "refs/41__chino_bellini__base.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 42,
+   "canon": "Chino Mimosa",
+   "brand": "Chino",
+   "variant": "base",
+   "file": "refs/42__chino_mimosa__base.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 43,
+   "canon": "Chino Rossini",
+   "brand": "Chino",
+   "variant": "base",
+   "file": "refs/43__chino_rossini__base.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 44,
+   "canon": "Chino Tintoretto",
+   "brand": "Chino",
+   "variant": "base",
+   "file": "refs/44__chino_tintoretto__base.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 45,
+   "canon": "Tamga",
+   "brand": "Tamga",
+   "variant": "base",
+   "file": "refs/45__tamga__base.jpg",
+   "source": "harness_exp1"
+  },
+  {
+   "idx": 99,
+   "canon": "AI TEA персик-жасмин",
+   "brand": "AI TEA",
+   "variant": "rot_field",
+   "file": "refs_field/aitea_persik_zhasmin__rot_FIELD_can045_1.png",
+   "source": "H2_field"
+  }
+ ]
+}

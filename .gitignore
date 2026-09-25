@@ -1,0 +1,38 @@
+# --- secrets -----------------------------------------------------------
+.env
+.env.*
+!.env.example
+*_key.txt
+*.pem
+service_account*.json
+
+# --- customer data never goes to git (see data/README.md) ---------------
+data/*
+!data/README.md
+!data/scripts/
+!data/scripts/**
+evals/cache/
+evals/frames_tg/
+evals/.uploads/
+
+# --- python ------------------------------------------------------------
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+build/
+
+# --- node --------------------------------------------------------------
+node_modules/
+dist/
+.vite/
+
+# --- misc --------------------------------------------------------------
+.DS_Store
+Thumbs.db
+*.log
+.idea/
+.vscode/

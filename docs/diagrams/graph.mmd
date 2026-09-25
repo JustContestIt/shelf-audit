@@ -1,0 +1,22 @@
+%% LangGraph pipeline of shelf-audit (hand-annotated copy of graph.generated.mmd,
+%% which is what GET /graph/mermaid returns for the compiled graph).
+flowchart TD
+    S([start: фото + точка]) --> A[validate_input<br/>магия байтов, размер, EXIF,<br/>блюр, pHash-дубли]
+    A --> B{input_guard<br/>это полка?}
+    B -- нет / брак --> R[reject<br/>причина + просьба переснять]
+    R --> E1([end])
+    B -- да --> C[detect<br/>Gemini, проход 1:<br/>boxes + бренд + вкус + тара]
+    C -- ошибка модели --> H
+    C --> D[postprocess<br/>IoU-дедуп, полки, слайверы,<br/>format_geo, группы]
+    D --> Q{есть неуверенные<br/>группы AI TEA?}
+    Q -- да --> F[retrieve_refs<br/>кропы → SigLIP + HSV →<br/>pgvector, top-k эталонов;<br/>проверка «свой / чужой»]
+    F -- PASS2_MODE=check --> H
+    F --> G[verify_subtypes<br/>Gemini, проход 2 по группам<br/>только с найденными эталонами]
+    G --> Q2{остались непроверенные<br/>и попыток < 2?}
+    Q2 -- да --> F
+    Q2 -- нет --> H
+    Q -- нет --> H[build_report<br/>строки по полкам, чужие,<br/>needs_review, стоимость]
+    H --> I{{human_review<br/>interrupt: ждём супервайзера}}
+    I -- переснять, ≤ 1 раз --> A
+    I -- утвердить / правка --> J[persist<br/>Postgres → выгрузка в Sheets]
+    J --> E2([end])

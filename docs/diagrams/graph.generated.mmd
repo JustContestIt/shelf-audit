@@ -1,0 +1,39 @@
+---
+config:
+  flowchart:
+    curve: linear
+---
+graph TD;
+	__start__([<p>__start__</p>]):::first
+	validate_input(validate_input)
+	input_guard(input_guard)
+	reject(reject)
+	detect(detect)
+	postprocess(postprocess)
+	retrieve_refs(retrieve_refs)
+	verify_subtypes(verify_subtypes)
+	build_report(build_report)
+	human_review(human_review)
+	persist(persist)
+	__end__([<p>__end__</p>]):::last
+	__start__ --> validate_input;
+	build_report -.-> human_review;
+	build_report -.-> persist;
+	detect -.-> build_report;
+	detect -.-> postprocess;
+	human_review -.-> persist;
+	human_review -.-> validate_input;
+	input_guard -.-> detect;
+	input_guard -.-> reject;
+	postprocess -.-> build_report;
+	postprocess -.-> retrieve_refs;
+	retrieve_refs -.-> build_report;
+	retrieve_refs -.-> verify_subtypes;
+	validate_input --> input_guard;
+	verify_subtypes -.-> build_report;
+	verify_subtypes -.-> retrieve_refs;
+	persist --> __end__;
+	reject --> __end__;
+	classDef default fill:#f2f0ff,line-height:1.2
+	classDef first fill-opacity:0
+	classDef last fill:#bfb6fc

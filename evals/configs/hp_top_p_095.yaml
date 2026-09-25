@@ -1,0 +1,17 @@
+name: hp_top_p_095
+description: top_p=0.95, one check; if no effect — write it down.
+mode: record
+settings:
+  prompt_detect: detect_v7.5
+  prompt_verify: verify_v9
+  pass2_mode: gate
+  pass2_refs: topk
+  rag_top_k: 3
+  temperature: 0
+  top_p: 0.95
+frames:
+- IMG_0644
+- IMG_0643
+variants:
+- orig
+repeats: 3

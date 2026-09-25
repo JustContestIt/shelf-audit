@@ -1,0 +1,24 @@
+{
+ "name": "rag_parity",
+ "created_at": "2026-09-25T13:47:10+00:00",
+ "mode": "offline",
+ "config": {
+  "backend_a": "pgvector (HNSW)",
+  "backend_b": "memory (.npz)",
+  "siglip": true,
+  "brand": "AI TEA",
+  "exclude_keys": [
+   "aitea_reven"
+  ],
+  "k": 3,
+  "refs": 188
+ },
+ "summary": {
+  "n_queries": 129,
+  "same_top1": 129,
+  "same_top3": 129,
+  "max_score_diff": 1.6e-05
+ },
+ "per_frame": [],
+ "notes": "Queries = the 129 labelled units of rag_sanity.py."
+}

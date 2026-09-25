@@ -1,0 +1,353 @@
+{
+ "frame_id": "COMP-1",
+ "aliases": [],
+ "tier": "draft",
+ "file": null,
+ "size": [
+  1920,
+  2560
+ ],
+ "variants": [
+  "orig"
+ ],
+ "source": "gt_COMP1_draft.md (20.08)",
+ "notes": "Frame file is not in the folder — get it from Telegram / Artyom. ⚠ items of the draft are unconfirmed (white can on shelf 1, second purple can on shelf 2). Order inside shelves 4–5 is by the draft list, not by position.",
+ "shelves": [
+  {
+   "shelf_index": 1,
+   "units": [
+    {
+     "brand": "ЧУЖОЙ",
+     "subtype": null,
+     "format": null
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA помело-цветок апельсина",
+     "format": "банка 0,45 л"
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA помело-цветок апельсина",
+     "format": "банка 0,45 л"
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA манго-маракуйя",
+     "format": "банка 0,45 л"
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA клубника-киви",
+     "format": "банка 0,45 л"
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA клубника-киви",
+     "format": "банка 0,45 л"
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA лимон-лайм-жасмин",
+     "format": "банка 0,45 л"
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA лимон-лайм-жасмин",
+     "format": "банка 0,45 л"
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA малина",
+     "format": "банка 0,45 л"
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA малина",
+     "format": "банка 0,45 л"
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA персик-жасмин",
+     "format": "банка 0,45 л"
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA персик-жасмин",
+     "format": "банка 0,45 л"
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA мандарин-лаванда",
+     "format": "банка 0,45 л"
+    }
+   ],
+   "tags": [
+    "foreign_nearby",
+    "pink_zone"
+   ],
+   "units_gt": 12
+  },
+  {
+   "shelf_index": 2,
+   "units": [
+    {
+     "brand": "ЧУЖОЙ",
+     "subtype": null,
+     "format": null
+    },
+    {
+     "brand": "ЧУЖОЙ",
+     "subtype": null,
+     "format": null
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA помело-цветок апельсина",
+     "format": "банка 0,45 л"
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA помело-цветок апельсина",
+     "format": "банка 0,45 л"
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA манго-маракуйя",
+     "format": "банка 0,45 л"
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA клубника-киви",
+     "format": "банка 0,45 л"
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA лимон-лайм-жасмин",
+     "format": "банка 0,45 л"
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA лимон-лайм-жасмин",
+     "format": "банка 0,45 л"
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA малина",
+     "format": "банка 0,45 л"
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA малина",
+     "format": "банка 0,45 л"
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA персик-жасмин",
+     "format": "банка 0,45 л"
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA персик-жасмин",
+     "format": "банка 0,45 л"
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA мандарин-лаванда",
+     "format": "банка 0,45 л"
+    }
+   ],
+   "tags": [
+    "foreign_nearby",
+    "pink_zone"
+   ],
+   "units_gt": 11
+  },
+  {
+   "shelf_index": 3,
+   "units": [
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA малина",
+     "format": "ПЭТ 0,5 л"
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA малина",
+     "format": "ПЭТ 0,5 л"
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA персик-жасмин",
+     "format": "ПЭТ 0,5 л"
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA персик-жасмин",
+     "format": "ПЭТ 0,5 л"
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA персик-жасмин",
+     "format": "ПЭТ 0,5 л"
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA манго-маракуйя",
+     "format": "ПЭТ 0,5 л"
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA манго-маракуйя",
+     "format": "ПЭТ 0,5 л"
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA манго-маракуйя",
+     "format": "ПЭТ 0,5 л"
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA клубника-киви",
+     "format": "ПЭТ 0,5 л"
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA клубника-киви",
+     "format": "ПЭТ 0,5 л"
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA клубника-киви",
+     "format": "ПЭТ 0,5 л"
+    }
+   ],
+   "tags": [
+    "pink_zone"
+   ],
+   "units_gt": 11
+  },
+  {
+   "shelf_index": 4,
+   "units": [
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA малина",
+     "format": "ПЭТ 1 л"
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA малина",
+     "format": "ПЭТ 1 л"
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA персик-жасмин",
+     "format": "ПЭТ 1 л"
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA лимон-лайм-жасмин",
+     "format": "ПЭТ 1 л"
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA лимон-лайм-жасмин",
+     "format": "ПЭТ 1 л"
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA помело-цветок апельсина",
+     "format": "ПЭТ 1 л"
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA манго-маракуйя",
+     "format": "ПЭТ 1 л"
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA манго-маракуйя",
+     "format": "ПЭТ 1 л"
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA клубника-киви",
+     "format": "ПЭТ 1 л"
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA клубника-киви",
+     "format": "ПЭТ 1 л"
+    }
+   ],
+   "tags": [
+    "draft_order",
+    "pink_zone"
+   ],
+   "units_gt": 10
+  },
+  {
+   "shelf_index": 5,
+   "units": [
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA малина",
+     "format": "ПЭТ 1 л"
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA малина",
+     "format": "ПЭТ 1 л"
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA персик-жасмин",
+     "format": "ПЭТ 1 л"
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA лимон-лайм-жасмин",
+     "format": "ПЭТ 1 л"
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA лимон-лайм-жасмин",
+     "format": "ПЭТ 1 л"
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA помело-цветок апельсина",
+     "format": "ПЭТ 1 л"
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA манго-маракуйя",
+     "format": "ПЭТ 1 л"
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA манго-маракуйя",
+     "format": "ПЭТ 1 л"
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA клубника-киви",
+     "format": "ПЭТ 1 л"
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA клубника-киви",
+     "format": "ПЭТ 1 л"
+    }
+   ],
+   "tags": [
+    "draft_order",
+    "pink_zone"
+   ],
+   "units_gt": 10
+  }
+ ],
+ "units_gt": 54,
+ "foreign_gt": 3
+}

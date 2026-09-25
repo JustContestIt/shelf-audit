@@ -1,0 +1,20 @@
+name: ab3_gemini3flash
+description: 'A/B-3: pass-1 model gemini-3-flash-preview (3x cheaper) vs gemini-3.5-flash (baseline).'
+mode: record
+settings:
+  prompt_detect: detect_v7.5
+  prompt_verify: verify_v9
+  pass2_mode: gate
+  pass2_refs: topk
+  rag_top_k: 3
+  temperature: 0
+  detect_models:
+  - gemini-3-flash-preview
+  verify_models:
+  - gemini-3-flash-preview
+frames:
+- gold
+- silver
+variants:
+- orig
+repeats: 3

@@ -1,0 +1,1888 @@
+{
+ "source": "bench/runs/test_bgcolor_img2/run_01.txt",
+ "frame": "IMG_0643",
+ "exec_id": "1563243",
+ "ts": "2026-09-01T12:34:53.159Z",
+ "label": "AITEA_5SHELF",
+ "pass1": {
+  "_detect": {
+   "boxes_total": 67,
+   "foreign_units": 0,
+   "slivers_dropped": 2,
+   "format_null": 0,
+   "boxes_raw": [
+    {
+     "box_2d": [
+      145,
+      168,
+      248,
+      203
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA персик-жасмин",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      145,
+      199,
+      248,
+      233
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA персик-жасмин",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      145,
+      229,
+      248,
+      263
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA персик-жасмин",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      145,
+      260,
+      248,
+      293
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA малина",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      145,
+      291,
+      248,
+      324
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA малина",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      145,
+      321,
+      248,
+      354
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA малина",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      145,
+      351,
+      248,
+      384
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA малина",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      144,
+      382,
+      248,
+      414
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA лимон-лайм-жасмин",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      144,
+      412,
+      248,
+      444
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA лимон-лайм-жасмин",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      144,
+      442,
+      248,
+      474
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA лимон-лайм-жасмин",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      144,
+      472,
+      248,
+      504
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA лимон-лайм-жасмин",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      144,
+      502,
+      248,
+      534
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA клубника-киви",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      144,
+      532,
+      248,
+      564
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA клубника-киви",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      144,
+      562,
+      248,
+      594
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA клубника-киви",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      143,
+      592,
+      248,
+      624
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA помело-цветок апельсина",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      143,
+      623,
+      248,
+      655
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA помело-цветок апельсина",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      143,
+      654,
+      248,
+      686
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA помело-цветок апельсина",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      143,
+      693,
+      248,
+      721
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA манго-маракуйя",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      143,
+      719,
+      248,
+      749
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA манго-маракуйя",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      143,
+      747,
+      248,
+      779
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA манго-маракуйя",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      350,
+      189,
+      504,
+      231
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA манго-маракуйя",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      350,
+      238,
+      504,
+      277
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA манго-маракуйя",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      350,
+      271,
+      504,
+      308
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA клубника-киви",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      350,
+      305,
+      504,
+      342
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA клубника-киви",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      350,
+      339,
+      504,
+      375
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA лимон-лайм-жасмин",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      350,
+      372,
+      504,
+      405
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA лимон-лайм-жасмин",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      350,
+      398,
+      504,
+      434
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA персик-жасмин",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      350,
+      431,
+      504,
+      469
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA персик-жасмин",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      350,
+      471,
+      504,
+      503
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA малина",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      350,
+      502,
+      504,
+      533
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA малина",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      350,
+      531,
+      504,
+      567
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA помело-цветок апельсина",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      350,
+      565,
+      504,
+      601
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA помело-цветок апельсина",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      338,
+      599,
+      504,
+      635
+     ],
+     "label": "Компотай",
+     "subtype": "Компотай ягодный",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      338,
+      632,
+      504,
+      671
+     ],
+     "label": "Компотай",
+     "subtype": "Компотай ягодный",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      338,
+      669,
+      504,
+      708
+     ],
+     "label": "Компотай",
+     "subtype": "Компотай ягодный",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      338,
+      706,
+      504,
+      745
+     ],
+     "label": "Компотай",
+     "subtype": "Компотай гранатовый",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      338,
+      742,
+      504,
+      781
+     ],
+     "label": "Компотай",
+     "subtype": "Компотай гранатовый",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      555,
+      214,
+      738,
+      258
+     ],
+     "label": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 1,5 л",
+     "shelf_index": 3,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      555,
+      253,
+      738,
+      287
+     ],
+     "label": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 1,5 л",
+     "shelf_index": 3,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      555,
+      277,
+      748,
+      321
+     ],
+     "label": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 1,5 л",
+     "shelf_index": 3,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      555,
+      317,
+      748,
+      359
+     ],
+     "label": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 1,5 л",
+     "shelf_index": 3,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      555,
+      357,
+      748,
+      397
+     ],
+     "label": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 1,5 л",
+     "shelf_index": 3,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      555,
+      394,
+      748,
+      434
+     ],
+     "label": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 1,5 л",
+     "shelf_index": 3,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      555,
+      432,
+      748,
+      472
+     ],
+     "label": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 1,5 л",
+     "shelf_index": 3,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      555,
+      470,
+      748,
+      510
+     ],
+     "label": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 1,5 л",
+     "shelf_index": 3,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      555,
+      508,
+      748,
+      548
+     ],
+     "label": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 1,5 л",
+     "shelf_index": 3,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      555,
+      546,
+      748,
+      586
+     ],
+     "label": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 1,5 л",
+     "shelf_index": 3,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      555,
+      584,
+      748,
+      624
+     ],
+     "label": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 1,5 л",
+     "shelf_index": 3,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      555,
+      622,
+      748,
+      663
+     ],
+     "label": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 1,5 л",
+     "shelf_index": 3,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      555,
+      661,
+      748,
+      701
+     ],
+     "label": "Компотай",
+     "subtype": "Компотай вишневый",
+     "format": "ПЭТ 1,5 л",
+     "shelf_index": 3,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      555,
+      696,
+      738,
+      729
+     ],
+     "label": "Компотай",
+     "subtype": "Компотай вишневый",
+     "format": "ПЭТ 1,5 л",
+     "shelf_index": 3,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      555,
+      723,
+      748,
+      766
+     ],
+     "label": "Компотай",
+     "subtype": "Компотай вишневый",
+     "format": "ПЭТ 1,5 л",
+     "shelf_index": 3,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      795,
+      211,
+      970,
+      261
+     ],
+     "label": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 2 л",
+     "shelf_index": 4,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      795,
+      255,
+      970,
+      301
+     ],
+     "label": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 2 л",
+     "shelf_index": 4,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      795,
+      297,
+      970,
+      342
+     ],
+     "label": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 2 л",
+     "shelf_index": 4,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      795,
+      339,
+      970,
+      383
+     ],
+     "label": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 2 л",
+     "shelf_index": 4,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      795,
+      380,
+      970,
+      424
+     ],
+     "label": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 2 л",
+     "shelf_index": 4,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      795,
+      421,
+      970,
+      465
+     ],
+     "label": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 2 л",
+     "shelf_index": 4,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      795,
+      462,
+      970,
+      506
+     ],
+     "label": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 2 л",
+     "shelf_index": 4,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      795,
+      503,
+      970,
+      547
+     ],
+     "label": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 2 л",
+     "shelf_index": 4,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      795,
+      544,
+      970,
+      588
+     ],
+     "label": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 2 л",
+     "shelf_index": 4,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      795,
+      593,
+      970,
+      639
+     ],
+     "label": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 2 л",
+     "shelf_index": 4,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      795,
+      637,
+      970,
+      678
+     ],
+     "label": "Компотай",
+     "subtype": "Компотай вишневый",
+     "format": "ПЭТ 1,5 л",
+     "shelf_index": 4,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      795,
+      676,
+      970,
+      718
+     ],
+     "label": "Компотай",
+     "subtype": "Компотай вишневый",
+     "format": "ПЭТ 1,5 л",
+     "shelf_index": 4,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      795,
+      716,
+      970,
+      758
+     ],
+     "label": "Компотай",
+     "subtype": "Компотай вишневый",
+     "format": "ПЭТ 1,5 л",
+     "shelf_index": 4,
+     "confidence": 0.98
+    }
+   ],
+   "format_geo": {
+    "anchor": {
+     "ok": true,
+     "w_rel": 0.0524,
+     "cans": 20
+    }
+   }
+  },
+  "_usage": {
+   "prompt_tokens": 54786,
+   "cached_tokens": null,
+   "output_tokens": 6201
+  },
+  "_pass2": null
+ },
+ "pass2": {
+  "_detect": {
+   "boxes_total": 67,
+   "foreign_units": 0,
+   "slivers_dropped": 2,
+   "format_null": 0,
+   "boxes_raw": [
+    {
+     "box_2d": [
+      145,
+      168,
+      248,
+      203
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA персик-жасмин",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      145,
+      199,
+      248,
+      233
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA персик-жасмин",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      145,
+      229,
+      248,
+      263
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA персик-жасмин",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      145,
+      260,
+      248,
+      293
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA малина",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      145,
+      291,
+      248,
+      324
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA малина",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      145,
+      321,
+      248,
+      354
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA малина",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      145,
+      351,
+      248,
+      384
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA малина",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      144,
+      382,
+      248,
+      414
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA лимон-лайм-жасмин",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      144,
+      412,
+      248,
+      444
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA лимон-лайм-жасмин",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      144,
+      442,
+      248,
+      474
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA лимон-лайм-жасмин",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      144,
+      472,
+      248,
+      504
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA лимон-лайм-жасмин",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      144,
+      502,
+      248,
+      534
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA клубника-киви",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      144,
+      532,
+      248,
+      564
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA клубника-киви",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      144,
+      562,
+      248,
+      594
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA клубника-киви",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      143,
+      592,
+      248,
+      624
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA помело-цветок апельсина",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      143,
+      623,
+      248,
+      655
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA помело-цветок апельсина",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      143,
+      654,
+      248,
+      686
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA помело-цветок апельсина",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      143,
+      693,
+      248,
+      721
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA манго-маракуйя",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      143,
+      719,
+      248,
+      749
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA манго-маракуйя",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      143,
+      747,
+      248,
+      779
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA манго-маракуйя",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      350,
+      189,
+      504,
+      231
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA манго-маракуйя",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      350,
+      238,
+      504,
+      277
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA манго-маракуйя",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      350,
+      271,
+      504,
+      308
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA клубника-киви",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      350,
+      305,
+      504,
+      342
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA клубника-киви",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      350,
+      339,
+      504,
+      375
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA лимон-лайм-жасмин",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      350,
+      372,
+      504,
+      405
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA лимон-лайм-жасмин",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      350,
+      398,
+      504,
+      434
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA персик-жасмин",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      350,
+      431,
+      504,
+      469
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA персик-жасмин",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      350,
+      471,
+      504,
+      503
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA малина",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      350,
+      502,
+      504,
+      533
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA малина",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      350,
+      531,
+      504,
+      567
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA помело-цветок апельсина",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      350,
+      565,
+      504,
+      601
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA помело-цветок апельсина",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      338,
+      599,
+      504,
+      635
+     ],
+     "label": "Компотай",
+     "subtype": "Компотай ягодный",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      338,
+      632,
+      504,
+      671
+     ],
+     "label": "Компотай",
+     "subtype": "Компотай ягодный",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      338,
+      669,
+      504,
+      708
+     ],
+     "label": "Компотай",
+     "subtype": "Компотай ягодный",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      338,
+      706,
+      504,
+      745
+     ],
+     "label": "Компотай",
+     "subtype": "Компотай гранатовый",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      338,
+      742,
+      504,
+      781
+     ],
+     "label": "Компотай",
+     "subtype": "Компотай гранатовый",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      555,
+      214,
+      738,
+      258
+     ],
+     "label": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 1,5 л",
+     "shelf_index": 3,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      555,
+      253,
+      738,
+      287
+     ],
+     "label": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 1,5 л",
+     "shelf_index": 3,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      555,
+      277,
+      748,
+      321
+     ],
+     "label": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 1,5 л",
+     "shelf_index": 3,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      555,
+      317,
+      748,
+      359
+     ],
+     "label": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 1,5 л",
+     "shelf_index": 3,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      555,
+      357,
+      748,
+      397
+     ],
+     "label": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 1,5 л",
+     "shelf_index": 3,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      555,
+      394,
+      748,
+      434
+     ],
+     "label": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 1,5 л",
+     "shelf_index": 3,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      555,
+      432,
+      748,
+      472
+     ],
+     "label": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 1,5 л",
+     "shelf_index": 3,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      555,
+      470,
+      748,
+      510
+     ],
+     "label": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 1,5 л",
+     "shelf_index": 3,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      555,
+      508,
+      748,
+      548
+     ],
+     "label": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 1,5 л",
+     "shelf_index": 3,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      555,
+      546,
+      748,
+      586
+     ],
+     "label": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 1,5 л",
+     "shelf_index": 3,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      555,
+      584,
+      748,
+      624
+     ],
+     "label": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 1,5 л",
+     "shelf_index": 3,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      555,
+      622,
+      748,
+      663
+     ],
+     "label": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 1,5 л",
+     "shelf_index": 3,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      555,
+      661,
+      748,
+      701
+     ],
+     "label": "Компотай",
+     "subtype": "Компотай вишневый",
+     "format": "ПЭТ 1,5 л",
+     "shelf_index": 3,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      555,
+      696,
+      738,
+      729
+     ],
+     "label": "Компотай",
+     "subtype": "Компотай вишневый",
+     "format": "ПЭТ 1,5 л",
+     "shelf_index": 3,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      555,
+      723,
+      748,
+      766
+     ],
+     "label": "Компотай",
+     "subtype": "Компотай вишневый",
+     "format": "ПЭТ 1,5 л",
+     "shelf_index": 3,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      795,
+      211,
+      970,
+      261
+     ],
+     "label": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 2 л",
+     "shelf_index": 4,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      795,
+      255,
+      970,
+      301
+     ],
+     "label": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 2 л",
+     "shelf_index": 4,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      795,
+      297,
+      970,
+      342
+     ],
+     "label": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 2 л",
+     "shelf_index": 4,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      795,
+      339,
+      970,
+      383
+     ],
+     "label": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 2 л",
+     "shelf_index": 4,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      795,
+      380,
+      970,
+      424
+     ],
+     "label": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 2 л",
+     "shelf_index": 4,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      795,
+      421,
+      970,
+      465
+     ],
+     "label": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 2 л",
+     "shelf_index": 4,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      795,
+      462,
+      970,
+      506
+     ],
+     "label": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 2 л",
+     "shelf_index": 4,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      795,
+      503,
+      970,
+      547
+     ],
+     "label": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 2 л",
+     "shelf_index": 4,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      795,
+      544,
+      970,
+      588
+     ],
+     "label": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 2 л",
+     "shelf_index": 4,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      795,
+      593,
+      970,
+      639
+     ],
+     "label": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 2 л",
+     "shelf_index": 4,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      795,
+      637,
+      970,
+      678
+     ],
+     "label": "Компотай",
+     "subtype": "Компотай вишневый",
+     "format": "ПЭТ 1,5 л",
+     "shelf_index": 4,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      795,
+      676,
+      970,
+      718
+     ],
+     "label": "Компотай",
+     "subtype": "Компотай вишневый",
+     "format": "ПЭТ 1,5 л",
+     "shelf_index": 4,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      795,
+      716,
+      970,
+      758
+     ],
+     "label": "Компотай",
+     "subtype": "Компотай вишневый",
+     "format": "ПЭТ 1,5 л",
+     "shelf_index": 4,
+     "confidence": 0.98
+    }
+   ],
+   "format_geo": {
+    "anchor": {
+     "ok": true,
+     "w_rel": 0.0524,
+     "cans": 20
+    }
+   }
+  },
+  "_usage": {
+   "prompt_tokens": 54786,
+   "cached_tokens": null,
+   "output_tokens": 6201
+  },
+  "_pass2": {
+   "version": "v9-groups",
+   "shelves_applied": 4,
+   "shelves_total": 4,
+   "subtypes_changed": 0,
+   "needs_review": 1,
+   "detail": [
+    {
+     "shelf": 1,
+     "applied": true,
+     "groups": [
+      {
+       "gi": 1,
+       "applied": true,
+       "changed": 0,
+       "name": "AI TEA персик-жасмин"
+      },
+      {
+       "gi": 2,
+       "applied": true,
+       "changed": 0,
+       "name": "AI TEA малина"
+      },
+      {
+       "gi": 3,
+       "applied": true,
+       "changed": 0,
+       "name": "AI TEA лимон-лайм-жасмин"
+      },
+      {
+       "gi": 4,
+       "applied": true,
+       "changed": 0,
+       "name": "AI TEA клубника-киви"
+      },
+      {
+       "gi": 5,
+       "applied": true,
+       "changed": 0,
+       "name": "AI TEA помело-цветок апельсина"
+      },
+      {
+       "gi": 6,
+       "applied": true,
+       "changed": 0,
+       "name": "AI TEA манго-маракуйя"
+      }
+     ]
+    },
+    {
+     "shelf": 2,
+     "applied": true,
+     "groups": [
+      {
+       "gi": 1,
+       "applied": true,
+       "changed": 0,
+       "name": "AI TEA манго-маракуйя"
+      },
+      {
+       "gi": 2,
+       "applied": true,
+       "changed": 0,
+       "name": "AI TEA клубника-киви"
+      },
+      {
+       "gi": 3,
+       "applied": true,
+       "changed": 0,
+       "name": "AI TEA лимон-лайм-жасмин"
+      },
+      {
+       "gi": 4,
+       "applied": true,
+       "changed": 0,
+       "name": "AI TEA персик-жасмин"
+      },
+      {
+       "gi": 5,
+       "applied": true,
+       "changed": 0,
+       "name": "AI TEA малина"
+      },
+      {
+       "gi": 6,
+       "applied": true,
+       "changed": 0,
+       "name": "AI TEA помело-цветок апельсина"
+      },
+      {
+       "gi": 7,
+       "applied": false,
+       "reason": "pass2 не уверен — оставлен Flash",
+       "needs_review": true
+      },
+      {
+       "gi": 8,
+       "applied": true,
+       "changed": 0,
+       "name": "Компотай гранатовый"
+      }
+     ]
+    },
+    {
+     "shelf": 3,
+     "applied": true,
+     "groups": [
+      {
+       "gi": 1,
+       "applied": true,
+       "changed": 0,
+       "name": "Буратино классический"
+      },
+      {
+       "gi": 2,
+       "applied": true,
+       "changed": 0,
+       "name": "Компотай вишневый"
+      }
+     ]
+    },
+    {
+     "shelf": 4,
+     "applied": true,
+     "groups": [
+      {
+       "gi": 1,
+       "applied": true,
+       "changed": 0,
+       "name": "Буратино классический"
+      },
+      {
+       "gi": 2,
+       "applied": true,
+       "changed": 0,
+       "name": "Компотай вишневый"
+      }
+     ]
+    }
+   ],
+   "usage": {
+    "prompt_tokens": 54140,
+    "cached_tokens": null,
+    "output_tokens": 666
+   }
+  }
+ }
+}

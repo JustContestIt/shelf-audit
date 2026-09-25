@@ -1,0 +1,108 @@
+[
+ {
+  "frame_id": "IMG_0644",
+  "tier": "gold",
+  "shelves": 5,
+  "units_gt": 53,
+  "foreign_gt": 5,
+  "has_file": true,
+  "variants": [
+   "orig",
+   "tg1280"
+  ]
+ },
+ {
+  "frame_id": "IMG_0643",
+  "tier": "gold",
+  "shelves": 4,
+  "units_gt": 66,
+  "foreign_gt": 0,
+  "has_file": true,
+  "variants": [
+   "orig",
+   "tg1280"
+  ]
+ },
+ {
+  "frame_id": "COMP-1",
+  "tier": "draft",
+  "shelves": 5,
+  "units_gt": 54,
+  "foreign_gt": 3,
+  "has_file": false,
+  "variants": [
+   "orig"
+  ]
+ },
+ {
+  "frame_id": "IMG_0645",
+  "tier": "silver",
+  "shelves": 4,
+  "units_gt": 40,
+  "foreign_gt": 0,
+  "has_file": true,
+  "variants": [
+   "orig",
+   "tg1280"
+  ]
+ },
+ {
+  "frame_id": "IMG_0614",
+  "tier": "silver",
+  "shelves": 2,
+  "units_gt": 12,
+  "foreign_gt": 18,
+  "has_file": true,
+  "variants": [
+   "orig"
+  ]
+ },
+ {
+  "frame_id": "IMG_0646",
+  "tier": "silver",
+  "shelves": 4,
+  "units_gt": 21,
+  "foreign_gt": 0,
+  "has_file": true,
+  "variants": [
+   "orig",
+   "tg1280"
+  ]
+ },
+ {
+  "frame_id": "IMG_0648",
+  "tier": "silver",
+  "shelves": 2,
+  "units_gt": 12,
+  "foreign_gt": 6,
+  "has_file": true,
+  "variants": [
+   "orig",
+   "tg1280"
+  ]
+ },
+ {
+  "frame_id": "IMG_0649",
+  "tier": "silver",
+  "shelves": 3,
+  "units_gt": 15,
+  "foreign_gt": 2,
+  "has_file": true,
+  "variants": [
+   "orig",
+   "tg1280"
+  ]
+ },
+ {
+  "frame_id": "IMG_0650",
+  "tier": "silver",
+  "shelves": 2,
+  "units_gt": 21,
+  "foreign_gt": 2,
+  "has_file": true,
+  "variants": [
+   "orig",
+   "tg1280"
+  ]
+ }
+]

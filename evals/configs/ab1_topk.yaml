@@ -1,0 +1,17 @@
+name: ab1_topk
+description: 'A/B-1 arm A: pass 2 with RAG top-3 refs per uncertain group.'
+mode: record
+settings:
+  prompt_detect: detect_v7.5
+  prompt_verify: verify_v9
+  pass2_mode: gate
+  pass2_refs: topk
+  rag_top_k: 3
+  temperature: 0
+frames:
+- gold
+- silver
+variants:
+- orig
+- tg1280
+repeats: 3

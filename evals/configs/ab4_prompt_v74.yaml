@@ -1,0 +1,18 @@
+name: ab4_prompt_v74
+description: 'A/B-4 prompts: detect_v7.4 + verify_v9_groups (before the bgcolor edit) vs detect_v7.5 + verify_v9. Arm B is
+  hp_temperature_0 (same frames x 5 repeats, same salts r0..r4, v7.5).'
+mode: record
+settings:
+  prompt_detect: detect_v7.4
+  prompt_verify: verify_v9_groups
+  pass2_mode: gate
+  pass2_refs: topk
+  rag_top_k: 3
+  temperature: 0.0
+frames:
+- IMG_0644
+- IMG_0643
+- IMG_0645
+variants:
+- orig
+repeats: 5

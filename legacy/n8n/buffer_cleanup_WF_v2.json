@@ -1,0 +1,415 @@
+{
+ "name": "Vision Assistance - Буфер: чистка (Data Tables) v2",
+ "nodes": [
+  {
+   "parameters": {
+    "jsCode": "// tzdata в n8n нет — считаем в UTC. Пороги уходят в фильтр по системной колонке createdAt\n// (тип date): нода сама превращает ISO-строку в Date, сравнение хронологическое.\nconst STUCK_MIN = 10;   // processing дольше этого = прогон умер (рестарт n8n, #20)\nconst KEEP_DAYS = 7;    // глубина хранения буфера (лимит Data Tables 50 МБ, #5.3)\nreturn [{ json: {\n  stuck_before: new Date(Date.now() - STUCK_MIN * 60 * 1000).toISOString(),\n  purge_before: new Date(Date.now() - KEEP_DAYS * 24 * 3600 * 1000).toISOString(),\n  now_iso: new Date().toISOString(),\n} }];"
+   },
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    240,
+    416
+   ],
+   "id": "6be4e33d-b358-4ad5-aefb-b084c32db890",
+   "name": "Пороги"
+  },
+  {
+   "parameters": {
+    "operation": "get",
+    "dataTableId": {
+     "__rl": true,
+     "value": "photo_buffer",
+     "mode": "name"
+    },
+    "matchType": "allConditions",
+    "filters": {
+     "conditions": [
+      {
+       "keyName": "status",
+       "condition": "eq",
+       "keyValue": "processing"
+      },
+      {
+       "keyName": "createdAt",
+       "condition": "lt",
+       "keyValue": "={{ $json.stuck_before }}"
+      }
+     ]
+    },
+    "returnAll": true
+   },
+   "type": "n8n-nodes-base.dataTable",
+   "typeVersion": 1,
+   "position": [
+    448,
+    256
+   ],
+   "id": "42fe43d3-165d-42ea-811c-263d2b96ef07",
+   "name": "Зависшие processing",
+   "notesInFlow": false,
+   "notes": "#20: прогон умер на рестарте n8n, строка осталась в processing.\nФильтр по системной колонке createdAt (date) — своей created_at в таблице нет."
+  },
+  {
+   "parameters": {
+    "jsCode": "// в photo_buffer нет своей processed_at — время правки хранит системная updatedAt\nreturn $input.all().map(i => i.json).filter(r => r && r.row_key)\n  .map(r => ({ json: { row_key: String(r.row_key) } }));"
+   },
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    672,
+    256
+   ],
+   "id": "f3db8db4-3c9a-4d26-b9ad-902062b84001",
+   "name": "Пометить протухшие"
+  },
+  {
+   "parameters": {
+    "operation": "update",
+    "dataTableId": {
+     "__rl": true,
+     "value": "photo_buffer",
+     "mode": "name"
+    },
+    "matchType": "allConditions",
+    "filters": {
+     "conditions": [
+      {
+       "keyName": "row_key",
+       "condition": "eq",
+       "keyValue": "={{ $json.row_key }}"
+      }
+     ]
+    },
+    "columns": {
+     "mappingMode": "defineBelow",
+     "value": {
+      "status": "error",
+      "claimed_by": "-"
+     },
+     "matchingColumns": [],
+     "schema": [
+      {
+       "id": "row_key",
+       "displayName": "row_key",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "canBeUsedToMatch": true,
+       "removed": true
+      },
+      {
+       "id": "agent_id",
+       "displayName": "agent_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "canBeUsedToMatch": true,
+       "removed": true
+      },
+      {
+       "id": "chat_id",
+       "displayName": "chat_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "canBeUsedToMatch": true,
+       "removed": true
+      },
+      {
+       "id": "message_id",
+       "displayName": "message_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "number",
+       "readOnly": false,
+       "canBeUsedToMatch": true,
+       "removed": true
+      },
+      {
+       "id": "media_group_id",
+       "displayName": "media_group_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "canBeUsedToMatch": true,
+       "removed": true
+      },
+      {
+       "id": "file_id",
+       "displayName": "file_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "canBeUsedToMatch": true,
+       "removed": true
+      },
+      {
+       "id": "status",
+       "displayName": "status",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "canBeUsedToMatch": true,
+       "removed": false
+      },
+      {
+       "id": "claimed_by",
+       "displayName": "claimed_by",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "canBeUsedToMatch": true,
+       "removed": false
+      },
+      {
+       "id": "report_id",
+       "displayName": "report_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "canBeUsedToMatch": true,
+       "removed": true
+      }
+     ],
+     "attemptToConvertTypes": false,
+     "convertFieldsToString": true
+    },
+    "options": {}
+   },
+   "type": "n8n-nodes-base.dataTable",
+   "typeVersion": 1,
+   "position": [
+    896,
+    256
+   ],
+   "id": "a811f25c-d3af-4dce-a686-3f15223a7bbf",
+   "name": "Буфер: протухло → error"
+  },
+  {
+   "parameters": {
+    "jsCode": "// одно сообщение на чат, а не на каждое потерянное фото\nconst rows = $input.all().map(i => i.json).filter(r => r && r.row_key);\nif (!rows.length) return [];\n\nconst byChat = {};\nfor (const r of rows) {\n  const c = String(r.chat_id || '');\n  if (!c) continue;\n  (byChat[c] = byChat[c] || []).push(r);\n}\n\nreturn Object.keys(byChat).map(chat_id => ({ json: {\n  chat_id: Number(chat_id),\n  count: byChat[chat_id].length,\n  text: '⚠️ ' + byChat[chat_id].length + ' фото не удалось обработать (обработка прервалась). '\n        + 'Пришлите их, пожалуйста, ещё раз.',\n} }));"
+   },
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    672,
+    432
+   ],
+   "id": "6bf9fda2-4f5f-4895-aa67-2cbe5f801de2",
+   "name": "Кому написать"
+  },
+  {
+   "parameters": {
+    "chatId": "={{ $json.chat_id }}",
+    "text": "={{ $json.text }}",
+    "additionalFields": {
+     "appendAttribution": false
+    }
+   },
+   "type": "n8n-nodes-base.telegram",
+   "typeVersion": 1.2,
+   "position": [
+    896,
+    432
+   ],
+   "id": "ac72d673-2689-43ce-acb5-ebb5e1f28219",
+   "name": "Сообщить агенту",
+   "webhookId": "<WEBHOOK_ID>",
+   "credentials": {
+    "telegramApi": {
+     "id": "<CRED_ID>",
+     "name": "<telegramApi>"
+    }
+   },
+   "onError": "continueRegularOutput"
+  },
+  {
+   "parameters": {
+    "operation": "deleteRows",
+    "dataTableId": {
+     "__rl": true,
+     "value": "photo_buffer",
+     "mode": "name"
+    },
+    "matchType": "allConditions",
+    "filters": {
+     "conditions": [
+      {
+       "keyName": "createdAt",
+       "condition": "lt",
+       "keyValue": "={{ $json.purge_before }}"
+      }
+     ]
+    },
+    "options": {}
+   },
+   "type": "n8n-nodes-base.dataTable",
+   "typeVersion": 1,
+   "position": [
+    448,
+    624
+   ],
+   "id": "d62223e7-5934-4a99-b29c-cb4717f1645d",
+   "name": "Чистка: старше 7 дней",
+   "alwaysOutputData": true,
+   "notesInFlow": false,
+   "notes": "Лимит Data Tables — 50 МБ на инстанс. Чистим по системной createdAt, независимо от статуса."
+  },
+  {
+   "parameters": {
+    "jsCode": "const stale = (() => { try { return $('Зависшие processing').all().filter(i => i.json && i.json.row_key).length; } catch (e) { return 0; } })();\nconst purged = $input.all().filter(i => i.json && i.json.row_key).length;\nreturn [{ json: { stale_to_error: stale, purged_rows: purged, at: $('Пороги').first().json.now_iso } }];"
+   },
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    672,
+    624
+   ],
+   "id": "213cff43-3221-4c07-b853-98bd7b81eb3b",
+   "name": "Итог чистки"
+  },
+  {
+   "parameters": {
+    "content": "## Чистка photo_buffer\n\n**Раз в 6 часов:**\n- `processing` старше 10 мин → `error` + агенту одно сообщение (#20)\n- любые строки старше 7 дней → удаление (лимит 50 МБ)\n\n**Возраст строки берём из СИСТЕМНОЙ колонки `createdAt`** (тип date).\nСвоих `created_at` / `processed_at` в photo_buffer нет — они пропали при\nпереезде на Sheets-cold (24.08), Main WF v9.2 их не пишет.\nЕсли когда-нибудь заведёте свою `created_at` — не забыть про эти два фильтра.",
+    "height": 300,
+    "width": 548,
+    "color": 3
+   },
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    -64,
+    -48
+   ],
+   "id": "f107a6e7-8321-407d-a358-0aa8fef83103",
+   "name": "Sticky"
+  },
+  {
+   "parameters": {
+    "rule": {
+     "interval": [
+      {
+       "field": "hours",
+       "hoursInterval": 6
+      }
+     ]
+    }
+   },
+   "type": "n8n-nodes-base.scheduleTrigger",
+   "typeVersion": 1.2,
+   "position": [
+    16,
+    416
+   ],
+   "id": "64d7af8e-bbb2-4312-94ef-58759a0abd05",
+   "name": "Каждые 6 часов"
+  }
+ ],
+ "connections": {
+  "Пороги": {
+   "main": [
+    [
+     {
+      "node": "Зависшие processing",
+      "type": "main",
+      "index": 0
+     },
+     {
+      "node": "Чистка: старше 7 дней",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Зависшие processing": {
+   "main": [
+    [
+     {
+      "node": "Пометить протухшие",
+      "type": "main",
+      "index": 0
+     },
+     {
+      "node": "Кому написать",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Пометить протухшие": {
+   "main": [
+    [
+     {
+      "node": "Буфер: протухло → error",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Кому написать": {
+   "main": [
+    [
+     {
+      "node": "Сообщить агенту",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Чистка: старше 7 дней": {
+   "main": [
+    [
+     {
+      "node": "Итог чистки",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Каждые 6 часов": {
+   "main": [
+    [
+     {
+      "node": "Пороги",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "active": true,
+ "settings": {
+  "executionOrder": "v1",
+  "binaryMode": "separate",
+  "availableInMCP": true,
+  "timeSavedMode": "fixed",
+  "timezone": "Asia/Almaty",
+  "callerPolicy": "workflowsFromSameOwner"
+ },
+ "nodeGroups": [],
+ "tags": []
+}

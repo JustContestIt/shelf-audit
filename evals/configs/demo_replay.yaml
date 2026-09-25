@@ -1,0 +1,17 @@
+name: demo_replay
+description: 'Demo without a key: the API in LLM_MODE=replay answers IMG_0644 / IMG_0643 with one recorded n8n answer
+  each (salt ''''). Settings = production defaults except pass-2 images = all refs, so the recorded pass-2 answer
+  stays valid.'
+mode: replay
+settings:
+  prompt_detect: detect_v7.5
+  prompt_verify: verify_v9
+  pass2_mode: gate
+  pass2_refs: all
+  temperature: 0
+  media_resolution: MEDIA_RESOLUTION_ULTRA_HIGH
+replay_salts:
+  IMG_0644:
+  - bench_test_bgcolor_img1_run_03
+  IMG_0643:
+  - bench_test_bgcolor_img2_run_01

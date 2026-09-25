@@ -1,0 +1,336 @@
+{
+ "name": "n8n_v74_replay_check",
+ "description": "A/B-2 arm «pass 1 + check»: the same recorded pass-1 answers, no LLM pass 2; uncertain groups still go through retrieve_refs for the SigLIP ours/foreign check (max-sim < 0.70 on unnamed groups -> out of the count until review). Pass-1 names are kept.",
+ "created_at": "2026-09-25T13:20:10+00:00",
+ "mode": "replay",
+ "config": {
+  "settings": {
+   "pass2_mode": "check",
+   "pass2_refs": "all",
+   "temperature": 0,
+   "media_resolution": "MEDIA_RESOLUTION_ULTRA_HIGH",
+   "prompt_detect": "detect_v7.4",
+   "prompt_verify": "verify_v9_groups",
+   "foreign_check": true,
+   "foreign_action": "exclude"
+  },
+  "frames": [
+   "IMG_0644",
+   "IMG_0643"
+  ],
+  "variants": [
+   "orig"
+  ],
+  "repeats": "replay_salts",
+  "prompt": "v7.4-nopairs-noreven",
+  "verify_prompt": "v9-groups-noreven",
+  "models": [
+   "gemini-3.5-flash",
+   "gemini-3-flash-preview"
+  ]
+ },
+ "summary": {
+  "count_exact_shelf_rate": 0.9111,
+  "count_mae": 0.0889,
+  "subtype_acc": 0.9057,
+  "subtype_acc_pink": 0.8571,
+  "contamination": 4,
+  "pack_acc": 1.0,
+  "stability_sigma_subtype_err": 2.83,
+  "cost_usd_per_photo": 0.0745,
+  "latency_p50_s": null,
+  "latency_p95_s": null,
+  "n_runs": 9,
+  "n_failed": 0,
+  "n_frames": 1,
+  "n_shelves": 45,
+  "n_units": 477
+ },
+ "slices": {
+  "tier:gold": {
+   "count_exact_shelf_rate": 0.9111,
+   "subtype_acc": 0.9057,
+   "subtype_acc_pink": 0.8571,
+   "contamination": 4,
+   "pack_acc": 1.0,
+   "n_runs": 9
+  },
+  "variant:orig": {
+   "count_exact_shelf_rate": 0.9111,
+   "subtype_acc": 0.9057,
+   "subtype_acc_pink": 0.8571,
+   "contamination": 4,
+   "pack_acc": 1.0,
+   "n_runs": 9
+  },
+  "tag:foreign_nearby": {
+   "shelves": 18,
+   "count_exact_shelf_rate": 0.7778,
+   "subtype_errors_per_shelf": 1.0
+  },
+  "tag:pink_zone": {
+   "shelves": 45,
+   "count_exact_shelf_rate": 0.9111,
+   "subtype_errors_per_shelf": 1.0
+  }
+ },
+ "per_frame": [
+  {
+   "frame_id": "IMG_0644",
+   "variant": "orig",
+   "repeat": "bench_test1_run_01",
+   "tier": "gold",
+   "status": "awaiting_review",
+   "shelves": 5,
+   "units_gt": 53,
+   "units_pred": 53,
+   "count_exact_shelves": 5,
+   "subtype_errors": 3,
+   "contamination": 0,
+   "pack_errors": 0,
+   "cost_usd": 0.12642,
+   "latency_s": null,
+   "pass2": {
+    "version": null,
+    "subtypes_changed": null,
+    "needs_review": null
+   },
+   "errors": [
+    "П3.9: клубника-киви → помело-цветок апельсина",
+    "П3.10: клубника-киви → помело-цветок апельсина",
+    "П3.11: клубника-киви → помело-цветок апельсина"
+   ]
+  },
+  {
+   "frame_id": "IMG_0644",
+   "variant": "orig",
+   "repeat": "bench_test1_run_02",
+   "tier": "gold",
+   "status": "awaiting_review",
+   "shelves": 5,
+   "units_gt": 53,
+   "units_pred": 53,
+   "count_exact_shelves": 5,
+   "subtype_errors": 3,
+   "contamination": 0,
+   "pack_errors": 0,
+   "cost_usd": 0.12642,
+   "latency_s": null,
+   "pass2": {
+    "version": null,
+    "subtypes_changed": null,
+    "needs_review": null
+   },
+   "errors": [
+    "П3.9: клубника-киви → помело-цветок апельсина",
+    "П3.10: клубника-киви → помело-цветок апельсина",
+    "П3.11: клубника-киви → помело-цветок апельсина"
+   ]
+  },
+  {
+   "frame_id": "IMG_0644",
+   "variant": "orig",
+   "repeat": "bench_test1_run_03",
+   "tier": "gold",
+   "status": "awaiting_review",
+   "shelves": 5,
+   "units_gt": 53,
+   "units_pred": 54,
+   "count_exact_shelves": 4,
+   "subtype_errors": 3,
+   "contamination": 1,
+   "pack_errors": 0,
+   "cost_usd": 0.05951,
+   "latency_s": null,
+   "pass2": {
+    "version": null,
+    "subtypes_changed": null,
+    "needs_review": null
+   },
+   "errors": [
+    "П1.1: чужая → AI TEA (в счёте!)",
+    "П1.3: помело-цветок апельсина → гуава-тропики",
+    "П1.6: клубника-киви → персик-жасмин",
+    "П2.6: помело-цветок апельсина → гуава-тропики"
+   ]
+  },
+  {
+   "frame_id": "IMG_0644",
+   "variant": "orig",
+   "repeat": "bench_test1_run_04",
+   "tier": "gold",
+   "status": "awaiting_review",
+   "shelves": 5,
+   "units_gt": 53,
+   "units_pred": 54,
+   "count_exact_shelves": 4,
+   "subtype_errors": 3,
+   "contamination": 1,
+   "pack_errors": 0,
+   "cost_usd": 0.05951,
+   "latency_s": null,
+   "pass2": {
+    "version": null,
+    "subtypes_changed": null,
+    "needs_review": null
+   },
+   "errors": [
+    "П1.1: чужая → AI TEA (в счёте!)",
+    "П1.3: помело-цветок апельсина → гуава-тропики",
+    "П1.6: клубника-киви → персик-жасмин",
+    "П2.6: помело-цветок апельсина → гуава-тропики"
+   ]
+  },
+  {
+   "frame_id": "IMG_0644",
+   "variant": "orig",
+   "repeat": "bench_test1_run_05",
+   "tier": "gold",
+   "status": "awaiting_review",
+   "shelves": 5,
+   "units_gt": 53,
+   "units_pred": 54,
+   "count_exact_shelves": 4,
+   "subtype_errors": 3,
+   "contamination": 1,
+   "pack_errors": 0,
+   "cost_usd": 0.05951,
+   "latency_s": null,
+   "pass2": {
+    "version": null,
+    "subtypes_changed": null,
+    "needs_review": null
+   },
+   "errors": [
+    "П1.1: чужая → AI TEA (в счёте!)",
+    "П1.3: помело-цветок апельсина → гуава-тропики",
+    "П1.6: клубника-киви → персик-жасмин",
+    "П2.6: помело-цветок апельсина → гуава-тропики"
+   ]
+  },
+  {
+   "frame_id": "IMG_0644",
+   "variant": "orig",
+   "repeat": "bench_test1_run_06",
+   "tier": "gold",
+   "status": "awaiting_review",
+   "shelves": 5,
+   "units_gt": 53,
+   "units_pred": 53,
+   "count_exact_shelves": 5,
+   "subtype_errors": 9,
+   "contamination": 0,
+   "pack_errors": 0,
+   "cost_usd": 0.05979,
+   "latency_s": null,
+   "pass2": {
+    "version": null,
+    "subtypes_changed": null,
+    "needs_review": null
+   },
+   "errors": [
+    "П1.3: помело-цветок апельсина → гуава-тропики",
+    "П2.6: помело-цветок апельсина → гуава-тропики",
+    "П3.9: клубника-киви → гуава-тропики",
+    "П3.10: клубника-киви → гуава-тропики",
+    "П3.11: клубника-киви → помело-цветок апельсина",
+    "П4.9: клубника-киви → гуава-тропики",
+    "П4.10: клубника-киви → гуава-тропики",
+    "П5.9: клубника-киви → гуава-тропики",
+    "П5.10: клубника-киви → гуава-тропики"
+   ]
+  },
+  {
+   "frame_id": "IMG_0644",
+   "variant": "orig",
+   "repeat": "tr_pass1_2_31_08_2026",
+   "tier": "gold",
+   "status": "awaiting_review",
+   "shelves": 5,
+   "units_gt": 53,
+   "units_pred": 53,
+   "count_exact_shelves": 5,
+   "subtype_errors": 9,
+   "contamination": 0,
+   "pack_errors": 0,
+   "cost_usd": 0.05979,
+   "latency_s": null,
+   "pass2": {
+    "version": null,
+    "subtypes_changed": null,
+    "needs_review": null
+   },
+   "errors": [
+    "П1.3: помело-цветок апельсина → гуава-тропики",
+    "П2.6: помело-цветок апельсина → гуава-тропики",
+    "П3.9: клубника-киви → гуава-тропики",
+    "П3.10: клубника-киви → гуава-тропики",
+    "П3.11: клубника-киви → помело-цветок апельсина",
+    "П4.9: клубника-киви → гуава-тропики",
+    "П4.10: клубника-киви → гуава-тропики",
+    "П5.9: клубника-киви → гуава-тропики",
+    "П5.10: клубника-киви → гуава-тропики"
+   ]
+  },
+  {
+   "frame_id": "IMG_0644",
+   "variant": "orig",
+   "repeat": "tr_pass1_2_31_08_2026_2",
+   "tier": "gold",
+   "status": "awaiting_review",
+   "shelves": 5,
+   "units_gt": 53,
+   "units_pred": 54,
+   "count_exact_shelves": 4,
+   "subtype_errors": 3,
+   "contamination": 1,
+   "pack_errors": 0,
+   "cost_usd": 0.05951,
+   "latency_s": null,
+   "pass2": {
+    "version": null,
+    "subtypes_changed": null,
+    "needs_review": null
+   },
+   "errors": [
+    "П1.1: чужая → AI TEA (в счёте!)",
+    "П1.3: помело-цветок апельсина → гуава-тропики",
+    "П1.6: клубника-киви → персик-жасмин",
+    "П2.6: помело-цветок апельсина → гуава-тропики"
+   ]
+  },
+  {
+   "frame_id": "IMG_0644",
+   "variant": "orig",
+   "repeat": "tr_pass1_2_31_08_2026_3",
+   "tier": "gold",
+   "status": "awaiting_review",
+   "shelves": 5,
+   "units_gt": 53,
+   "units_pred": 53,
+   "count_exact_shelves": 5,
+   "subtype_errors": 9,
+   "contamination": 0,
+   "pack_errors": 0,
+   "cost_usd": 0.05979,
+   "latency_s": null,
+   "pass2": {
+    "version": null,
+    "subtypes_changed": null,
+    "needs_review": null
+   },
+   "errors": [
+    "П1.3: помело-цветок апельсина → гуава-тропики",
+    "П2.6: помело-цветок апельсина → гуава-тропики",
+    "П3.9: клубника-киви → гуава-тропики",
+    "П3.10: клубника-киви → гуава-тропики",
+    "П3.11: клубника-киви → помело-цветок апельсина",
+    "П4.9: клубника-киви → гуава-тропики",
+    "П4.10: клубника-киви → гуава-тропики",
+    "П5.9: клубника-киви → гуава-тропики",
+    "П5.10: клубника-киви → гуава-тропики"
+   ]
+  }
+ ],
+ "notes": "Latency of recorded answers is unknown (not in the exports) — cost is computed from recorded token usage."
+}

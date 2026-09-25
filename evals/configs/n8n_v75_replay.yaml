@@ -1,0 +1,23 @@
+name: n8n_v75_replay
+description: 'Recorded n8n answers of 01.09 12:18–12:40 right after the bgcolor edit (v7.5-bgcolor / v9-bgcolor):
+  IMG_0644 x4, IMG_0643 x3; pass 2 on all groups as in n8n.'
+mode: replay
+settings:
+  pass2_mode: always
+  pass2_refs: all
+  temperature: 0
+  media_resolution: MEDIA_RESOLUTION_ULTRA_HIGH
+  prompt_detect: detect_v7.5
+  prompt_verify: verify_v9
+  foreign_check: false
+replay_salts:
+  IMG_0644:
+  - bench_test_bgcolor_img1_run_01
+  - bench_test_bgcolor_img1_run_02
+  - bench_test_bgcolor_img1_run_03
+  - bench_test_bgcolor_img1_run_04
+  IMG_0643:
+  - bench_test_bgcolor_img2_run_01
+  - bench_test_bgcolor_img2_run_02
+  - bench_test_bgcolor_img2_run_03
+notes: Folder names in bench/runs were swapped (test_bgcolor_img2 is IMG_0643); frames identified by content.

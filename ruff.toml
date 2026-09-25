@@ -1,0 +1,14 @@
+line-length = 120
+target-version = "py311"
+extend-exclude = ["frontend", "legacy", "evals/history", "backend/tests/js_parity"]
+
+[lint]
+select = ["E", "F", "I", "B", "UP"]
+ignore = ["E501", "B008", "E731"]
+
+[lint.isort]
+known-first-party = ["app", "evals", "shelf_bot", "shelf_audit_mcp"]
+
+[lint.per-file-ignores]
+# stdlib-only scripts that must run on the system Python 3.10 of a teammate's machine
+"data/scripts/*" = ["UP017"]

@@ -1,0 +1,169 @@
+{
+ "name": "rag_sanity",
+ "created_at": "2026-09-25T12:15:13+00:00",
+ "mode": "offline",
+ "config": {
+  "units": 129,
+  "frames": [
+   "IMG_0614",
+   "IMG_0644",
+   "IMG_0646",
+   "IMG_0648",
+   "IMG_0649",
+   "IMG_0650"
+  ],
+  "siglip": true,
+  "catalog_refs": 188
+ },
+ "summary": {
+  "subtype_acc": 0.9302,
+  "subtype_acc_pink": 0.9211,
+  "recall_at_3": 0.9845,
+  "n_units": 129,
+  "n_frames": 6
+ },
+ "slices": {
+  "exp_current / siglip+hsv": {
+   "top1_acc": 0.9302,
+   "recall_at_3": 0.9845,
+   "pink_acc": 0.9211,
+   "refs": 43
+  },
+  "exp_current / hsv": {
+   "top1_acc": 0.8372,
+   "recall_at_3": 0.9612,
+   "pink_acc": 0.8158,
+   "refs": 43
+  },
+  "full / siglip+hsv": {
+   "top1_acc": 0.9535,
+   "recall_at_3": 1.0,
+   "pink_acc": 0.9474,
+   "refs": 188
+  },
+  "prod: full, brand filter, no ревень": {
+   "top1_acc": 0.969,
+   "recall_at_3": 1.0,
+   "pink_acc": 0.9649,
+   "refs": 188
+  }
+ },
+ "per_frame": [
+  {
+   "frame_id": "IMG_0614",
+   "tier": "silver",
+   "exp_current / siglip+hsv": "10/10",
+   "exp_current / hsv": "10/10",
+   "full / siglip+hsv": "10/10",
+   "prod: full, brand filter, no ревень": "10/10"
+  },
+  {
+   "frame_id": "IMG_0644",
+   "tier": "silver",
+   "exp_current / siglip+hsv": "48/52",
+   "exp_current / hsv": "43/52",
+   "full / siglip+hsv": "49/52",
+   "prod: full, brand filter, no ревень": "50/52"
+  },
+  {
+   "frame_id": "IMG_0646",
+   "tier": "silver",
+   "exp_current / siglip+hsv": "20/21",
+   "exp_current / hsv": "17/21",
+   "full / siglip+hsv": "21/21",
+   "prod: full, brand filter, no ревень": "21/21"
+  },
+  {
+   "frame_id": "IMG_0648",
+   "tier": "silver",
+   "exp_current / siglip+hsv": "9/11",
+   "exp_current / hsv": "9/11",
+   "full / siglip+hsv": "9/11",
+   "prod: full, brand filter, no ревень": "9/11"
+  },
+  {
+   "frame_id": "IMG_0649",
+   "tier": "silver",
+   "exp_current / siglip+hsv": "13/14",
+   "exp_current / hsv": "12/14",
+   "full / siglip+hsv": "14/14",
+   "prod: full, brand filter, no ревень": "14/14"
+  },
+  {
+   "frame_id": "IMG_0650",
+   "tier": "silver",
+   "exp_current / siglip+hsv": "20/21",
+   "exp_current / hsv": "17/21",
+   "full / siglip+hsv": "20/21",
+   "prod: full, brand filter, no ревень": "21/21"
+  }
+ ],
+ "details": {
+  "exp_current / siglip+hsv": {
+   "top1": 120,
+   "n": 129,
+   "top1_acc": 0.9302,
+   "recall_at_3": 0.9845,
+   "pink_acc": 0.9211,
+   "pink_n": 114,
+   "refs": 43,
+   "top_errors": [
+    "мандарин-лаванда → манго-маракуйя ×2",
+    "клубника-киви → персик-жасмин ×2",
+    "манго-маракуйя → персик-жасмин ×2",
+    "клубника-киви → малина ×1",
+    "персик-жасмин → малина ×1",
+    "клубника-киви → Компотай гранатовый ×1"
+   ]
+  },
+  "exp_current / hsv": {
+   "top1": 108,
+   "n": 129,
+   "top1_acc": 0.8372,
+   "recall_at_3": 0.9612,
+   "pink_acc": 0.8158,
+   "pink_n": 114,
+   "refs": 43,
+   "top_errors": [
+    "клубника-киви → персик-жасмин ×12",
+    "мандарин-лаванда → манго-маракуйя ×2",
+    "малина → Компотай сливовый ×2",
+    "клубника-киви → малина ×1",
+    "персик-жасмин → Компотай вишневый ×1",
+    "манго-маракуйя → Chino Tintoretto ×1"
+   ]
+  },
+  "full / siglip+hsv": {
+   "top1": 123,
+   "n": 129,
+   "top1_acc": 0.9535,
+   "recall_at_3": 1.0,
+   "pink_acc": 0.9474,
+   "pink_n": 114,
+   "refs": 188,
+   "top_errors": [
+    "мандарин-лаванда → манго-маракуйя ×2",
+    "клубника-киви → малина ×1",
+    "персик-жасмин → малина ×1",
+    "клубника-киви → персик-жасмин ×1",
+    "манго-маракуйя → персик-жасмин ×1"
+   ]
+  },
+  "prod: full, brand filter, no ревень": {
+   "top1": 125,
+   "n": 129,
+   "top1_acc": 0.969,
+   "recall_at_3": 1.0,
+   "pink_acc": 0.9649,
+   "pink_n": 114,
+   "refs": 188,
+   "top_errors": [
+    "клубника-киви → малина ×1",
+    "персик-жасмин → малина ×1",
+    "мандарин-лаванда → манго-маракуйя ×1",
+    "клубника-киви → персик-жасмин ×1"
+   ]
+  }
+ },
+ "notes": "Reference (24.08, embedding_experiment/REPORT.md): ensemble 120/129 (93%), HSV 109/129 (84%), SigLIP 102/129 (79%)."
+}

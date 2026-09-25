@@ -1,0 +1,25 @@
+name: n8n_v74_replay_gate
+description: 'Same recorded answers, new merge rule: pass-2 names are applied only to uncertain groups (AI TEA with
+  a pink-zone name or no name), healthy names from pass 1 stay. The pass-2 request is byte-identical to n8n (46
+  refs, full plan), so the recorded answer is valid; only the merge differs.'
+mode: replay
+settings:
+  pass2_mode: gate
+  pass2_refs: all
+  temperature: 0
+  media_resolution: MEDIA_RESOLUTION_ULTRA_HIGH
+  prompt_detect: detect_v7.4
+  prompt_verify: verify_v9_groups
+  foreign_check: false
+replay_salts:
+  IMG_0644:
+  - bench_test1_run_01
+  - bench_test1_run_02
+  - bench_test1_run_03
+  - bench_test1_run_04
+  - bench_test1_run_05
+  - bench_test1_run_06
+  - tr_pass1_2_31_08_2026
+  - tr_pass1_2_31_08_2026_2
+  - tr_pass1_2_31_08_2026_3
+notes: Latency of recorded answers is unknown (not in the exports) — cost is computed from recorded token usage.

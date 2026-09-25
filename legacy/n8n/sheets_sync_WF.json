@@ -1,0 +1,1158 @@
+{
+ "name": "Vision Assistance - Sheets Sync",
+ "nodes": [
+  {
+   "parameters": {
+    "rule": {
+     "interval": [
+      {
+       "field": "days",
+       "daysInterval": 1,
+       "triggerAtHour": 5,
+       "triggerAtMinute": 40
+      }
+     ]
+    }
+   },
+   "type": "n8n-nodes-base.scheduleTrigger",
+   "typeVersion": 1.2,
+   "position": [
+    0,
+    -280
+   ],
+   "id": "sync-0",
+   "name": "Каталог: расписание (05:40)"
+  },
+  {
+   "parameters": {
+    "documentId": {
+     "__rl": true,
+     "value": "<GOOGLE_ID>",
+     "mode": "list",
+     "cachedResultName": "<REDACTED>",
+     "cachedResultUrl": "<REDACTED>"
+    },
+    "sheetName": {
+     "__rl": true,
+     "value": 1976422679,
+     "mode": "list",
+     "cachedResultName": "<REDACTED>",
+     "cachedResultUrl": "<REDACTED>"
+    },
+    "options": {}
+   },
+   "type": "n8n-nodes-base.googleSheets",
+   "typeVersion": 4.7,
+   "position": [
+    220,
+    -280
+   ],
+   "id": "sync-1",
+   "name": "Каталог: чтение листа",
+   "credentials": {
+    "googleSheetsOAuth2Api": {
+     "id": "<CRED_ID>",
+     "name": "<googleSheetsOAuth2Api>"
+    }
+   },
+   "retryOnFail": true,
+   "waitBetweenTries": 4000
+  },
+  {
+   "parameters": {
+    "jsCode": "// Реплика листа Catalog в Data Table brand_catalog.\n// Валидация ДО очистки: если лист пуст/сломан — падаем ЗДЕСЬ, реплика остаётся вчерашней\n// (URI Files API живут 48 ч, WF-3 обновляет их раз в сутки в 05:00 — запас есть).\nconst rows = $input.all().map(i => i.json).filter(r => r && String(r.key || '').trim());\nconst usable = rows.filter(r => r.file_url && r.canon_name);\nif (usable.length < 20) {\n  throw new Error('Sheets Sync: в Catalog только ' + usable.length + ' пригодных эталонов (<20) — реплику не трогаю, проверь WF-3');\n}\nreturn [{ json: { rows: rows.map(r => ({\n  key:        String(r.key ?? ''),\n  brand:      String(r.brand ?? ''),\n  canon_name: String(r.canon_name ?? ''),\n  variant:    String(r.variant ?? ''),\n  file_url:   String(r.file_url ?? ''),\n  mime_type:  String(r.mime_type ?? ''),\n})), count: rows.length } }];"
+   },
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    440,
+    -280
+   ],
+   "id": "sync-2",
+   "name": "Каталог: валидация"
+  },
+  {
+   "parameters": {
+    "resource": "row",
+    "dataTableId": {
+     "__rl": true,
+     "value": "brand_catalog",
+     "mode": "name"
+    },
+    "operation": "deleteRows",
+    "matchType": "allConditions",
+    "filters": {
+     "conditions": [
+      {
+       "keyName": "key",
+       "condition": "isNotEmpty",
+       "keyValue": ""
+      }
+     ]
+    },
+    "options": {}
+   },
+   "type": "n8n-nodes-base.dataTable",
+   "typeVersion": 1,
+   "position": [
+    660,
+    -280
+   ],
+   "id": "sync-3",
+   "name": "Каталог DT: очистка",
+   "alwaysOutputData": true
+  },
+  {
+   "parameters": {
+    "jsCode": "return $('Каталог: валидация').first().json.rows.map(r => ({ json: r }));"
+   },
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    880,
+    -280
+   ],
+   "id": "sync-4",
+   "name": "Каталог: развернуть строки"
+  },
+  {
+   "parameters": {
+    "resource": "row",
+    "dataTableId": {
+     "__rl": true,
+     "value": "brand_catalog",
+     "mode": "name"
+    },
+    "columns": {
+     "mappingMode": "defineBelow",
+     "value": {
+      "key": "={{ $json.key }}",
+      "brand": "={{ $json.brand }}",
+      "canon_name": "={{ $json.canon_name }}",
+      "variant": "={{ $json.variant }}",
+      "file_url": "={{ $json.file_url }}",
+      "mime_type": "={{ $json.mime_type }}"
+     },
+     "matchingColumns": [],
+     "schema": [
+      {
+       "id": "key",
+       "displayName": "key",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "brand",
+       "displayName": "brand",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "canon_name",
+       "displayName": "canon_name",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "variant",
+       "displayName": "variant",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "file_url",
+       "displayName": "file_url",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "mime_type",
+       "displayName": "mime_type",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      }
+     ]
+    }
+   },
+   "type": "n8n-nodes-base.dataTable",
+   "typeVersion": 1,
+   "position": [
+    1100,
+    -280
+   ],
+   "id": "sync-5",
+   "name": "Каталог DT: запись"
+  },
+  {
+   "parameters": {
+    "jsCode": "return [{ json: { catalog_rows: $input.all().length, at: new Date().toISOString() } }];"
+   },
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    1320,
+    -280
+   ],
+   "id": "sync-6",
+   "name": "Каталог: итог"
+  },
+  {
+   "parameters": {
+    "rule": {
+     "interval": [
+      {
+       "field": "days",
+       "daysInterval": 1,
+       "triggerAtHour": 21,
+       "triggerAtMinute": 0
+      }
+     ]
+    }
+   },
+   "type": "n8n-nodes-base.scheduleTrigger",
+   "typeVersion": 1.2,
+   "position": [
+    0,
+    160
+   ],
+   "id": "sync-7",
+   "name": "Выгрузка: расписание (21:00)"
+  },
+  {
+   "parameters": {
+    "jsCode": "// ISO UTC: сравнение строк = сравнение времени (конвенция как в photo_buffer).\nconst now = Date.now();\nreturn [{ json: {\n  now_iso:           new Date(now).toISOString(),\n  hold_before:       new Date(now - 24*3600*1000).toISOString(),      // незакрытые строки младше суток ждут следующего синка\n  purge_rows_before: new Date(now - 14*24*3600*1000).toISOString(),   // report_rows: 14 дней после выгрузки\n  purge_logs_before: new Date(now - 30*24*3600*1000).toISOString(),   // wf_logs: 30 дней\n} }];"
+   },
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    220,
+    160
+   ],
+   "id": "sync-8",
+   "name": "Пороги выгрузки"
+  },
+  {
+   "parameters": {
+    "resource": "row",
+    "dataTableId": {
+     "__rl": true,
+     "value": "report_rows",
+     "mode": "name"
+    },
+    "operation": "get",
+    "matchType": "allConditions",
+    "filters": {
+     "conditions": [
+      {
+       "keyName": "synced",
+       "condition": "eq",
+       "keyValue": "-"
+      }
+     ]
+    },
+    "returnAll": true,
+    "options": {}
+   },
+   "type": "n8n-nodes-base.dataTable",
+   "typeVersion": 1,
+   "position": [
+    440,
+    40
+   ],
+   "id": "sync-9",
+   "name": "Отчёт: выборка"
+  },
+  {
+   "parameters": {
+    "jsCode": "const th = $('Пороги выгрузки').first().json;\nconst rows = $input.all().map(i => i.json).filter(r => r && r.report_id);\n// строка уезжает, когда статус финальный; «на_проверке» держим сутки, чтобы успел приехать вердикт агента\nconst ready = rows.filter(r =>\n  (r.status && r.status !== 'на_проверке') || String(r.created_at || '') < th.hold_before);\nreturn ready.map(r => ({ json: {\n  report_id: r.report_id ?? '',          report_date: r.report_date ?? '',\n  route_code: r.route_code ?? '',        store_code: r.store_code ?? '',\n  store_name: r.store_name ?? '',        product_name: r.product_name ?? '',\n  product_subtype: r.product_subtype ?? '', package_format: r.package_format ?? '',\n  shelf_index: r.shelf_index ?? '',      position: r.position ?? '',\n  front_facing_count: r.front_facing_count ?? '', status: r.status ?? '',\n} }));"
+   },
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    660,
+    40
+   ],
+   "id": "sync-10",
+   "name": "Отчёт: к выгрузке"
+  },
+  {
+   "parameters": {
+    "operation": "append",
+    "documentId": {
+     "__rl": true,
+     "value": "<GOOGLE_ID>",
+     "mode": "list",
+     "cachedResultName": "<REDACTED>",
+     "cachedResultUrl": "<REDACTED>"
+    },
+    "sheetName": {
+     "__rl": true,
+     "value": "gid=0",
+     "mode": "list",
+     "cachedResultName": "<REDACTED>",
+     "cachedResultUrl": "<REDACTED>"
+    },
+    "columns": {
+     "mappingMode": "defineBelow",
+     "value": {
+      "Номер фото": "={{ $json.report_id }}",
+      "Дата": "={{ $json.report_date }}",
+      "Код маршрута": "={{ $json.route_code }}",
+      "Код ТТ": "={{ $json.store_code }}",
+      "Магазин": "={{ $json.store_name }}",
+      "Бренд": "={{ $json.product_name }}",
+      "Подвид": "={{ $json.product_subtype }}",
+      "Формат": "={{ $json.package_format }}",
+      "Номер полки": "={{ $json.shelf_index }}",
+      "Расположение": "={{ $json.position }}",
+      "Статус": "={{ $json.status }}",
+      "Единиц в ряду": "={{ $json.front_facing_count }}"
+     },
+     "matchingColumns": [],
+     "schema": [
+      {
+       "id": "Номер фото",
+       "displayName": "Номер фото",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true,
+       "removed": false
+      },
+      {
+       "id": "Дата",
+       "displayName": "Дата",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true,
+       "removed": false
+      },
+      {
+       "id": "Код маршрута",
+       "displayName": "Код маршрута",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true,
+       "removed": false
+      },
+      {
+       "id": "Код ТТ",
+       "displayName": "Код ТТ",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true,
+       "removed": false
+      },
+      {
+       "id": "Магазин",
+       "displayName": "Магазин",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true,
+       "removed": false
+      },
+      {
+       "id": "Бренд",
+       "displayName": "Бренд",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true,
+       "removed": false
+      },
+      {
+       "id": "Подвид",
+       "displayName": "Подвид",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true,
+       "removed": false
+      },
+      {
+       "id": "Формат",
+       "displayName": "Формат",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true,
+       "removed": false
+      },
+      {
+       "id": "Номер полки",
+       "displayName": "Номер полки",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true,
+       "removed": false
+      },
+      {
+       "id": "Расположение",
+       "displayName": "Расположение",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true,
+       "removed": false
+      },
+      {
+       "id": "Единиц в ряду",
+       "displayName": "Единиц в ряду",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true,
+       "removed": false
+      },
+      {
+       "id": "Статус",
+       "displayName": "Статус",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true,
+       "removed": false
+      }
+     ]
+    },
+    "options": {
+     "useAppend": true
+    }
+   },
+   "type": "n8n-nodes-base.googleSheets",
+   "typeVersion": 4.7,
+   "position": [
+    880,
+    40
+   ],
+   "id": "sync-11",
+   "name": "Отчёт: выгрузка в Sheets",
+   "credentials": {
+    "googleSheetsOAuth2Api": {
+     "id": "<CRED_ID>",
+     "name": "<googleSheetsOAuth2Api>"
+    }
+   },
+   "retryOnFail": true,
+   "maxTries": 3,
+   "waitBetweenTries": 4000
+  },
+  {
+   "parameters": {
+    "jsCode": "// пометка по report_id: все строки одного фото едут одной пачкой, id не нужен\nconst at = $('Пороги выгрузки').first().json.now_iso;\nconst ids = [...new Set($('Отчёт: к выгрузке').all().map(i => i.json.report_id))];\nreturn ids.map(report_id => ({ json: { report_id, at } }));"
+   },
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    1100,
+    40
+   ],
+   "id": "sync-12",
+   "name": "Отчёт: к пометке"
+  },
+  {
+   "parameters": {
+    "resource": "row",
+    "dataTableId": {
+     "__rl": true,
+     "value": "report_rows",
+     "mode": "name"
+    },
+    "operation": "update",
+    "matchType": "allConditions",
+    "filters": {
+     "conditions": [
+      {
+       "keyName": "report_id",
+       "condition": "eq",
+       "keyValue": "={{ $json.report_id }}"
+      },
+      {
+       "keyName": "synced",
+       "condition": "eq",
+       "keyValue": "-"
+      }
+     ]
+    },
+    "columns": {
+     "mappingMode": "defineBelow",
+     "value": {
+      "synced": "={{ $json.at }}"
+     },
+     "matchingColumns": [],
+     "schema": [
+      {
+       "id": "synced",
+       "displayName": "synced",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      }
+     ]
+    }
+   },
+   "type": "n8n-nodes-base.dataTable",
+   "typeVersion": 1,
+   "position": [
+    1320,
+    40
+   ],
+   "id": "sync-13",
+   "name": "Отчёт: пометить synced"
+  },
+  {
+   "parameters": {
+    "resource": "row",
+    "dataTableId": {
+     "__rl": true,
+     "value": "wf_logs",
+     "mode": "name"
+    },
+    "operation": "get",
+    "matchType": "allConditions",
+    "filters": {
+     "conditions": [
+      {
+       "keyName": "synced",
+       "condition": "eq",
+       "keyValue": "-"
+      }
+     ]
+    },
+    "returnAll": true,
+    "options": {}
+   },
+   "type": "n8n-nodes-base.dataTable",
+   "typeVersion": 1,
+   "position": [
+    440,
+    280
+   ],
+   "id": "sync-14",
+   "name": "Логи: выборка"
+  },
+  {
+   "parameters": {
+    "jsCode": "const th = $('Пороги выгрузки').first().json;\nconst disp = iso => { const d = new Date(new Date(iso).getTime() + 5*3600*1000);\n  return isNaN(d) ? '' : d.toISOString().replace('T', ' ').slice(0, 19); };  // формат листа Logs, UTC+5\nconst rows = $input.all().map(i => i.json).filter(r => r && r.run_id);\n// Started/Processed = прогон ещё идёт; держим сутки, потом выгружаем как есть — упавшие прогоны видно в таблице\nconst ready = rows.filter(r =>\n  !['Started', 'Processed'].includes(String(r.status)) || String(r.created_at || '') < th.hold_before);\nreturn ready.map(r => ({ json: {\n  run_id: r.run_id ?? '', chat_id: r.chat_id ?? '', status: r.status ?? '',\n  confidence: r.confidence ?? '', notes_google: r.notes_google ?? '', notes_user: r.notes_user ?? '',\n  created_disp: disp(r.created_at), updated_disp: disp(r.updated_at),\n} }));"
+   },
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    660,
+    280
+   ],
+   "id": "sync-15",
+   "name": "Логи: к выгрузке"
+  },
+  {
+   "parameters": {
+    "operation": "append",
+    "documentId": {
+     "__rl": true,
+     "value": "<GOOGLE_ID>",
+     "mode": "list",
+     "cachedResultName": "<REDACTED>",
+     "cachedResultUrl": "<REDACTED>"
+    },
+    "sheetName": {
+     "__rl": true,
+     "value": "gid=0",
+     "mode": "list",
+     "cachedResultName": "<REDACTED>",
+     "cachedResultUrl": "<REDACTED>"
+    },
+    "columns": {
+     "mappingMode": "defineBelow",
+     "value": {
+      "ID запуска": "={{ $json.run_id }}",
+      "ID телеграм": "={{ $json.chat_id }}",
+      "Уверенность в обработанной фотографии": "={{ $json.confidence }}",
+      "Заметки Google": "={{ $json.notes_google }}",
+      "Заметки пользователя": "={{ $json.notes_user }}",
+      "Статус": "={{ $json.status }}",
+      "Дата создания": "={{ $json.created_disp }}",
+      "Дата обновления": "={{ $json.updated_disp }}"
+     },
+     "matchingColumns": [],
+     "schema": [
+      {
+       "id": "ID запуска",
+       "displayName": "ID запуска",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true,
+       "removed": false
+      },
+      {
+       "id": "ID телеграм",
+       "displayName": "ID телеграм",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true,
+       "removed": false
+      },
+      {
+       "id": "Уверенность в обработанной фотографии",
+       "displayName": "Уверенность в обработанной фотографии",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true,
+       "removed": false
+      },
+      {
+       "id": "Заметки Google",
+       "displayName": "Заметки Google",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true,
+       "removed": false
+      },
+      {
+       "id": "Заметки пользователя",
+       "displayName": "Заметки пользователя",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true,
+       "removed": false
+      },
+      {
+       "id": "Статус",
+       "displayName": "Статус",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true,
+       "removed": false
+      },
+      {
+       "id": "Дата создания",
+       "displayName": "Дата создания",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true,
+       "removed": false
+      },
+      {
+       "id": "Дата обновления",
+       "displayName": "Дата обновления",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true,
+       "removed": false
+      }
+     ]
+    },
+    "options": {
+     "useAppend": true
+    }
+   },
+   "type": "n8n-nodes-base.googleSheets",
+   "typeVersion": 4.7,
+   "position": [
+    880,
+    280
+   ],
+   "id": "sync-16",
+   "name": "Логи: выгрузка в Sheets",
+   "credentials": {
+    "googleSheetsOAuth2Api": {
+     "id": "<CRED_ID>",
+     "name": "<googleSheetsOAuth2Api>"
+    }
+   },
+   "retryOnFail": true,
+   "maxTries": 3,
+   "waitBetweenTries": 4000
+  },
+  {
+   "parameters": {
+    "jsCode": "const at = $('Пороги выгрузки').first().json.now_iso;\nconst ids = [...new Set($('Логи: к выгрузке').all().map(i => i.json.run_id))];\nreturn ids.map(run_id => ({ json: { run_id, at } }));"
+   },
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    1100,
+    280
+   ],
+   "id": "sync-17",
+   "name": "Логи: к пометке"
+  },
+  {
+   "parameters": {
+    "resource": "row",
+    "dataTableId": {
+     "__rl": true,
+     "value": "wf_logs",
+     "mode": "name"
+    },
+    "operation": "update",
+    "matchType": "allConditions",
+    "filters": {
+     "conditions": [
+      {
+       "keyName": "run_id",
+       "condition": "eq",
+       "keyValue": "={{ $json.run_id }}"
+      },
+      {
+       "keyName": "synced",
+       "condition": "eq",
+       "keyValue": "-"
+      }
+     ]
+    },
+    "columns": {
+     "mappingMode": "defineBelow",
+     "value": {
+      "synced": "={{ $json.at }}"
+     },
+     "matchingColumns": [],
+     "schema": [
+      {
+       "id": "synced",
+       "displayName": "synced",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      }
+     ]
+    }
+   },
+   "type": "n8n-nodes-base.dataTable",
+   "typeVersion": 1,
+   "position": [
+    1320,
+    280
+   ],
+   "id": "sync-18",
+   "name": "Логи: пометить synced"
+  },
+  {
+   "parameters": {
+    "resource": "row",
+    "dataTableId": {
+     "__rl": true,
+     "value": "report_rows",
+     "mode": "name"
+    },
+    "operation": "deleteRows",
+    "matchType": "allConditions",
+    "filters": {
+     "conditions": [
+      {
+       "keyName": "synced",
+       "condition": "neq",
+       "keyValue": "-"
+      },
+      {
+       "keyName": "created_at",
+       "condition": "lt",
+       "keyValue": "={{ $json.purge_rows_before }}"
+      }
+     ]
+    },
+    "options": {}
+   },
+   "type": "n8n-nodes-base.dataTable",
+   "typeVersion": 1,
+   "position": [
+    440,
+    520
+   ],
+   "id": "sync-19",
+   "name": "Чистка: отчёт старше 14 дней",
+   "alwaysOutputData": true
+  },
+  {
+   "parameters": {
+    "resource": "row",
+    "dataTableId": {
+     "__rl": true,
+     "value": "wf_logs",
+     "mode": "name"
+    },
+    "operation": "deleteRows",
+    "matchType": "allConditions",
+    "filters": {
+     "conditions": [
+      {
+       "keyName": "synced",
+       "condition": "neq",
+       "keyValue": "-"
+      },
+      {
+       "keyName": "created_at",
+       "condition": "lt",
+       "keyValue": "={{ $('Пороги выгрузки').first().json.purge_logs_before }}"
+      }
+     ]
+    },
+    "options": {}
+   },
+   "type": "n8n-nodes-base.dataTable",
+   "typeVersion": 1,
+   "position": [
+    660,
+    520
+   ],
+   "id": "sync-20",
+   "name": "Чистка: логи старше 30 дней",
+   "alwaysOutputData": true
+  },
+  {
+   "parameters": {
+    "jsCode": "const cnt = name => { try { return $(name).all().filter(i => i.json && Object.keys(i.json).length).length; } catch (e) { return 0; } };\nconst r = cnt('Отчёт: к выгрузке'), l = cnt('Логи: к выгрузке');\nreturn [{ json: { report_rows_exported: r, logs_exported: l, at: new Date().toISOString(),\n  text: '📤 Sheets Sync: отчёт ' + r + ' строк, логи ' + l + ' строк.' } }];"
+   },
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    880,
+    520
+   ],
+   "id": "sync-21",
+   "name": "Итог синка"
+  },
+  {
+   "parameters": {
+    "chatId": "ПОСТАВЬ_СЮДА_chat_id",
+    "text": "={{ $json.text }}",
+    "additionalFields": {
+     "appendAttribution": false
+    }
+   },
+   "type": "n8n-nodes-base.telegram",
+   "typeVersion": 1.2,
+   "position": [
+    1100,
+    520
+   ],
+   "id": "sync-22",
+   "name": "Итог в Telegram",
+   "credentials": {
+    "telegramApi": {
+     "id": "<CRED_ID>",
+     "name": "<telegramApi>"
+    }
+   },
+   "disabled": true
+  },
+  {
+   "parameters": {
+    "content": "## Реплика каталога (05:40)\nWF-3 перезаливает URI в 05:00 → в 05:40 копируем лист Catalog в Data Table `brand_catalog` (WF-2 читает её вместо Sheets).\nВалидация стоит ДО очистки: сломанный/пустой лист не затирает вчерашнюю реплику.",
+    "height": 200,
+    "width": 420,
+    "color": 5
+   },
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    0,
+    -520
+   ],
+   "id": "sync-sticky-a",
+   "name": "Sticky A"
+  },
+  {
+   "parameters": {
+    "content": "## Дневная выгрузка (21:00)\n`report_rows` → лист «Статистика», `wf_logs` → лист Logs, одним батч-append'ом.\nСтроки «на_проверке» и логи Started/Processed младше суток ждут следующего синка (чтобы уехал финальный статус). Пометка `synced` — по report_id / run_id.\nДля демо: Execute workflow вручную — выгрузит всё готовое сейчас (и заодно обновит реплику каталога).",
+    "height": 230,
+    "width": 480,
+    "color": 5
+   },
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    0,
+    700
+   ],
+   "id": "sync-sticky-b",
+   "name": "Sticky B"
+  }
+ ],
+ "connections": {
+  "Каталог: расписание (05:40)": {
+   "main": [
+    [
+     {
+      "node": "Каталог: чтение листа",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Каталог: чтение листа": {
+   "main": [
+    [
+     {
+      "node": "Каталог: валидация",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Каталог: валидация": {
+   "main": [
+    [
+     {
+      "node": "Каталог DT: очистка",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Каталог DT: очистка": {
+   "main": [
+    [
+     {
+      "node": "Каталог: развернуть строки",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Каталог: развернуть строки": {
+   "main": [
+    [
+     {
+      "node": "Каталог DT: запись",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Каталог DT: запись": {
+   "main": [
+    [
+     {
+      "node": "Каталог: итог",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Выгрузка: расписание (21:00)": {
+   "main": [
+    [
+     {
+      "node": "Пороги выгрузки",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Пороги выгрузки": {
+   "main": [
+    [
+     {
+      "node": "Отчёт: выборка",
+      "type": "main",
+      "index": 0
+     },
+     {
+      "node": "Логи: выборка",
+      "type": "main",
+      "index": 0
+     },
+     {
+      "node": "Чистка: отчёт старше 14 дней",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Отчёт: выборка": {
+   "main": [
+    [
+     {
+      "node": "Отчёт: к выгрузке",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Отчёт: к выгрузке": {
+   "main": [
+    [
+     {
+      "node": "Отчёт: выгрузка в Sheets",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Отчёт: выгрузка в Sheets": {
+   "main": [
+    [
+     {
+      "node": "Отчёт: к пометке",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Отчёт: к пометке": {
+   "main": [
+    [
+     {
+      "node": "Отчёт: пометить synced",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Логи: выборка": {
+   "main": [
+    [
+     {
+      "node": "Логи: к выгрузке",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Логи: к выгрузке": {
+   "main": [
+    [
+     {
+      "node": "Логи: выгрузка в Sheets",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Логи: выгрузка в Sheets": {
+   "main": [
+    [
+     {
+      "node": "Логи: к пометке",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Логи: к пометке": {
+   "main": [
+    [
+     {
+      "node": "Логи: пометить synced",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Чистка: отчёт старше 14 дней": {
+   "main": [
+    [
+     {
+      "node": "Чистка: логи старше 30 дней",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Чистка: логи старше 30 дней": {
+   "main": [
+    [
+     {
+      "node": "Итог синка",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Итог синка": {
+   "main": [
+    [
+     {
+      "node": "Итог в Telegram",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "settings": {
+  "executionOrder": "v1"
+ }
+}

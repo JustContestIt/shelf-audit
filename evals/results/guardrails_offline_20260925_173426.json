@@ -1,0 +1,260 @@
+{
+ "name": "guardrails_offline",
+ "created_at": "2026-09-25T12:34:26+00:00",
+ "mode": "offline",
+ "config": {
+  "blur_threshold": 60.0,
+  "min_side_px": 640,
+  "llm_check": false
+ },
+ "summary": {
+  "guardrail_precision": 1.0,
+  "guardrail_recall": 0.6429,
+  "recall_deterministic_kinds": 1.0,
+  "false_rejects": 0,
+  "n_units": 32
+ },
+ "slices": {
+  "kind:shelf": {
+   "n": 16,
+   "rejected": 0
+  },
+  "kind:blur": {
+   "n": 4,
+   "rejected": 4
+  },
+  "kind:tiny": {
+   "n": 4,
+   "rejected": 4
+  },
+  "kind:not_image": {
+   "n": 1,
+   "rejected": 1
+  },
+  "kind:catalog": {
+   "n": 1,
+   "rejected": 0
+  },
+  "kind:mockup": {
+   "n": 4,
+   "rejected": 0
+  },
+  "kind:injection": {
+   "n": 2,
+   "rejected": 0
+  }
+ },
+ "per_frame": [
+  {
+   "frame_id": "IMG_0644/orig",
+   "tier": "shelf",
+   "status": "accepted",
+   "errors": []
+  },
+  {
+   "frame_id": "IMG_0644/tg1280",
+   "tier": "shelf",
+   "status": "accepted",
+   "errors": []
+  },
+  {
+   "frame_id": "IMG_0643/orig",
+   "tier": "shelf",
+   "status": "accepted",
+   "errors": []
+  },
+  {
+   "frame_id": "IMG_0643/tg1280",
+   "tier": "shelf",
+   "status": "accepted",
+   "errors": []
+  },
+  {
+   "frame_id": "IMG_0645/orig",
+   "tier": "shelf",
+   "status": "accepted",
+   "errors": []
+  },
+  {
+   "frame_id": "IMG_0645/tg1280",
+   "tier": "shelf",
+   "status": "accepted",
+   "errors": []
+  },
+  {
+   "frame_id": "IMG_0614/orig",
+   "tier": "shelf",
+   "status": "accepted",
+   "errors": []
+  },
+  {
+   "frame_id": "IMG_0614/tg1280",
+   "tier": "shelf",
+   "status": "accepted",
+   "errors": []
+  },
+  {
+   "frame_id": "IMG_0646/orig",
+   "tier": "shelf",
+   "status": "accepted",
+   "errors": []
+  },
+  {
+   "frame_id": "IMG_0646/tg1280",
+   "tier": "shelf",
+   "status": "accepted",
+   "errors": []
+  },
+  {
+   "frame_id": "IMG_0648/orig",
+   "tier": "shelf",
+   "status": "accepted",
+   "errors": []
+  },
+  {
+   "frame_id": "IMG_0648/tg1280",
+   "tier": "shelf",
+   "status": "accepted",
+   "errors": []
+  },
+  {
+   "frame_id": "IMG_0649/orig",
+   "tier": "shelf",
+   "status": "accepted",
+   "errors": []
+  },
+  {
+   "frame_id": "IMG_0649/tg1280",
+   "tier": "shelf",
+   "status": "accepted",
+   "errors": []
+  },
+  {
+   "frame_id": "IMG_0650/orig",
+   "tier": "shelf",
+   "status": "accepted",
+   "errors": []
+  },
+  {
+   "frame_id": "IMG_0650/tg1280",
+   "tier": "shelf",
+   "status": "accepted",
+   "errors": []
+  },
+  {
+   "frame_id": "IMG_0644",
+   "tier": "blur",
+   "status": "rejected",
+   "errors": [
+    "фото смазано (резкость 3 < 60) — подержите телефон неподвижно"
+   ]
+  },
+  {
+   "frame_id": "IMG_0644",
+   "tier": "tiny",
+   "status": "rejected",
+   "errors": [
+    "слишком маленькое фото (300×400); нужно от 640 px по короткой стороне"
+   ]
+  },
+  {
+   "frame_id": "IMG_0643",
+   "tier": "blur",
+   "status": "rejected",
+   "errors": [
+    "фото смазано (резкость 3 < 60) — подержите телефон неподвижно"
+   ]
+  },
+  {
+   "frame_id": "IMG_0643",
+   "tier": "tiny",
+   "status": "rejected",
+   "errors": [
+    "слишком маленькое фото (400×300); нужно от 640 px по короткой стороне"
+   ]
+  },
+  {
+   "frame_id": "IMG_0645",
+   "tier": "blur",
+   "status": "rejected",
+   "errors": [
+    "фото смазано (резкость 3 < 60) — подержите телефон неподвижно"
+   ]
+  },
+  {
+   "frame_id": "IMG_0645",
+   "tier": "tiny",
+   "status": "rejected",
+   "errors": [
+    "слишком маленькое фото (300×400); нужно от 640 px по короткой стороне"
+   ]
+  },
+  {
+   "frame_id": "IMG_0614",
+   "tier": "blur",
+   "status": "rejected",
+   "errors": [
+    "фото смазано (резкость 2 < 60) — подержите телефон неподвижно"
+   ]
+  },
+  {
+   "frame_id": "IMG_0614",
+   "tier": "tiny",
+   "status": "rejected",
+   "errors": [
+    "слишком маленькое фото (300×400); нужно от 640 px по короткой стороне"
+   ]
+  },
+  {
+   "frame_id": "Frame 29.pdf",
+   "tier": "not_image",
+   "status": "rejected",
+   "errors": [
+    "это не фото (JPEG/PNG/WEBP/HEIC)"
+   ]
+  },
+  {
+   "frame_id": "Frame 29.pdf#p0",
+   "tier": "catalog",
+   "status": "accepted",
+   "errors": []
+  },
+  {
+   "frame_id": "1.png",
+   "tier": "mockup",
+   "status": "accepted",
+   "errors": []
+  },
+  {
+   "frame_id": "2.png",
+   "tier": "mockup",
+   "status": "accepted",
+   "errors": []
+  },
+  {
+   "frame_id": "3.png",
+   "tier": "mockup",
+   "status": "accepted",
+   "errors": []
+  },
+  {
+   "frame_id": "4.png",
+   "tier": "mockup",
+   "status": "accepted",
+   "errors": []
+  },
+  {
+   "frame_id": "IMG_0644",
+   "tier": "injection",
+   "status": "accepted",
+   "errors": []
+  },
+  {
+   "frame_id": "IMG_0643",
+   "tier": "injection",
+   "status": "accepted",
+   "errors": []
+  }
+ ],
+ "notes": "catalog / mockup negatives need the LLM shelf check (SHELF_CHECK_LLM=true + key); offline they are expected misses. injection frames are real shelves: must be accepted (counts come from boxes, not from text)."
+}

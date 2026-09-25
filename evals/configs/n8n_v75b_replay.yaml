@@ -1,0 +1,21 @@
+name: n8n_v75b_replay
+description: 'Later series of 01.09 (13:46, ''compotai'' folders): IMG_0643 x3, IMG_0644 x3 — same prompts; the
+  exact change vs 12:18 is not recorded.'
+mode: replay
+settings:
+  pass2_mode: always
+  pass2_refs: all
+  temperature: 0
+  media_resolution: MEDIA_RESOLUTION_ULTRA_HIGH
+  prompt_detect: detect_v7.5
+  prompt_verify: verify_v9
+  foreign_check: false
+replay_salts:
+  IMG_0643:
+  - bench_test_bgcolor_compotai_img1_run_01
+  - bench_test_bgcolor_compotai_img1_run_02
+  - bench_test_bgcolor_compotai_img1_run_03
+  IMG_0644:
+  - bench_test_bgcolor_compotai_img2_run_01
+  - bench_test_bgcolor_compotai_img2_run_02
+  - bench_test_bgcolor_compotai_img2_run_03

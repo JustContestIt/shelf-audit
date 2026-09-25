@@ -1,0 +1,375 @@
+{
+ "frame_id": "IMG_0614",
+ "aliases": [],
+ "tier": "silver",
+ "file": "frames/examples/IMG_0614.JPG",
+ "size": [
+  960,
+  1280
+ ],
+ "variants": [
+  "orig"
+ ],
+ "source": "embedding_experiment 24.08: labels_IMG_*.json + multi_crops_meta.json (YOLO11x rows)",
+ "notes": "Visual labels by zooms (not a field recount), ±1–2 units; packs not labelled; shelf numbers are YOLO rows with our units, top to bottom — the model may number shelves differently (scored by order).",
+ "shelves": [
+  {
+   "shelf_index": 1,
+   "yolo_row": 0,
+   "units": [
+    {
+     "brand": "ЧУЖОЙ",
+     "subtype": null,
+     "format": null,
+     "box_px": [
+      362,
+      113,
+      402,
+      211
+     ]
+    },
+    {
+     "brand": "ЧУЖОЙ",
+     "subtype": null,
+     "format": null,
+     "box_px": [
+      400,
+      95,
+      444,
+      212
+     ]
+    },
+    {
+     "brand": "ЧУЖОЙ",
+     "subtype": null,
+     "format": null,
+     "box_px": [
+      444,
+      116,
+      478,
+      213
+     ]
+    },
+    {
+     "brand": "ЧУЖОЙ",
+     "subtype": null,
+     "format": null,
+     "box_px": [
+      473,
+      96,
+      514,
+      213
+     ]
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA клубника-киви",
+     "format": null,
+     "box_px": [
+      487,
+      830,
+      534,
+      993
+     ]
+    },
+    {
+     "brand": "ЧУЖОЙ",
+     "subtype": null,
+     "format": null,
+     "box_px": [
+      526,
+      117,
+      566,
+      215
+     ]
+    },
+    {
+     "brand": "ЧУЖОЙ",
+     "subtype": null,
+     "format": null,
+     "box_px": [
+      565,
+      116,
+      607,
+      216
+     ]
+    },
+    {
+     "brand": "ЧУЖОЙ",
+     "subtype": null,
+     "format": null,
+     "box_px": [
+      606,
+      118,
+      648,
+      217
+     ]
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA клубника-киви",
+     "format": null,
+     "box_px": [
+      628,
+      832,
+      672,
+      995
+     ]
+    },
+    {
+     "brand": "ЧУЖОЙ",
+     "subtype": null,
+     "format": null,
+     "box_px": [
+      651,
+      53,
+      701,
+      218
+     ]
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA лимон-лайм-жасмин",
+     "format": null,
+     "box_px": [
+      705,
+      95,
+      745,
+      215
+     ]
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA малина",
+     "format": null,
+     "box_px": [
+      748,
+      95,
+      792,
+      215
+     ]
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA помело-цветок апельсина",
+     "format": null,
+     "box_px": [
+      793,
+      95,
+      833,
+      215
+     ]
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA манго-маракуйя",
+     "format": null,
+     "box_px": [
+      876,
+      93,
+      922,
+      213
+     ]
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA гуава-тропики",
+     "format": null,
+     "unsure": true,
+     "box_px": [
+      923,
+      93,
+      958,
+      213
+     ]
+    }
+   ],
+   "units_gt": 7,
+   "tags": [
+    "foreign_nearby",
+    "pink_zone",
+    "unsure_labels"
+   ]
+  },
+  {
+   "shelf_index": 2,
+   "yolo_row": 4,
+   "units": [
+    {
+     "brand": "ЧУЖОЙ",
+     "subtype": null,
+     "format": null,
+     "box_px": [
+      0,
+      858,
+      47,
+      1005
+     ]
+    },
+    {
+     "brand": "ЧУЖОЙ",
+     "subtype": null,
+     "format": null,
+     "box_px": [
+      43,
+      853,
+      76,
+      990
+     ]
+    },
+    {
+     "brand": "ЧУЖОЙ",
+     "subtype": null,
+     "format": null,
+     "box_px": [
+      70,
+      860,
+      112,
+      1003
+     ]
+    },
+    {
+     "brand": "ЧУЖОЙ",
+     "subtype": null,
+     "format": null,
+     "box_px": [
+      107,
+      858,
+      156,
+      1003
+     ]
+    },
+    {
+     "brand": "ЧУЖОЙ",
+     "subtype": null,
+     "format": null,
+     "box_px": [
+      154,
+      858,
+      201,
+      1002
+     ]
+    },
+    {
+     "brand": "ЧУЖОЙ",
+     "subtype": null,
+     "format": null,
+     "box_px": [
+      197,
+      856,
+      241,
+      987
+     ]
+    },
+    {
+     "brand": "ЧУЖОЙ",
+     "subtype": null,
+     "format": null,
+     "box_px": [
+      243,
+      857,
+      289,
+      1000
+     ]
+    },
+    {
+     "brand": "ЧУЖОЙ",
+     "subtype": null,
+     "format": null,
+     "box_px": [
+      296,
+      850,
+      342,
+      1000
+     ]
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA лимон-лайм-жасмин",
+     "format": null,
+     "box_px": [
+      339,
+      836,
+      391,
+      996
+     ]
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA манго-маракуйя",
+     "format": null,
+     "box_px": [
+      387,
+      828,
+      442,
+      990
+     ]
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA гуава-тропики",
+     "format": null,
+     "unsure": true,
+     "box_px": [
+      438,
+      837,
+      487,
+      960
+     ]
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA малина",
+     "format": null,
+     "box_px": [
+      534,
+      826,
+      582,
+      986
+     ]
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA помело-цветок апельсина",
+     "format": null,
+     "box_px": [
+      579,
+      828,
+      630,
+      996
+     ]
+    },
+    {
+     "brand": "ЧУЖОЙ",
+     "subtype": null,
+     "format": null,
+     "box_px": [
+      713,
+      832,
+      771,
+      987
+     ]
+    },
+    {
+     "brand": "ЧУЖОЙ",
+     "subtype": null,
+     "format": null,
+     "box_px": [
+      911,
+      833,
+      960,
+      995
+     ]
+    }
+   ],
+   "units_gt": 5,
+   "tags": [
+    "foreign_nearby",
+    "pink_zone",
+    "unsure_labels"
+   ]
+  }
+ ],
+ "units_gt": 12,
+ "foreign_gt": 18
+}

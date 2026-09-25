@@ -1,0 +1,233 @@
+[
+ {
+  "name": "bench_test1_run_01",
+  "source": "bench/runs/test1/run_01.txt",
+  "frame": "IMG_0644",
+  "has_items": false,
+  "has_slivers": false
+ },
+ {
+  "name": "bench_test1_run_02",
+  "source": "bench/runs/test1/run_02.txt",
+  "frame": "IMG_0644",
+  "has_items": false,
+  "has_slivers": false
+ },
+ {
+  "name": "bench_test1_run_03",
+  "source": "bench/runs/test1/run_03.txt",
+  "frame": "IMG_0644",
+  "has_items": false,
+  "has_slivers": false
+ },
+ {
+  "name": "bench_test1_run_04",
+  "source": "bench/runs/test1/run_04.txt",
+  "frame": "IMG_0644",
+  "has_items": false,
+  "has_slivers": false
+ },
+ {
+  "name": "bench_test1_run_05",
+  "source": "bench/runs/test1/run_05.txt",
+  "frame": "IMG_0644",
+  "has_items": false,
+  "has_slivers": false
+ },
+ {
+  "name": "bench_test1_run_06",
+  "source": "bench/runs/test1/run_06.txt",
+  "frame": "IMG_0644",
+  "has_items": false,
+  "has_slivers": false
+ },
+ {
+  "name": "bench_test_bgcolor_compotai_img1_run_01",
+  "source": "bench/runs/test_bgcolor_compotai_img1/run_01.txt",
+  "frame": "IMG_0643",
+  "has_items": false,
+  "has_slivers": false
+ },
+ {
+  "name": "bench_test_bgcolor_compotai_img1_run_02",
+  "source": "bench/runs/test_bgcolor_compotai_img1/run_02.txt",
+  "frame": "IMG_0643",
+  "has_items": false,
+  "has_slivers": false
+ },
+ {
+  "name": "bench_test_bgcolor_compotai_img1_run_03",
+  "source": "bench/runs/test_bgcolor_compotai_img1/run_03.txt",
+  "frame": "IMG_0643",
+  "has_items": false,
+  "has_slivers": false
+ },
+ {
+  "name": "bench_test_bgcolor_compotai_img2_run_01",
+  "source": "bench/runs/test_bgcolor_compotai_img2/run_01.txt",
+  "frame": "IMG_0644",
+  "has_items": false,
+  "has_slivers": false
+ },
+ {
+  "name": "bench_test_bgcolor_compotai_img2_run_02",
+  "source": "bench/runs/test_bgcolor_compotai_img2/run_02.txt",
+  "frame": "IMG_0644",
+  "has_items": false,
+  "has_slivers": false
+ },
+ {
+  "name": "bench_test_bgcolor_compotai_img2_run_03",
+  "source": "bench/runs/test_bgcolor_compotai_img2/run_03.txt",
+  "frame": "IMG_0644",
+  "has_items": false,
+  "has_slivers": false
+ },
+ {
+  "name": "bench_test_bgcolor_img1_run_01",
+  "source": "bench/runs/test_bgcolor_img1/run_01.txt",
+  "frame": "IMG_0644",
+  "has_items": false,
+  "has_slivers": false
+ },
+ {
+  "name": "bench_test_bgcolor_img1_run_02",
+  "source": "bench/runs/test_bgcolor_img1/run_02.txt",
+  "frame": "IMG_0644",
+  "has_items": false,
+  "has_slivers": false
+ },
+ {
+  "name": "bench_test_bgcolor_img1_run_03",
+  "source": "bench/runs/test_bgcolor_img1/run_03.txt",
+  "frame": "IMG_0644",
+  "has_items": false,
+  "has_slivers": false
+ },
+ {
+  "name": "bench_test_bgcolor_img1_run_04",
+  "source": "bench/runs/test_bgcolor_img1/run_04.txt",
+  "frame": "IMG_0644",
+  "has_items": false,
+  "has_slivers": false
+ },
+ {
+  "name": "bench_test_bgcolor_img2_run_01",
+  "source": "bench/runs/test_bgcolor_img2/run_01.txt",
+  "frame": "IMG_0643",
+  "has_items": false,
+  "has_slivers": false
+ },
+ {
+  "name": "bench_test_bgcolor_img2_run_02",
+  "source": "bench/runs/test_bgcolor_img2/run_02.txt",
+  "frame": "IMG_0643",
+  "has_items": false,
+  "has_slivers": false
+ },
+ {
+  "name": "bench_test_bgcolor_img2_run_03",
+  "source": "bench/runs/test_bgcolor_img2/run_03.txt",
+  "frame": "IMG_0643",
+  "has_items": false,
+  "has_slivers": false
+ },
+ {
+  "name": "bench_test_cold_cache_run_01",
+  "source": "bench/runs/test_cold_cache/run_01.txt",
+  "frame": "IMG_0644",
+  "has_items": false,
+  "has_slivers": false
+ },
+ {
+  "name": "bench_test_cold_cache_run_02",
+  "source": "bench/runs/test_cold_cache/run_02.txt",
+  "frame": "IMG_0644",
+  "has_items": false,
+  "has_slivers": false
+ },
+ {
+  "name": "bench_test_cold_cache_run_03",
+  "source": "bench/runs/test_cold_cache/run_03.txt",
+  "frame": "IMG_0644",
+  "has_items": false,
+  "has_slivers": false
+ },
+ {
+  "name": "bench_test_klubnika_only_pass_1_run_01",
+  "source": "bench/runs/test_klubnika_only_pass_1/run_01.txt",
+  "frame": "IMG_0644",
+  "has_items": false,
+  "has_slivers": false
+ },
+ {
+  "name": "bench_test_klubnika_only_pass_1_run_02",
+  "source": "bench/runs/test_klubnika_only_pass_1/run_02.txt",
+  "frame": "IMG_0644",
+  "has_items": false,
+  "has_slivers": false
+ },
+ {
+  "name": "bench_test_old_catalog_run_01",
+  "source": "bench/runs/test_old_catalog/run_01.txt",
+  "frame": "IMG_0644",
+  "has_items": false,
+  "has_slivers": false
+ },
+ {
+  "name": "bench_test_old_catalog_run_02",
+  "source": "bench/runs/test_old_catalog/run_02.txt",
+  "frame": "IMG_0644",
+  "has_items": false,
+  "has_slivers": false
+ },
+ {
+  "name": "bench_test_old_catalog_run_03",
+  "source": "bench/runs/test_old_catalog/run_03.txt",
+  "frame": "IMG_0644",
+  "has_items": false,
+  "has_slivers": false
+ },
+ {
+  "name": "bench_test_old_catalog_pass_1_2_run_01",
+  "source": "bench/runs/test_old_catalog_pass_1_2/run_01.txt",
+  "frame": "IMG_0644",
+  "has_items": false,
+  "has_slivers": false
+ },
+ {
+  "name": "bench_test_only_pass_1_run_01",
+  "source": "bench/runs/test_only_pass_1/run_01.txt",
+  "frame": "IMG_0644",
+  "has_items": false,
+  "has_slivers": false
+ },
+ {
+  "name": "bench_test_only_pass_1_run_02",
+  "source": "bench/runs/test_only_pass_1/run_02.txt",
+  "frame": "IMG_0644",
+  "has_items": false,
+  "has_slivers": false
+ },
+ {
+  "name": "tr_pass1_2_31_08_2026",
+  "source": "test results/pass1&2_31_08_2026.txt",
+  "frame": "IMG_0644",
+  "has_items": true,
+  "has_slivers": true
+ },
+ {
+  "name": "tr_pass1_2_31_08_2026_2",
+  "source": "test results/pass1&2_31_08_2026_2.txt",
+  "frame": "IMG_0644",
+  "has_items": true,
+  "has_slivers": true
+ },
+ {
+  "name": "tr_pass1_2_31_08_2026_3",
+  "source": "test results/pass1&2_31_08_2026_3.txt",
+  "frame": "IMG_0644",
+  "has_items": true,
+  "has_slivers": true
+ }
+]

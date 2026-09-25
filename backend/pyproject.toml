@@ -1,0 +1,43 @@
+[project]
+name = "shelf-audit"
+version = "0.1.0"
+description = "Shelf audit from a photo: LangGraph + Gemini vision + visual RAG over reference images"
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi>=0.115",
+  "uvicorn[standard]>=0.30",
+  "python-multipart>=0.0.9",
+  "httpx>=0.27",
+  "pydantic>=2.7",
+  "pydantic-settings>=2.3",
+  "pyyaml>=6.0",
+  "pillow>=10.3",
+  "numpy>=1.26",
+  "onnxruntime>=1.18",
+  "pymupdf>=1.24",
+  "psycopg[binary,pool]>=3.2",
+  "pgvector>=0.3",
+  "langgraph>=1.0",
+  "langgraph-checkpoint-postgres>=2.0",
+  "langsmith>=0.2",
+  "openpyxl>=3.1",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "pytest-asyncio>=0.23", "ruff>=0.5"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["app"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+  "pg: needs a running Postgres with pgvector (DATABASE_URL)",
+  "onnx: needs data/models/siglip_vision.onnx",
+  "data: needs customer data in ../data (not in git)",
+]
+

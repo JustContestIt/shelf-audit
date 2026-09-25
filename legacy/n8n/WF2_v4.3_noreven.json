@@ -1,0 +1,1569 @@
+{
+ "name": "Vision Assistance - WF-2 ver.4.3 (Sheets Cold)",
+ "nodes": [
+  {
+   "parameters": {
+    "jsCode": "const inp = $input.first().json;\n\nconst required = ['file_id', 'chat_id', 'agent_id', 'store_name'];\nconst missing = required.filter(k => inp[k] === undefined || inp[k] === null || inp[k] === '');\nif (missing.length) {\n  throw new Error('WF-2: не переданы обязательные поля: ' + missing.join(', '));\n}\n\nreturn [{ json: {\n  file_id:       String(inp.file_id),\n  chat_id:       inp.chat_id,\n  agent_id:      String(inp.agent_id),\n  store_name:    String(inp.store_name),\n  message_id:    inp.message_id ?? Date.now(),\n  source:        inp.source || 'direct',\n  store_code:    String(inp.store_code ?? ''),   // №26: код ТТ из маршрута\n  route_code:    String(inp.route_code ?? ''),   // 1 маршрут = 1 агент → это и есть его ID у заказчика\n} }];"
+   },
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "id": "93c01fa2-4a6e-40ac-b59b-f4a3f2953c9b",
+   "name": "Валидация входа",
+   "position": [
+    -1936,
+    1216
+   ]
+  },
+  {
+   "parameters": {
+    "resource": "row",
+    "dataTableId": {
+     "__rl": true,
+     "value": "wf_logs",
+     "mode": "name"
+    },
+    "columns": {
+     "mappingMode": "defineBelow",
+     "value": {
+      "run_id": "={{ $execution.id }}",
+      "chat_id": "={{ String($('Валидация входа').item.json.chat_id) }}",
+      "status": "Started",
+      "confidence": "",
+      "notes_google": "",
+      "notes_user": "Запуск обработки фотографии",
+      "created_at": "={{ new Date().toISOString() }}",
+      "updated_at": "={{ new Date().toISOString() }}",
+      "synced": "-"
+     },
+     "matchingColumns": [],
+     "schema": [
+      {
+       "id": "run_id",
+       "displayName": "run_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "chat_id",
+       "displayName": "chat_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "status",
+       "displayName": "status",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "confidence",
+       "displayName": "confidence",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "notes_google",
+       "displayName": "notes_google",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "notes_user",
+       "displayName": "notes_user",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "created_at",
+       "displayName": "created_at",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "updated_at",
+       "displayName": "updated_at",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "synced",
+       "displayName": "synced",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      }
+     ]
+    }
+   },
+   "type": "n8n-nodes-base.dataTable",
+   "typeVersion": 1,
+   "position": [
+    -1712,
+    992
+   ],
+   "id": "7e3a37b8-a3e0-499a-b8b0-92a686ea454d",
+   "name": "Создание лога (Started)",
+   "onError": "continueErrorOutput"
+  },
+  {
+   "parameters": {
+    "chatId": "=<CHAT_ID>",
+    "text": "=Ошибка в логгировании на started. \nТелеграм ID чата: {{ $('Валидация входа').item.json.chat_id }}.\nВремя: {{ new Date().toISOString() }}.\nОшибка: {{ $json.error }}",
+    "additionalFields": {
+     "appendAttribution": false,
+     "parse_mode": "Markdown"
+    }
+   },
+   "type": "n8n-nodes-base.telegram",
+   "typeVersion": 1.2,
+   "position": [
+    -1488,
+    992
+   ],
+   "id": "998e3421-a68b-4dfa-8afe-682250ba8735",
+   "name": "Ошибка лога (Started)",
+   "webhookId": "<WEBHOOK_ID>",
+   "credentials": {
+    "telegramApi": {
+     "id": "<CRED_ID>",
+     "name": "<telegramApi>"
+    }
+   },
+   "onError": "continueRegularOutput"
+  },
+  {
+   "parameters": {
+    "resource": "file",
+    "fileId": "={{ $('Валидация входа').item.json.file_id }}",
+    "additionalFields": {}
+   },
+   "type": "n8n-nodes-base.telegram",
+   "typeVersion": 1.2,
+   "position": [
+    -1712,
+    1376
+   ],
+   "id": "824e5f5b-ca9d-4f8c-84b6-0d3d02d11a50",
+   "name": "Загрузка фото",
+   "webhookId": "<WEBHOOK_ID>",
+   "credentials": {
+    "telegramApi": {
+     "id": "<CRED_ID>",
+     "name": "<telegramApi>"
+    }
+   }
+  },
+  {
+   "parameters": {
+    "jsCode": "// n8n Code node - определение только графических типов для Telegram + заполнение file_mime по file_path\nconst items = $input.all();\n\n// Разрешенные графические расширения\nconst ALLOWED = new Set([\"jpg\",\"png\",\"gif\",\"webp\",\"bmp\",\"tiff\",\"heic\",\"heif\",\"svg\"]);\n\n// MIME карта по расширениям (включил pdf на всякий случай и несколько часто встречающихся типов)\nconst extToMime = {\n  jpg: \"image/jpeg\",\n  jpeg: \"image/jpeg\",\n  png: \"image/png\",\n  gif: \"image/gif\",\n  webp: \"image/webp\",\n  bmp: \"image/bmp\",\n  tiff: \"image/tiff\",\n  tif: \"image/tiff\",\n  heic: \"image/heic\",\n  heif: \"image/heif\",\n  svg: \"image/svg+xml\",\n  avif: \"image/avif\",\n  pdf: \"application/pdf\",\n  mp4: \"video/mp4\",\n  webm: \"video/webm\"\n};\n\nfunction normalizeExt(ext) {\n  if (!ext) return null;\n  ext = String(ext).toLowerCase().replace(/[^a-z0-9]/g, \"\");\n  if (ext === \"jpeg\") return \"jpg\";\n  if (ext === \"tif\") return \"tiff\";\n  return ext;\n}\nfunction isAllowed(ext) {\n  return !!ext && ALLOWED.has(ext);\n}\nfunction extFromFilename(name) {\n  if (!name || typeof name !== \"string\") return null;\n  const withoutQuery = name.split(\"?\")[0].split(\"#\")[0];\n  const lastDot = withoutQuery.lastIndexOf(\".\");\n  if (lastDot === -1) return null;\n  return normalizeExt(withoutQuery.slice(lastDot + 1));\n}\nfunction extFromMime(mime) {\n  if (!mime || typeof mime !== \"string\") return null;\n  mime = mime.toLowerCase();\n  const parts = mime.split(\"/\");\n  if (parts.length === 2) {\n    // image/png -> png ; application/pdf -> pdf\n    return normalizeExt(parts[1].split(\"+\")[0]);\n  }\n  return null;\n}\nfunction extFromDataUrl(dataUrl) {\n  if (!dataUrl || typeof dataUrl !== \"string\") return null;\n  const m = dataUrl.match(/^data:([^;]+);base64,/i);\n  if (!m) return null;\n  return extFromMime(m[1]);\n}\nfunction extFromUrlOrPath(possibleUrl) {\n  if (!possibleUrl) return null;\n  try {\n    const u = new URL(possibleUrl);\n    return extFromFilename(u.pathname);\n  } catch (e) {\n    return extFromFilename(String(possibleUrl));\n  }\n}\nfunction getMimeForExt(ext) {\n  if (!ext) return null;\n  ext = normalizeExt(ext);\n  return extToMime[ext] || null;\n}\n\n// Собираем строки-кандидаты из разных мест, включая result.*\nfunction collectStringCandidates(j) {\n  const c = [];\n  const topKeys = [\"filename\",\"fileName\",\"file_name\",\"name\",\"originalName\",\"original_filename\",\"title\",\n                   \"file_path\",\"filePath\",\"path\",\"url\",\"fileUrl\",\"file_url\",\"link\",\"href\"];\n  for (const k of topKeys) if (j[k]) c.push(j[k]);\n\n  const nestedContainers = [\"result\",\"document\",\"file\",\"photo\",\"message\",\"payload\"];\n  for (const key of nestedContainers) {\n    const obj = j[key];\n    if (!obj || typeof obj !== \"object\") continue;\n    const known = [\"file_name\",\"fileName\",\"file_path\",\"filePath\",\"url\",\"path\",\"link\",\"href\"];\n    for (const k of known) if (obj[k]) c.push(obj[k]);\n    for (const subKey of Object.keys(obj)) {\n      const val = obj[subKey];\n      if (typeof val === \"string\") c.push(val);\n    }\n  }\n  return c;\n}\n\nfor (const item of items) {\n  const j = item.json || {};\n  let detected = null;\n  let detectedMime = null;\n\n  // 1) если явно передали file_type и он разрешен\n  if (j.file_type && typeof j.file_type === \"string\") {\n    const e = normalizeExt(j.file_type);\n    if (isAllowed(e)) detected = e;\n  }\n\n  // 2) Попытки по имени/пути, включая result.*\n  if (!detected) {\n    const candidates = collectStringCandidates(j);\n    for (const cand of candidates) {\n      const e = extFromFilename(String(cand));\n      if (isAllowed(e)) { detected = e; break; }\n    }\n  }\n\n  // 3) По MIME из входящих полей\n  if (!detected) {\n    const mimeCandidates = [\n      j.mimeType, j.mimetype, j.contentType, j.content_type, j.type,\n      j.file && j.file.mime, j.document && (j.document.mime_type || j.document.mimeType || j.document.mimetype),\n      j.result && (j.result.mime_type || j.result.mimeType || j.result.mimetype),\n      j.message && (j.message.mime_type || j.message.mimetype)\n    ];\n    for (const m of mimeCandidates) {\n      if (!m) continue;\n      const e = extFromMime(m);\n      if (isAllowed(e)) { detected = e; detectedMime = m; break; }\n    }\n  }\n\n  // 4) Data URL\n  if (!detected) {\n    const dataCandidates = [j.data, j.base64, j.content, j.file && j.file.content];\n    for (const d of dataCandidates) {\n      if (typeof d === \"string\" && d.startsWith(\"data:\")) {\n        const e = extFromDataUrl(d);\n        if (isAllowed(e)) { detected = e; break; }\n      }\n    }\n  }\n\n  // 5) URL/path fallback\n  if (!detected) {\n    const urlCandidates = [\n      j.url, j.fileUrl, j.file_url, j.link, j.href,\n      j.result && j.result.url, j.result && j.result.file_path, j.result && j.result.fileUrl\n    ];\n    for (const u of urlCandidates) {\n      const e = extFromUrlOrPath(u);\n      if (isAllowed(e)) { detected = e; break; }\n    }\n  }\n\n  // 6) Telegram heuristics\n  if (!detected) {\n    if (j.message && j.message.photo) detected = \"jpg\";\n    else if (j.message && j.message.sticker) {\n      const st = j.message.sticker;\n      const fromMime = extFromMime(st.mime_type || st.mimeType || st.mimetype);\n      if (isAllowed(fromMime)) detected = fromMime;\n      else detected = \"webp\";\n    }\n    else if (j.message && j.message.animation) {\n      const anim = j.message.animation;\n      const fromMime = extFromMime(anim.mime_type || anim.mimeType || anim.mimetype);\n      if (isAllowed(fromMime)) detected = fromMime;\n      else detected = \"gif\";\n    } else if (j.message && j.message.document) {\n      const doc = j.message.document;\n      const fromMime = extFromMime(doc.mime_type || doc.mimeType || doc.mimetype);\n      if (isAllowed(fromMime)) detected = fromMime;\n      else {\n        const nameExt = extFromFilename(doc.file_name || doc.fileName || doc.file_name);\n        if (isAllowed(nameExt)) detected = nameExt;\n      }\n    }\n  }\n\n  if (!detected) detected = \"unknown\";\n\n  // --- Заполнение file_mime: приоритеты\n  // 1) explicit detectedMime (из mimeCandidates)\n  // 2) existing fields в джсоне (j.mimeType / j.mimetype / result.*)\n  // 3) вывести mime по расширению, взятому из file_path / result.file_path / других кандидатов\n  // 4) null если ничего не вышло\n\n  let finalMime = detectedMime ||\n                  j.mimeType || j.mimetype || j.contentType ||\n                  (j.result && (j.result.mime_type || j.result.mimetype || j.result.mimeType)) || null;\n\n  if (!finalMime) {\n    // попробуем явно взять расширение из file_path и сопоставить\n    const pathCandidates = [\n      j.file_path, j.filePath, j.path,\n      j.result && j.result.file_path, j.result && j.result.filePath,\n      j.result && j.result.path\n    ];\n    let extFromPath = null;\n    for (const p of pathCandidates) {\n      if (!p) continue;\n      const e = extFromFilename(String(p));\n      if (e) { extFromPath = e; break; }\n    }\n    // если не нашли в специальных полях, попробуем остальные строковые кандидаты\n    if (!extFromPath) {\n      const allStr = collectStringCandidates(j);\n      for (const s of allStr) {\n        const e = extFromFilename(String(s));\n        if (e) { extFromPath = e; break; }\n      }\n    }\n    if (extFromPath) {\n      const mimeByExt = getMimeForExt(extFromPath);\n      if (mimeByExt) finalMime = mimeByExt;\n    }\n  }\n\n  item.json.file_type = detected;\n  item.json.file_mime = finalMime || null;\n}\n\nreturn items;"
+   },
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    -1488,
+    1376
+   ],
+   "id": "cf349a25-34c9-477f-a0c7-56abfcef9571",
+   "name": "Закрепляю тип фотографии"
+  },
+  {
+   "parameters": {
+    "operation": "binaryToPropery",
+    "options": {}
+   },
+   "type": "n8n-nodes-base.extractFromFile",
+   "typeVersion": 1,
+   "position": [
+    -1264,
+    1376
+   ],
+   "id": "304fd643-7ee9-4645-830c-5b30c6a56ac0",
+   "name": "Перевод фото в строку"
+  },
+  {
+   "parameters": {
+    "jsCode": "// v7.5-format-geo = v7.1-slivers + блок 3b (гео-арбитраж литража крупных ПЭТ).\n// v7.1-slivers: парсинг ответа-детекции + ДЕТЕРМИНИРОВАННЫЙ счёт по боксам + ФОРМАТ ТАРЫ (№25)\n// + фильтр «щепок» (серия H, 04.08: на документе Flash выдал фантомные боксы шириной 10 и 22\n// при медиане полки 31–36 → счёт 67 вместо 65, план Pro-прохода поехал).\n// Правило: ИНТЕРЬЕРНЫЙ бокс уже 0.7 медианной ширины своей полки → в диагностику, не в отчёт.\n// Боксы у краёв кадра (x_min ≤ 5 или x_max ≥ 995) НЕ отсеиваются — частично видимые единицы\n// включаем по промпту (правка п.6 от 27.07).\n// Также в _detect добавлен finish_reason — контроль обрезания вывода (MAX_TOKENS/SAFETY).\nconst raw = $input.first().json;\nconst cand = raw.candidates?.[0];\nconst parts = cand?.content?.parts || [];\nconst textPart = [...parts].reverse().find(p => typeof p.text === 'string');\nif (!textPart) {\n  throw new Error('Нет текстового ответа Gemini: ' + JSON.stringify(raw).slice(0, 800));\n}\nconst data = JSON.parse(textPart.text);\n\nconst BRANDS = ['Буратино', 'AI TEA', 'Chino', 'Компотай', 'Tamga'];\nconst boxesIn = Array.isArray(data.boxes) ? data.boxes : [];\n\n// 1) валидация координат\nconst valid = [];\nlet bad = 0;\nfor (const b of boxesIn) {\n  const c = b && b.box_2d;\n  if (!Array.isArray(c) || c.length !== 4 || c.some(v => typeof v !== 'number')) { bad++; continue; }\n  const clamped = c.map(v => Math.max(0, Math.min(1000, v)));\n  const y0 = clamped[0], x0 = clamped[1], y1 = clamped[2], x1 = clamped[3];\n  if (y1 <= y0 || x1 <= x0) { bad++; continue; }\n  valid.push(Object.assign({}, b, { box_2d: [y0, x0, y1, x1] }));\n}\n\n// 2) дедуп: IoU > 0.7 → остаётся бокс с большей confidence\nconst iou = (a, b) => {\n  const ix = Math.max(0, Math.min(a[3], b[3]) - Math.max(a[1], b[1]));\n  const iy = Math.max(0, Math.min(a[2], b[2]) - Math.max(a[0], b[0]));\n  const inter = ix * iy;\n  const union = (a[3] - a[1]) * (a[2] - a[0]) + (b[3] - b[1]) * (b[2] - b[0]) - inter;\n  return union > 0 ? inter / union : 0;\n};\nvalid.sort((a, b) => (b.confidence ?? 0) - (a.confidence ?? 0));\nconst keptAll = [];\nlet dups = 0;\nfor (const b of valid) {\n  if (keptAll.some(k => iou(k.box_2d, b.box_2d) > 0.7)) { dups++; continue; }\n  keptAll.push(b);\n}\n\n// 2b) фильтр «щепок»: аномально узкие интерьерные боксы — артефакты детекции, не товар\nconst wOf = b => b.box_2d[3] - b.box_2d[1];\nconst shelfOf = b => Number.isInteger(b.shelf_index) && b.shelf_index > 0 ? b.shelf_index : 0;\nconst widthsByShelf = new Map();\nfor (const b of keptAll) {\n  const s = shelfOf(b);\n  if (!widthsByShelf.has(s)) widthsByShelf.set(s, []);\n  widthsByShelf.get(s).push(wOf(b));\n}\nconst medW = new Map();\nfor (const [s, ws] of widthsByShelf) {\n  const sorted = [...ws].sort((a, b) => a - b);\n  medW.set(s, sorted[Math.floor(sorted.length / 2)]);\n}\nconst sliversDropped = [];\nconst kept = keptAll.filter(b => {\n  const med = medW.get(shelfOf(b)) || 0;\n  const atEdge = b.box_2d[1] <= 5 || b.box_2d[3] >= 995;\n  if (!atEdge && med > 0 && wOf(b) < 0.7 * med) { sliversDropped.push(b); return false; }\n  return true;\n});\n\n// 3) ЧУЖОЙ — в диагностику, не в отчёт\nconst foreign = kept.filter(b => b.label === 'ЧУЖОЙ');\nconst ours = kept.filter(b => BRANDS.includes(b.label));\n\n// ── 3b) ФОРМАТ-ГЕО (v7.5, №25-геометрия): арбитраж литража КРУПНЫХ ПЭТ по ширине боксов.\n// Калибровка 10.08.2026 на живых боксах Flash (IMG_0643, gt-66): w_rel = ширина бокса ÷ span\n// ряда полки; отношение к якорю «банка 0,45 л»: 1 л ≈ 1.18 · 1,5 л ≈ 1.33 · 2 л ≈ 1.54\n// (физика диаметров 1.24/1.39/1.58; систематика боксов ≈ −4% сокращается отношением).\n// Применяется ТОЛЬКО: плотный полный ряд (гейты density/span), группы ≥3, бренды с крупными ПЭТ,\n// есть якорь-банка. 0,5↔1 л НЕ трогаем (шириной не разделяются — калибровка 10.08). Пороги —\n// отношениями к якорю, не абсолютами. Диагностика: _detect.format_geo. Ручка: GEO.enabled.\nconst GEO = { enabled: true, r_1_15: 1.25, r_15_2: 1.43, r_floor: 1.10,\n  minGroup: 3, minShelf: 4, densLo: 0.9, densHi: 1.3, spanFrac: 0.8, minAnchor: 3 };\nconst GEO_ENUM = { 'Буратино': ['ПЭТ 1 л', 'ПЭТ 1,5 л', 'ПЭТ 2 л'], 'Компотай': ['ПЭТ 1 л', 'ПЭТ 1,5 л'] };\nconst geoDiag = { enabled: GEO.enabled, anchor: null, groups: [] };\nif (GEO.enabled) (() => {\n  const wOf2 = b => b.box_2d[3] - b.box_2d[1];\n  const medOf = xs => { const s = [...xs].sort((a, b) => a - b); return s[Math.floor(s.length / 2)]; };\n  const byShelfAll = new Map();\n  for (const b of ours) { const s = shelfOf(b); if (!byShelfAll.has(s)) byShelfAll.set(s, []); byShelfAll.get(s).push(b); }\n  const meta = new Map();\n  let maxSpan = 0;\n  for (const [s, arr] of byShelfAll) {\n    const span = Math.max(...arr.map(b => b.box_2d[3])) - Math.min(...arr.map(b => b.box_2d[1]));\n    const dens = span > 0 ? arr.reduce((a, b) => a + wOf2(b), 0) / span : 0;\n    meta.set(s, { span, dens, n: arr.length });\n    if (span > maxSpan) maxSpan = span;\n  }\n  const shelfOk = s => { const m = meta.get(s);\n    return !!m && m.n >= GEO.minShelf && m.dens >= GEO.densLo && m.dens <= GEO.densHi && m.span >= GEO.spanFrac * maxSpan; };\n  // якорь кадра: медианная относительная ширина банок 0,45 на валидных полках\n  const cans = ours.filter(b => b.format === 'банка 0,45 л' && shelfOk(shelfOf(b)));\n  if (cans.length < GEO.minAnchor) { geoDiag.anchor = { ok: false, cans: cans.length }; return; }\n  const anchor = medOf(cans.map(b => wOf2(b) / meta.get(shelfOf(b)).span));\n  geoDiag.anchor = { ok: true, w_rel: +anchor.toFixed(4), cans: cans.length };\n  // целевые группы: (полка, бренд, формат) — только крупные ПЭТ и null-ПЭТ брендов из GEO_ENUM\n  const tg = new Map();\n  for (const b of ours) {\n    const allowed = GEO_ENUM[b.label];\n    if (!allowed) continue;\n    const f = b.format || null;\n    if (f !== null && allowed.indexOf(f) === -1) continue;   // банка / 0,5 / 2,4 — не трогаем\n    if (!shelfOk(shelfOf(b))) continue;\n    const k = shelfOf(b) + '|' + b.label + '|' + (f || 'null');\n    if (!tg.has(k)) tg.set(k, []);\n    tg.get(k).push(b);\n  }\n  for (const [k, arr] of tg) {\n    const brand = k.split('|')[1];\n    if (arr.length < GEO.minGroup) { geoDiag.groups.push({ key: k, n: arr.length, kept: 'мало боксов' }); continue; }\n    const r = medOf(arr.map(b => wOf2(b) / meta.get(shelfOf(b)).span)) / anchor;\n    if (r < GEO.r_floor) { geoDiag.groups.push({ key: k, n: arr.length, r: +r.toFixed(3), kept: 'зона 0,5/1 л' }); continue; }\n    let to = r < GEO.r_1_15 ? 'ПЭТ 1 л' : r < GEO.r_15_2 ? 'ПЭТ 1,5 л' : 'ПЭТ 2 л';\n    const allowed = GEO_ENUM[brand];\n    if (allowed.indexOf(to) === -1) to = allowed[allowed.length - 1];  // enum-cap бренда (у Компотая нет 2 л)\n    const changed = arr.filter(b => (b.format || null) !== to).length;\n    arr.forEach(b => { b.format = to; });\n    geoDiag.groups.push({ key: k, n: arr.length, r: +r.toFixed(3), to, changed });\n  }\n})();\n\n// 4) группировка (полка, бренд, подвид, ФОРМАТ) → items; счёт = ЧИСЛО БОКСОВ\nconst groups = new Map();\nfor (const b of ours) {\n  const shelf = Number.isInteger(b.shelf_index) && b.shelf_index > 0 ? b.shelf_index : 0;\n  const fmt = b.format || null;\n  const key = shelf + '|' + b.label + '|' + (b.subtype || '') + '|' + (fmt || '');\n  if (!groups.has(key)) groups.set(key, { shelf, brand: b.label, subtype: b.subtype || null, format: fmt, boxes: [] });\n  groups.get(key).boxes.push(b);\n}\n\nconst loc = x => x < 333 ? 'слева' : x < 667 ? 'центр' : 'справа';\nconst items = [...groups.values()].map(g => {\n  const centers = g.boxes.map(b => (b.box_2d[1] + b.box_2d[3]) / 2);\n  const meanX = centers.reduce((s, v) => s + v, 0) / centers.length;\n  return {\n    product_name: g.brand,\n    product_subtype: g.subtype,\n    package_format: g.format,\n    shelf_index: g.shelf,\n    shelf_location: loc(meanX),\n    front_facing_count: g.boxes.length,\n    confidence: Math.min.apply(null, g.boxes.map(b => typeof b.confidence === 'number' ? b.confidence : 1)),\n    _x: meanX,\n  };\n}).sort((a, b) => a.shelf_index - b.shelf_index || a._x - b._x);\nitems.forEach(i => { delete i._x; });\n\nreturn [{ json: {\n  shelves_with_target_product: new Set(items.map(i => i.shelf_index)).size,\n  items,\n  store_code_on_card: data.store_code_on_card ?? null,\n  overall_confidence: typeof data.overall_confidence === 'number' ? data.overall_confidence : null,\n  notes: data.notes || '',\n  _detect: {                       // диагностика в executions\n    boxes_total: boxesIn.length,\n    boxes_bad: bad,\n    dedup_dropped: dups,\n    slivers_dropped: sliversDropped.length,          // серия H: фантомы-щепки\n    slivers_raw: sliversDropped,                      // сами щепки — для box_viewer\n    foreign_units: foreign.length,\n    format_null: ours.filter(b => !b.format).length,\n    format_geo: geoDiag,                              // v7.5: арбитраж литража по ширине\n    finish_reason: (cand && cand.finishReason) || null, // контроль обрезания вывода\n    boxes_raw: kept,\n  },\n  _usage: {\n    prompt_tokens: raw.usageMetadata?.promptTokenCount ?? null,\n    cached_tokens: raw.usageMetadata?.cachedContentTokenCount ?? null,\n    output_tokens: raw.usageMetadata?.candidatesTokenCount ?? null,\n  },\n} }];"
+   },
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    -192,
+    1360
+   ],
+   "id": "b05be954-4f7d-43c6-82ca-bbadaaa8ddb8",
+   "name": "Парсинг обработки Google Vision"
+  },
+  {
+   "parameters": {
+    "jsCode": "const response = $input.first().json;\nconst inp = $('Валидация входа').first().json;\n\n// Время Алматы = UTC+5\nconst t = new Date(Date.now() + 5 * 3600 * 1000);\nconst p = x => String(x).padStart(2, '0');\nconst formattedToday = p(t.getUTCDate()) + '.' + p(t.getUTCMonth() + 1) + '.' + t.getUTCFullYear()\n  + ' ' + p(t.getUTCHours()) + ':' + p(t.getUTCMinutes()) + ':' + p(t.getUTCSeconds());\n\nconst report_id  = 'R_' + Date.now() + '_' + inp.message_id;  // 1 фото = 1 отчёт\nconst agent_id   = inp.agent_id;\nconst store_name = inp.store_name;\nconst store_code = inp.store_code || '';\nconst route_code = inp.route_code || '';\n\nconst rows = (response.items || [])\n  .filter(it => it && it.product_name)\n  .map(it => ({\n    report_id, formattedToday, store_name, store_code, agent_id, route_code,\n    product_name:       it.product_name,\n    product_subtype:    it.product_subtype || '',   // null → пустая ячейка\n    package_format:     it.package_format || '',    // v7: тара/объём («банка 0,45 л»…), null → пусто\n    shelf_index:        it.shelf_index,\n    position:           it.shelf_location,\n    front_facing_count: it.front_facing_count,\n    item_confidence:    it.confidence,          // в таблицу не пишется, оставлено для отладки\n    overall_confidence: response.overall_confidence\n  }));\n\nreturn rows.length\n  ? rows.map(json => ({ json }))\n  : [{ json: { report_id, formattedToday, store_name, store_code, agent_id, route_code,\n      product_name: 'ничего не распознано', product_subtype: '', package_format: '',\n      notes: response.notes || 'ничего не распознано' } }];"
+   },
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    1056,
+    1376
+   ],
+   "id": "3e9ab99c-49cb-49f4-9af5-2896ad760b85",
+   "name": "Подготовка данных для занесения в таблицу"
+  },
+  {
+   "parameters": {
+    "resource": "row",
+    "dataTableId": {
+     "__rl": true,
+     "value": "report_rows",
+     "mode": "name"
+    },
+    "columns": {
+     "mappingMode": "defineBelow",
+     "value": {
+      "report_id": "={{ $json.report_id }}",
+      "report_date": "={{ $json.formattedToday }}",
+      "route_code": "={{ String($json.route_code ?? '') }}",
+      "store_code": "={{ String($json.store_code ?? '') }}",
+      "store_name": "={{ String($json.store_name ?? '') }}",
+      "product_name": "={{ String($json.product_name ?? '') }}",
+      "product_subtype": "={{ String($json.product_subtype ?? '') }}",
+      "package_format": "={{ String($json.package_format ?? '') }}",
+      "shelf_index": "={{ String($json.shelf_index ?? '') }}",
+      "position": "={{ String($json.position ?? '') }}",
+      "front_facing_count": "={{ String($json.front_facing_count ?? '') }}",
+      "status": "на_проверке",
+      "created_at": "={{ new Date().toISOString() }}",
+      "synced": "-"
+     },
+     "matchingColumns": [],
+     "schema": [
+      {
+       "id": "report_id",
+       "displayName": "report_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "report_date",
+       "displayName": "report_date",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "route_code",
+       "displayName": "route_code",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "store_code",
+       "displayName": "store_code",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "store_name",
+       "displayName": "store_name",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "product_name",
+       "displayName": "product_name",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "product_subtype",
+       "displayName": "product_subtype",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "package_format",
+       "displayName": "package_format",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "shelf_index",
+       "displayName": "shelf_index",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "position",
+       "displayName": "position",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "front_facing_count",
+       "displayName": "front_facing_count",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "status",
+       "displayName": "status",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "created_at",
+       "displayName": "created_at",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "synced",
+       "displayName": "synced",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      }
+     ]
+    }
+   },
+   "type": "n8n-nodes-base.dataTable",
+   "typeVersion": 1,
+   "position": [
+    1264,
+    1376
+   ],
+   "id": "e2a65fd8-8ec5-427f-ba12-4fa17635565d",
+   "name": "Занесение данных в таблицу"
+  },
+  {
+   "parameters": {
+    "jsCode": "// v8: если проход 2 (Pro) отработал — берём его подвиды, иначе проход 1\nlet parsed = null;\ntry { const m = $('Слияние подвидов').first().json; if (m && m.items) parsed = m; } catch (e) {}\nif (!parsed) parsed = $('Парсинг обработки Google Vision').first().json;\nconst inp = $('Валидация входа').first().json;\nconst prepared = $('Подготовка данных для занесения в таблицу').all();\n\nconst CONF_THRESHOLD = 0.8;   // порог пересъёмки (правка заказчика №5)\nconst conf = typeof parsed.overall_confidence === 'number' ? parsed.overall_confidence : null;\n\n// краткая выкладка для агента: то же, что уходит в таблицу, но сжато\nconst items_brief = (parsed.items || [])\n  .filter(i => i && i.product_name)\n  .map(i => ({\n    name:    i.product_name,\n    subtype: i.product_subtype || '',\n    format:  i.package_format || '',\n    shelf:   i.shelf_index ?? null,\n    count:   i.front_facing_count ?? null,\n  }));\n\nreturn [{ json: {\n  status: 'ok',\n  report_id: prepared[0]?.json?.report_id || null,\n  chat_id: inp.chat_id,\n  message_id: inp.message_id,\n  file_id: inp.file_id,\n  agent_id: inp.agent_id,\n  store_name: inp.store_name,\n  store_code: inp.store_code,\n  route_code: inp.route_code,\n  source: inp.source,\n  items_count: (parsed.items || []).filter(i => i && i.product_name).length,\n  items_brief,\n  overall_confidence: conf,\n  low_confidence: conf === null ? true : conf < CONF_THRESHOLD,\n  notes: parsed.notes || '',\n  store_code_on_card: parsed.store_code_on_card ?? null,\n} }];"
+   },
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "id": "ca9970cd-f826-42b6-8097-788b6a53bc21",
+   "name": "Формирование результата",
+   "position": [
+    2192,
+    1360
+   ]
+  },
+  {
+   "parameters": {
+    "content": "# Обработка фотографии и анализ содержимого",
+    "height": 544,
+    "width": 2656,
+    "color": 6
+   },
+   "type": "n8n-nodes-base.stickyNote",
+   "position": [
+    -1776,
+    1216
+   ],
+   "typeVersion": 1,
+   "id": "c254016a-c2f8-46e3-b590-cfa54ee77448",
+   "name": "Sticky Note4"
+  },
+  {
+   "parameters": {
+    "content": "# Загрузка данных в гугл таблицу",
+    "height": 320,
+    "width": 432
+   },
+   "type": "n8n-nodes-base.stickyNote",
+   "position": [
+    992,
+    1280
+   ],
+   "typeVersion": 1,
+   "id": "c3fe9a8c-ee7d-49c6-b685-4a7d272cab83",
+   "name": "Sticky Note5"
+  },
+  {
+   "parameters": {
+    "content": "# Логирование (Started)",
+    "height": 256,
+    "width": 480,
+    "color": 4
+   },
+   "type": "n8n-nodes-base.stickyNote",
+   "position": [
+    -1792,
+    912
+   ],
+   "typeVersion": 1,
+   "id": "d48467ca-6e86-4e63-92e6-64428a1ab047",
+   "name": "Sticky Note6"
+  },
+  {
+   "parameters": {
+    "content": "# Логирование (Processed)",
+    "height": 256,
+    "width": 464,
+    "color": 4
+   },
+   "type": "n8n-nodes-base.stickyNote",
+   "position": [
+    208,
+    896
+   ],
+   "typeVersion": 1,
+   "id": "<GOOGLE_ID>",
+   "name": "Sticky Note"
+  },
+  {
+   "parameters": {
+    "content": "# Логирование (Finished)",
+    "height": 464,
+    "width": 448,
+    "color": 4
+   },
+   "type": "n8n-nodes-base.stickyNote",
+   "position": [
+    1568,
+    1280
+   ],
+   "typeVersion": 1,
+   "id": "5ddc70f3-8d31-4ca5-a756-bf07b5b82213",
+   "name": "Sticky Note7"
+  },
+  {
+   "parameters": {
+    "operation": "update",
+    "resource": "row",
+    "dataTableId": {
+     "__rl": true,
+     "value": "wf_logs",
+     "mode": "name"
+    },
+    "matchType": "allConditions",
+    "filters": {
+     "conditions": [
+      {
+       "keyName": "run_id",
+       "condition": "eq",
+       "keyValue": "={{ $execution.id }}"
+      }
+     ]
+    },
+    "columns": {
+     "mappingMode": "defineBelow",
+     "value": {
+      "status": "Processed",
+      "chat_id": "={{ String($('Валидация входа').item.json.chat_id) }}",
+      "confidence": "={{ String($json.overall_confidence ?? '') }}",
+      "notes_google": "={{ String($json.notes ?? '') }}",
+      "notes_user": "Фотография обработана",
+      "updated_at": "={{ new Date().toISOString() }}"
+     },
+     "matchingColumns": [],
+     "schema": [
+      {
+       "id": "run_id",
+       "displayName": "run_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "chat_id",
+       "displayName": "chat_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "status",
+       "displayName": "status",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "confidence",
+       "displayName": "confidence",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "notes_google",
+       "displayName": "notes_google",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "notes_user",
+       "displayName": "notes_user",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "created_at",
+       "displayName": "created_at",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "updated_at",
+       "displayName": "updated_at",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "synced",
+       "displayName": "synced",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      }
+     ]
+    }
+   },
+   "type": "n8n-nodes-base.dataTable",
+   "typeVersion": 1,
+   "position": [
+    272,
+    976
+   ],
+   "id": "06326078-b1ff-463f-91e3-a6ef68374314",
+   "name": "Обновление лога о работе воркфлоу (Processed)",
+   "onError": "continueErrorOutput"
+  },
+  {
+   "parameters": {
+    "operation": "update",
+    "resource": "row",
+    "dataTableId": {
+     "__rl": true,
+     "value": "wf_logs",
+     "mode": "name"
+    },
+    "matchType": "allConditions",
+    "filters": {
+     "conditions": [
+      {
+       "keyName": "run_id",
+       "condition": "eq",
+       "keyValue": "={{ $execution.id }}"
+      }
+     ]
+    },
+    "columns": {
+     "mappingMode": "defineBelow",
+     "value": {
+      "status": "Finished",
+      "confidence": "={{ String($('Парсинг обработки Google Vision').item.json.overall_confidence ?? '') }}",
+      "notes_google": "={{ String($('Парсинг обработки Google Vision').item.json.notes ?? '') }}",
+      "notes_user": "Обработка фотографии завершена",
+      "updated_at": "={{ new Date().toISOString() }}"
+     },
+     "matchingColumns": [],
+     "schema": [
+      {
+       "id": "run_id",
+       "displayName": "run_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "chat_id",
+       "displayName": "chat_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "status",
+       "displayName": "status",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "confidence",
+       "displayName": "confidence",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "notes_google",
+       "displayName": "notes_google",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "notes_user",
+       "displayName": "notes_user",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "created_at",
+       "displayName": "created_at",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "updated_at",
+       "displayName": "updated_at",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "synced",
+       "displayName": "synced",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      }
+     ]
+    }
+   },
+   "type": "n8n-nodes-base.dataTable",
+   "typeVersion": 1,
+   "position": [
+    1632,
+    1376
+   ],
+   "id": "75b6f1bc-f9bd-4f6b-9335-2bb464998eb0",
+   "name": "Завершение лога о работе воркфлоу (Finished)",
+   "onError": "continueErrorOutput",
+   "executeOnce": true
+  },
+  {
+   "parameters": {
+    "chatId": "=<CHAT_ID>",
+    "text": "=Ошибка в логгировании на Этапе 3.\nТелеграм ID чата: {{ $('Валидация входа').item.json.chat_id }}.\nВремя: {{ new Date().toISOString() }}.\nОшибка: {{ $json.error }}.",
+    "additionalFields": {
+     "appendAttribution": false,
+     "parse_mode": "Markdown"
+    }
+   },
+   "type": "n8n-nodes-base.telegram",
+   "typeVersion": 1.2,
+   "position": [
+    1840,
+    1552
+   ],
+   "id": "3e789690-4f65-40ca-8433-58a05aaa03d4",
+   "name": "Сообщение об ошибке логирования (Finished)",
+   "webhookId": "<WEBHOOK_ID>",
+   "credentials": {
+    "telegramApi": {
+     "id": "<CRED_ID>",
+     "name": "<telegramApi>"
+    }
+   },
+   "onError": "continueRegularOutput"
+  },
+  {
+   "parameters": {
+    "chatId": "=<CHAT_ID>",
+    "text": "=Ошибка в логгировании на Этапе 2.\nТелеграм ID чата: {{ $('Валидация входа').item.json.chat_id }}.\nВремя: {{ new Date().toISOString() }}.\nОшибка: {{ $json.error.message }}.",
+    "additionalFields": {
+     "appendAttribution": false,
+     "parse_mode": "Markdown"
+    }
+   },
+   "type": "n8n-nodes-base.telegram",
+   "typeVersion": 1.2,
+   "position": [
+    496,
+    976
+   ],
+   "id": "f6de36a6-53b9-4c6b-861e-4bbcf4829cef",
+   "name": "Сообщение об ошибке логирования (Processed)",
+   "webhookId": "<WEBHOOK_ID>",
+   "credentials": {
+    "telegramApi": {
+     "id": "<CRED_ID>",
+     "name": "<telegramApi>"
+    }
+   },
+   "onError": "continueRegularOutput"
+  },
+  {
+   "parameters": {
+    "operation": "get",
+    "resource": "row",
+    "dataTableId": {
+     "__rl": true,
+     "value": "brand_catalog",
+     "mode": "name"
+    },
+    "matchType": "allConditions",
+    "filters": {
+     "conditions": [
+      {
+       "keyName": "key",
+       "condition": "isNotEmpty",
+       "keyValue": ""
+      }
+     ]
+    },
+    "returnAll": true,
+    "options": {}
+   },
+   "type": "n8n-nodes-base.dataTable",
+   "typeVersion": 1,
+   "position": [
+    -1024,
+    1376
+   ],
+   "id": "b449f1cc-63db-49be-b1c2-96d3272a9ef4",
+   "name": "Каталог брендов: Config"
+  },
+  {
+   "parameters": {
+    "workflowInputs": {
+     "values": [
+      {
+       "name": "file_id"
+      },
+      {
+       "name": "chat_id",
+       "type": "number"
+      },
+      {
+       "name": "agent_id"
+      },
+      {
+       "name": "store_name"
+      },
+      {
+       "name": "message_id",
+       "type": "number"
+      },
+      {
+       "name": "source"
+      },
+      {
+       "name": "store_code"
+      },
+      {
+       "name": "route_code"
+      }
+     ]
+    }
+   },
+   "type": "n8n-nodes-base.executeWorkflowTrigger",
+   "typeVersion": 1.1,
+   "id": "0eeb2b36-64f0-47b5-a61a-a9953040e972",
+   "name": "When Executed by Another Workflow",
+   "position": [
+    -2144,
+    1216
+   ]
+  },
+  {
+   "parameters": {
+    "content": "# Логирование (Google Vision Error)",
+    "height": 480,
+    "width": 480,
+    "color": 4
+   },
+   "type": "n8n-nodes-base.stickyNote",
+   "position": [
+    -240,
+    1776
+   ],
+   "typeVersion": 1,
+   "id": "e976ecf1-ed02-4822-838a-86e9a6a22826",
+   "name": "Sticky Note1"
+  },
+  {
+   "parameters": {
+    "operation": "update",
+    "resource": "row",
+    "dataTableId": {
+     "__rl": true,
+     "value": "wf_logs",
+     "mode": "name"
+    },
+    "matchType": "allConditions",
+    "filters": {
+     "conditions": [
+      {
+       "keyName": "run_id",
+       "condition": "eq",
+       "keyValue": "={{ $execution.id }}"
+      }
+     ]
+    },
+    "columns": {
+     "mappingMode": "defineBelow",
+     "value": {
+      "status": "Error",
+      "confidence": "={{ String($json.overall_confidence ?? '') }}",
+      "notes_google": "={{ String($json.notes ?? '') }}",
+      "notes_user": "Фотография не обработана, ошибка в работе Google Vision!",
+      "updated_at": "={{ new Date().toISOString() }}"
+     },
+     "matchingColumns": [],
+     "schema": [
+      {
+       "id": "run_id",
+       "displayName": "run_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "chat_id",
+       "displayName": "chat_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "status",
+       "displayName": "status",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "confidence",
+       "displayName": "confidence",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "notes_google",
+       "displayName": "notes_google",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "notes_user",
+       "displayName": "notes_user",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "created_at",
+       "displayName": "created_at",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "updated_at",
+       "displayName": "updated_at",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "synced",
+       "displayName": "synced",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      }
+     ]
+    }
+   },
+   "type": "n8n-nodes-base.dataTable",
+   "typeVersion": 1,
+   "position": [
+    -176,
+    1856
+   ],
+   "id": "7b4a8833-34dc-4bea-b623-bc8f3ee0d1d2",
+   "name": "Ошибка в обработке фото (Google Vision Error)",
+   "onError": "continueErrorOutput"
+  },
+  {
+   "parameters": {
+    "chatId": "=<CHAT_ID>",
+    "text": "=Ошибка в логгировании ошибки работы WF-2.\nТелеграм ID чата: {{ $('Валидация входа').item.json.chat_id }}.\nВремя: {{ new Date().toISOString() }}.\nОшибка: {{ $json.error }}.",
+    "additionalFields": {
+     "appendAttribution": false,
+     "parse_mode": "Markdown"
+    }
+   },
+   "type": "n8n-nodes-base.telegram",
+   "typeVersion": 1.2,
+   "position": [
+    64,
+    1856
+   ],
+   "id": "0fe62804-145d-4be7-8068-4bb87da9aa0f",
+   "name": "Сообщение об ошибке обработки фото (Google Vision Error)",
+   "webhookId": "<WEBHOOK_ID>",
+   "credentials": {
+    "telegramApi": {
+     "id": "<CRED_ID>",
+     "name": "<telegramApi>"
+    }
+   },
+   "onError": "continueRegularOutput"
+  },
+  {
+   "parameters": {
+    "chatId": "=<CHAT_ID>",
+    "text": "=Ошибка в обработке фото WF-2.\nТелеграм ID чата: {{ $('Валидация входа').item.json.chat_id }}.\nВремя: {{ new Date().toISOString() }}.\nОшибка: ```{{ $json.error.message }}```.",
+    "additionalFields": {
+     "appendAttribution": false,
+     "parse_mode": "Markdown"
+    }
+   },
+   "type": "n8n-nodes-base.telegram",
+   "typeVersion": 1.2,
+   "position": [
+    -176,
+    2064
+   ],
+   "id": "42f62255-6103-4406-977f-1776f5f849cc",
+   "name": "Сообщение об ошибке работы wf-2 (Google Vision Error)",
+   "webhookId": "<WEBHOOK_ID>",
+   "credentials": {
+    "telegramApi": {
+     "id": "<CRED_ID>",
+     "name": "<telegramApi>"
+    }
+   },
+   "onError": "continueRegularOutput"
+  },
+  {
+   "parameters": {
+    "method": "POST",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent",
+    "authentication": "genericCredentialType",
+    "genericAuthType": "httpHeaderAuth",
+    "sendBody": true,
+    "specifyBody": "json",
+    "jsonBody": "={{ $('Сборка запроса Gemini').first().json.gemini_body }}",
+    "options": {}
+   },
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.2,
+   "position": [
+    -592,
+    1552
+   ],
+   "id": "4c85aa8a-3ec2-48ca-9202-81dbac19b8e7",
+   "name": "Gemini Vision (3-flash-preview)",
+   "retryOnFail": true,
+   "maxTries": 3,
+   "waitBetweenTries": 5000,
+   "credentials": {
+    "httpHeaderAuth": {
+     "id": "<CRED_ID>",
+     "name": "<httpHeaderAuth>"
+    }
+   },
+   "disabled": true,
+   "onError": "continueErrorOutput"
+  },
+  {
+   "parameters": {
+    "method": "POST",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent",
+    "authentication": "genericCredentialType",
+    "genericAuthType": "httpHeaderAuth",
+    "sendBody": true,
+    "specifyBody": "json",
+    "jsonBody": "={{ $json.gemini_body }}",
+    "options": {}
+   },
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.2,
+   "position": [
+    -592,
+    1376
+   ],
+   "id": "c2a9acfe-00ad-45c6-ad85-6f28bdfdb601",
+   "name": "Gemini Vision (3.5-flash)",
+   "retryOnFail": true,
+   "maxTries": 3,
+   "waitBetweenTries": 5000,
+   "credentials": {
+    "httpHeaderAuth": {
+     "id": "<CRED_ID>",
+     "name": "<httpHeaderAuth>"
+    }
+   },
+   "onError": "continueErrorOutput"
+  },
+  {
+   "parameters": {
+    "jsCode": "// v7.1 БЛИЗНЕЦЫ: v7 (формат/литраж) + контраст-правила трёх пар-близнецов AI TEA (серия E).\n// Единственный источник промпта и тела запроса для ОБЕИХ Gemini Vision-нод.\n// Изменение против v7 ровно одно: блок «ПАРЫ-БЛИЗНЕЦЫ» в конце SUBTYPE (+ маркер версии).\n// Признаки пар выведены из мокапов эталонов (просмотрены бок-о-бок 2026-07-29), не из памяти.\n\n// ── РУЧКИ ЗАМЕРА ─────────────────────────────────────────────\n// ULTRA_HIGH = базовая конфигурация с 2026-07-27 (решение Никиты: оставить включённым).\n// ⚠️ Если в ТВОЕЙ живой ноде значение другое — сохрани его, не моё.\nconst TARGET_MEDIA_RESOLUTION = 'MEDIA_RESOLUTION_ULTRA_HIGH';\nconst MEDIA_RESOLUTION = null;\n\n// ── ФОРМАТЫ ТАРЫ (№25) ───────────────────────────────────────\n// Фиксированный список: форматы, в отличие от подвидов, меняются редко — новый формат\n// добавлять СЮДА и в блок «Допустимые форматы» промпта. Состав собран по мокапам заказчика\n// (README_ALL); после SKU-справочника заказчика сверить и поправить.\nconst FORMATS = ['банка 0,45 л', 'банка 0,9 л', 'ПЭТ 0,25 л', 'ПЭТ 0,5 л', 'ПЭТ 1 л', 'ПЭТ 1,5 л', 'ПЭТ 2 л', 'ПЭТ 2,4 л'];\n\nconst rowsAll = $('Каталог брендов: Config').all().map(i => i.json).filter(r => r.file_url && r.canon_name);\nif (rowsAll.length < 20) throw new Error('WF-2: в Catalog только ' + rowsAll.length + ' эталонов с file_url — прогони WF-3');\n\n// ── ВРЕМЕННОЕ ИСКЛЮЧЕНИЕ ПОДВИДОВ ИЗ КАТАЛОГА (31.08.2026) ──────────────────\n// Ревень снят с выборки: полевых фото вкуса нет, SKU предположительно снят с производства.\n// Пока ключ в списке — подвида нет НИ в справочнике эталонов, НИ в enum схемы,\n// то есть модель о нём не знает вовсе (лечит имя-паразит: ревень без хозяина на полке\n// липнул к самой розовой группе — персик/клубника).\n// ВЕРНУТЬ РЕВЕНЬ = очистить массив:  const EXCLUDE_KEYS = [];   ← и больше ничего.\n// Сравнивается базовый key: точное совпадение ИЛИ key + '__<вариант>' — ловит __rot, __kz, __ru, __pet1000, __can900,\n// и НЕ заденет посторонний подвид с похожим началом имени.\nconst EXCLUDE_KEYS = ['aitea_reven'];\nconst isExcluded = r => { const k = String(r.key || ''); return EXCLUDE_KEYS.some(p => k === p || k.startsWith(p + '__')); };\n\n// Ветка скана брендов удалена 03.08 (пользы не давала, C2 закрыта) — эталоны шлём все.\nconst scanBrands = null;\nlet rows = rowsAll.filter(r => !isExcluded(r));\n\n// стабильный порядок: бренд → подвид → key (база раньше вариантов; implicit-кеш любит байт-в-байт одинаковый префикс)\nrows.sort((a, b) => String(a.brand).localeCompare(String(b.brand), 'ru')\n  || String(a.canon_name).localeCompare(String(b.canon_name), 'ru')\n  || String(a.key).localeCompare(String(b.key), 'ru'));\n\nconst BRANDS = ['Буратино', 'AI TEA', 'Chino', 'Компотай', 'Tamga'];\n// enum подвидов: УНИКАЛЬНЫЕ канон-имена (вариантные строки дублируют имя, в схему дубли нельзя)\nconst SUBTYPES = [...new Set(rows.map(r => String(r.canon_name)))].filter(c => c !== 'Tamga');\n\nconst SYSTEM_PROMPT = `Ты — система визуального аудита выкладки товара. Твоя задача — ДЕТЕКЦИЯ, а не подсчёт: обведи рамкой каждую единицу товара наших брендов в переднем ряду. Итоговые количества посчитает программа по твоим рамкам, поэтому важна каждая отдельная рамка, а не «примерное число».\n\nВХОД: сначала СПРАВОЧНИК — эталонные изображения подвидов, перед каждым текстовая метка с канон-именем и брендом. Затем целевое фото полки или стойки.\n\nDetect the 2D bounding boxes of every front-row product unit of the company brands.\n\nБРЕНДЫ (label): Буратино, AI TEA, Chino, Компотай, Tamga.\n\nПРАВИЛА ДЕТЕКЦИИ:\n1. Один физический предмет (банка/бутылка) = ровно один бокс. Одинаковые банки, стоящие вплотную, — отдельные боксы каждой, не один общий.\n2. Боксируй только ПЕРЕДНИЙ ряд, обращённый к камере. Товар за передним рядом, скрытый запас и мультипаки фоном не боксируй.\n3. Частично видимые единицы с краёв кадра боксируй.\n4. Работай системно: полка за полкой сверху вниз, в пределах полки слева направо. Полки нумеруй сверху вниз: верхняя = 1; каждому боксу проставь shelf_index его полки.\n5. box_2d = [y_min, x_min, y_max, x_max], координаты нормированы 0–1000.\n6. Не боксируй только ДРУГИЕ стеллажи — отделённые от основного рамой, стенкой или проходом. Внутри основного стеллажа/витрины боксируй ВСЕ единицы на всех полках, включая стоящие у самого края кадра и частично обрезанные (п. 3).\n\nLABEL И ЗАЩИТА ОТ ЧУЖОГО:\n- label определяй по логотипу и упаковке, сверяясь с эталонами.\n- Единица ПОХОЖА на наш бренд, но логотип/этикетка не совпадает с эталонами (марка-двойник) — ставь label: ЧУЖОЙ. Такие боксы не попадут в отчёт: это защита от зачисления чужого товара в наши.\n- ЧУЖОЙ ставь только при явном отличии от эталонов. Если единица просто плохо видна, но похожа на наш бренд — наш label и subtype: null.\n- Очевидно чужой товар (другая категория, другое оформление) не боксируй вовсе.\n\nSUBTYPE — определяй для каждого бокса ПО ШАГАМ:\n1. ЦВЕТ СНАЧАЛА: определи доминирующий цвет корпуса/этикетки этой единицы и отбери эталоны её бренда с таким цветом — это шорт-лист кандидатов.\n2. Разведи кандидатов шорт-листа по остальным признакам: цвет крышки, изображённые плоды, надписи на этикетке — сверяясь с эталонами.\n3. Если после шагов 1–2 остаётся больше одного кандидата — ставь null, бокс при этом остаётся.\n\n⚠️ ЦВЕТ КОРПУСА — ЖЁСТКОЕ ОГРАНИЧЕНИЕ. Подвид, у которого корпус зелёный (гуава, помело, лимон-лайм-жасмин), не может оказаться на малиновой, красной, розовой или оранжевой единице, и наоборот. Никакой другой признак — ни цвет букв, ни надпись, ни крышка — не может переопределить цвет корпуса: эти признаки работают ТОЛЬКО внутри уже отобранного по корпусу шорт-листа.\n\n⚠️ ТИП ЧАЯ НЕ ЯВЛЯЕТСЯ ПРИЗНАКОМ ПОДВИДА. Слова БЕЛЫЙ ЧАЙ / ЗЕЛЕНЫЙ ЧАЙ / ЧЕРНЫЙ ЧАЙ и АҚ ШАЙЫ / КӨК ШАЙЫ / ҚАРА ШАЙЫ встречаются у нескольких разных подвидов сразу. Никогда не выбирай подвид по типу чая. Название вкуса на этикетке («МАНГО + МАРАКУЙЯ», «ПЕРСИК + ЖАСМИН», «КЛУБНИЧНЫЙ + КИВИ», «ПОМЕЛО + АПЕЛЬСИН») — наоборот, самый прямой признак: прочитал его — используй.\n\n- Пиши ТОЧНОЕ канон-имя из метки эталона, не меняя ни символа.\n- Каждую единицу решай индивидуально, не копируй подвид от соседа — рядом могут стоять разные подвиды одного бренда.\n- Не уверен — ставь null: пустое значение лучше уверенной ошибки.\n- Tamga: подвидов нет — всегда null.\n\nFORMAT — тара и объём каждого бокса, ПО ШАГАМ:\n1. ТИП ТАРЫ по силуэту: металлическая банка (ровный цилиндр, плоский верх, без крышки-колпачка) или ПЭТ-бутылка (сужение к горлышку, пластиковая крышка).\n2. ОБЪЁМ по пропорциям и соседям: банка 0,9 л заметно выше и вытянутее банки 0,45 л; объём ПЭТ оценивай по высоте бутылки относительно соседних единиц, чей формат уже ясен, и относительно высоты полки.\n3. Ряд одинаковых единиц одного бренда и подвида — один формат: определи по самой различимой единице ряда и присвой остальным единицам ряда.\nДопустимые форматы по брендам: AI TEA — банка 0,45 л, банка 0,9 л, ПЭТ 0,5 л, ПЭТ 1 л. Компотай — банка 0,45 л, ПЭТ 0,25 л, ПЭТ 0,5 л, ПЭТ 1 л, ПЭТ 1,5 л; бутылка Компотая в цветном рукаве-плёнке во весь корпус = ПЭТ 1 л. Буратино — банка 0,45 л, ПЭТ 0,5 л, ПЭТ 1 л, ПЭТ 1,5 л, ПЭТ 2 л, ПЭТ 2,4 л. Chino и Tamga — format всегда null.\n- Формат определяй по единице НА ФОТО: эталон подвида может быть снят в другой таре — эталоны сверяй для label и subtype, а не для format.\n- Не уверен в объёме — ставь format: null, бокс остаётся. Неуверенность в формате НЕ влияет на label и subtype.\n\nДОПОЛНИТЕЛЬНО:\n- store_code_on_card: рукописный код с карточки в кадре (например «231»), иначе null.\n- overall_confidence (0..1): качество кадра — резкость, блики, ракурс, перекрытия.\n- notes: коротко, что мешало (блики, перекрытия), какие подвиды не различил, был ли рядом чужой товар-двойник.\n\nВЫВОД: строго валидный JSON по схеме. Без текста вне JSON.`;\n\nconst RESPONSE_SCHEMA = {\n  type: 'object',\n  propertyOrdering: ['boxes', 'store_code_on_card', 'overall_confidence', 'notes'],\n  properties: {\n    boxes: {\n      type: 'array',\n      items: {\n        type: 'object',\n        propertyOrdering: ['box_2d', 'label', 'subtype', 'format', 'shelf_index', 'confidence'],\n        properties: {\n          box_2d: { type: 'array', items: { type: 'integer' }, minItems: 4, maxItems: 4 },\n          label: { type: 'string', enum: BRANDS.concat(['ЧУЖОЙ']) },\n          subtype: { type: 'string', enum: SUBTYPES, nullable: true },\n          format: { type: 'string', enum: FORMATS, nullable: true },\n          shelf_index: { type: 'integer' },\n          confidence: { type: 'number' }\n        },\n        required: ['box_2d', 'label', 'subtype', 'format', 'shelf_index', 'confidence']\n      }\n    },\n    store_code_on_card: { type: 'string', nullable: true },\n    overall_confidence: { type: 'number' },\n    notes: { type: 'string' }\n  },\n  required: ['boxes', 'overall_confidence']\n};\n\n// ── варианты эталона: подпись (обобщённая версия из README_ALL, знает все токены форматов) ──\nconst variantOf = r => {\n  if (r.variant) return String(r.variant);\n  const k = String(r.key), i = k.indexOf('__');\n  return i === -1 ? null : k.slice(i + 2);\n};\nconst VARIANT_NOTE = v => {\n  if (!v) return null;\n  const parts = [];\n  if (/(^|_)kz($|_)/.test(v)) parts.push('этикетка на казахском');\n  if (/(^|_)ru($|_)/.test(v)) parts.push('этикетка на русском');\n  if (/rot/.test(v)) parts.push('повёрнутый ракурс');\n  if (v === 'field') parts.push('полевое фото с полки');\n  if (/^can900/.test(v)) parts.push('банка 0,9 л');\n  else if (/^can/.test(v)) parts.push('банка крупным планом');\n  if (/^sleever/.test(v)) parts.push('ПЭТ-бутылка 1 л с цветным рукавом');\n  if (/^pet1000/.test(v)) parts.push('ПЭТ-бутылка 1 л');\n  else if (/^pet(\\d+)/.test(v)) {\n    const m = v.match(/^pet(\\d+)/)[1];\n    const vol = {'025':'0,25','05':'0,5','1':'1','15':'1,5','2':'2','24':'2,4'}[m] || m;\n    parts.push('ПЭТ-бутылка ' + vol + ' л');\n  }\n  return parts.length ? parts.join(', ') : 'дополнительный ракурс (' + v + ')';\n};\n\nconst hasVariants = rows.some(r => variantOf(r));\nconst parts = [];\nparts.push({ text: 'СПРАВОЧНИК ПОДВИДОВ КОМПАНИИ. Далее эталонные изображения; перед каждым — его канон-имя и бренд'\n  + (hasVariants ? '; у подвида может быть несколько эталонов (другой язык этикетки, другой ракурс или другая тара) — это один и тот же подвид' : '') + ':' });\nconst seen = new Set();\nfor (const r of rows) {\n  const note = VARIANT_NOTE(variantOf(r));\n  if (!seen.has(r.canon_name)) {\n    seen.add(r.canon_name);\n    parts.push({ text: `Эталон: «${r.canon_name}» — бренд ${r.brand}.` + (note ? ` (${note})` : '') });\n  } else {\n    parts.push({ text: `Тот же подвид «${r.canon_name}», ${note || 'дополнительный эталон'}.` });\n  }\n  parts.push({ file_data: { mime_type: r.mime_type || 'image/png', file_uri: r.file_url } });\n}\nparts.push({ text: 'Теперь обведи боксами каждую единицу переднего ряда на ЭТОМ фото по правилам и схеме:' });\n// ── MIME целевого фото (№10) ─────────────────────────────────\n// Фото может прийти документом: PNG/HEIC/WEBP, а не только JPEG Telegram.\n// Приоритет источников: магические байты бинарника → эвристика «Закрепляю тип фотографии» → jpeg.\nconst MIME_OK = new Set(['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/heif']);\nlet photoMime = null;\ntry { photoMime = $('Загрузка фото').first().binary.data.mimeType; } catch (e) {}\nif (!MIME_OK.has(String(photoMime))) { try { photoMime = $('Закрепляю тип фотографии').first().json.file_mime; } catch (e) {} }\nif (!MIME_OK.has(String(photoMime))) photoMime = 'image/jpeg';\n\nconst photoB64 = $('Перевод фото в строку').first().json.data;\nconst photoPart = { inline_data: { mime_type: photoMime, data: photoB64 } };\nif (TARGET_MEDIA_RESOLUTION) photoPart.media_resolution = { level: TARGET_MEDIA_RESOLUTION };\nparts.push(photoPart);\n\nconst gemini_body = {\n  systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },\n  contents: [{ role: 'user', parts }],\n  generationConfig: {\n    temperature: 0,\n    response_mime_type: 'application/json',\n    response_schema: RESPONSE_SCHEMA\n  }\n};\nif (MEDIA_RESOLUTION) gemini_body.generationConfig.media_resolution = MEDIA_RESOLUTION;\n\nreturn [{ json: {\n  gemini_body,\n  scan_brands: scanBrands,\n  refs_count: rows.length,\n  refs_variants: rows.filter(r => variantOf(r)).length,\n  target_media_resolution: TARGET_MEDIA_RESOLUTION,\n  prompt_version: 'v7.4-nopairs-noreven',\n  photo_mime: photoMime,                                  // ← №10: чем оказался целевой кадр\n  photo_kb: Math.round(photoB64.length * 3 / 4 / 1024),   // ← №10: сколько реально ушло в Gemini\n} }];"
+   },
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    -800,
+    1376
+   ],
+   "id": "a3c7a2b2-9108-4060-aa98-9a801349169d",
+   "name": "Сборка запроса Gemini"
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict",
+      "version": 2
+     },
+     "conditions": [
+      {
+       "id": "pro-switch-1",
+       "leftValue": "={{ true }}",
+       "rightValue": "",
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2.2,
+   "position": [
+    48,
+    1360
+   ],
+   "id": "29bb3cd3-652c-4071-a83a-cf77d1f87fe4",
+   "name": "Pro-проход включён?"
+  },
+  {
+   "parameters": {
+    "jsCode": "// v9 ПРОХОД 2 «ГРУППЫ»: модель называет подвид ЦЕЛЫХ ГРУПП по границам Flash —\n// перечисление юнитов убрано совсем. Мотив: guard v4.2 и так принимает только\n// переименования целых групп; просить последовательность юнитов = лишние степени\n// свободы, которые дрейфуют (серия H: 3+3+3+3+3+5 vs 3+4+4+3+3+3) и идут в мусор.\n// Границы групп зафиксированы Flash'ем by construction → дрейф невозможен.\n// Имена подвидов Flash модели НЕ показываем (якорь «ревень»); бренд группы показываем.\n// Правила SUBTYPE (цвет сначала, запрет типа чая) — байт-в-байт из v8.\n// Замена тела ноды «Сборка запроса Pro». Модель-namer выбирается URL'ом HTTP-ноды.\nconst parsed = $input.first().json;\nconst BRANDS = ['Буратино', 'AI TEA', 'Chino', 'Компотай', 'Tamga'];\nconst UNKNOWN = 'НЕ ОПРЕДЕЛЁН';\n\nconst boxes = ((parsed._detect && parsed._detect.boxes_raw) || []).filter(b => b && BRANDS.includes(b.label));\nif (!boxes.length) return [{ json: { pass2_skip: true, reason: 'нет боксов наших брендов' } }];\n\n// ── группировка: полка → слева направо → последовательные с одинаковым (label, subtype)\n// ВАЖНО: тот же алгоритм скопирован в «Слиянии v9» — менять только синхронно.\nconst shelfOf = b => Number.isInteger(b.shelf_index) && b.shelf_index > 0 ? b.shelf_index : 0;\nconst byShelf = new Map();\nfor (const b of boxes) {\n  const s = shelfOf(b);\n  if (!byShelf.has(s)) byShelf.set(s, []);\n  byShelf.get(s).push(b);\n}\nconst shelvesPlan = [];\nfor (const [shelf_index, arr] of [...byShelf.entries()].sort((a, b) => a[0] - b[0])) {\n  arr.sort((p, q) => p.box_2d[1] - q.box_2d[1]);\n  const groups = [];\n  let pos = 0;\n  while (pos < arr.length) {\n    const brand = arr[pos].label, sub = arr[pos].subtype || null;\n    let end = pos;\n    while (end < arr.length && arr[end].label === brand && (arr[end].subtype || null) === sub) end++;\n    groups.push({ group_index: groups.length + 1, brand, size: end - pos });\n    pos = end;\n  }\n  shelvesPlan.push({ shelf_index, count: arr.length, groups });\n}\nconst planText = shelvesPlan.map(s =>\n  'полка ' + s.shelf_index + ' (' + s.count + ' шт. слева направо): '\n  + s.groups.map(g => 'группа ' + g.group_index + ' — ' + g.size + ' шт., бренд ' + g.brand).join('; ')\n).join('\\n');\n\n// ── справочник эталонов: тот же порядок, что в проходе 1 (implicit-кеш любит одинаковый префикс)\nlet rowsAll = $('Каталог брендов: Config').all().map(i => i.json).filter(r => r.file_url && r.canon_name);\nif (rowsAll.length < 20) throw new Error('WF-2 v9: в Catalog только ' + rowsAll.length + ' эталонов — прогони WF-3');\n\n// ── ВРЕМЕННОЕ ИСКЛЮЧЕНИЕ ПОДВИДОВ ИЗ КАТАЛОГА (31.08.2026) ──────────────────\n// Ревень снят с выборки: полевых фото вкуса нет, SKU предположительно снят с производства.\n// Пока ключ в списке — подвида нет НИ в справочнике эталонов, НИ в enum схемы,\n// то есть модель о нём не знает вовсе (лечит имя-паразит: ревень без хозяина на полке\n// липнул к самой розовой группе — персик/клубника).\n// ВЕРНУТЬ РЕВЕНЬ = очистить массив:  const EXCLUDE_KEYS = [];   ← и больше ничего.\n// Сравнивается базовый key: точное совпадение ИЛИ key + '__<вариант>' — ловит __rot, __kz, __ru, __pet1000, __can900,\n// и НЕ заденет посторонний подвид с похожим началом имени.\nconst EXCLUDE_KEYS = ['aitea_reven'];\nconst isExcluded = r => { const k = String(r.key || ''); return EXCLUDE_KEYS.some(p => k === p || k.startsWith(p + '__')); };\nrowsAll = rowsAll.filter(r => !isExcluded(r));\nrowsAll.sort((a, b) => String(a.brand).localeCompare(String(b.brand), 'ru')\n  || String(a.canon_name).localeCompare(String(b.canon_name), 'ru')\n  || String(a.key).localeCompare(String(b.key), 'ru'));\nconst SUBTYPES = [...new Set(rowsAll.map(r => String(r.canon_name)))].filter(c => c !== 'Tamga');\n\nconst variantOf = r => {\n  if (r.variant) return String(r.variant);\n  const k = String(r.key), i = k.indexOf('__');\n  return i === -1 ? null : k.slice(i + 2);\n};\nconst VARIANT_NOTE = v => {\n  if (!v) return null;\n  const parts = [];\n  if (/(^|_)kz($|_)/.test(v)) parts.push('этикетка на казахском');\n  if (/(^|_)ru($|_)/.test(v)) parts.push('этикетка на русском');\n  if (/rot/.test(v)) parts.push('повёрнутый ракурс');\n  if (v === 'field') parts.push('полевое фото с полки');\n  if (/^can900/.test(v)) parts.push('банка 0,9 л');\n  else if (/^can/.test(v)) parts.push('банка крупным планом');\n  if (/^sleever/.test(v)) parts.push('ПЭТ-бутылка 1 л с цветным рукавом');\n  if (/^pet1000/.test(v)) parts.push('ПЭТ-бутылка 1 л');\n  else if (/^pet(\\d+)/.test(v)) {\n    const m = v.match(/^pet(\\d+)/)[1];\n    const vol = { '025': '0,25', '05': '0,5', '1': '1', '15': '1,5', '2': '2', '24': '2,4' }[m] || m;\n    parts.push('ПЭТ-бутылка ' + vol + ' л');\n  }\n  return parts.length ? parts.join(', ') : 'дополнительный ракурс (' + v + ')';\n};\n\n// ── mime целевого фото: как в проходе 1\nconst MIME_OK = new Set(['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/heif']);\nlet photoMime = null;\ntry { photoMime = $('Загрузка фото').first().binary.data.mimeType; } catch (e) {}\nif (!MIME_OK.has(String(photoMime))) { try { photoMime = $('Закрепляю тип фотографии').first().json.file_mime; } catch (e) {} }\nif (!MIME_OK.has(String(photoMime))) photoMime = 'image/jpeg';\n\nconst SYSTEM_PROMPT = 'Ты — система визуального аудита выкладки товара. Единицы товара на фото УЖЕ обведены, посчитаны и сгруппированы другой системой: подряд стоящие одинаковые единицы объединены в ГРУППЫ. Координаты и пересчёт не нужны.\\n\\n'\n  + 'ЗАДАЧА: для КАЖДОЙ группы из плана назвать ОДИН подвид — тот, которым являются все единицы этой группы. Группы в плане идут слева направо по каждой полке; их границы и размеры уже проверены — не объединяй и не дели группы.\\n\\n'\n  + 'ВХОД: сначала СПРАВОЧНИК — эталонные изображения подвидов, перед каждым текстовая метка с канон-именем и брендом. Затем целевое фото и ПЛАН групп по полкам.\\n\\n'\n  + \"SUBTYPE группы — определяй ПО ШАГАМ:\\n1. Найди группу на фото: полка из плана, отсчёт групп слева направо по указанным размерам.\\n2. ЦВЕТ СНАЧАЛА: определи доминирующий цвет корпуса/этикетки единиц группы и отбери эталоны её бренда с таким цветом — это шорт-лист кандидатов.\\n3. Разведи кандидатов шорт-листа по остальным признакам: цвет крышки, изображённые плоды, надписи на этикетке — сверяясь с эталонами.\\n4. Если после шагов 2–3 остаётся больше одного кандидата — ставь «НЕ ОПРЕДЕЛЁН».\\n\\n⚠️ ЦВЕТ КОРПУСА — ЖЁСТКОЕ ОГРАНИЧЕНИЕ. Подвид, у которого корпус зелёный (гуава, помело, лимон-лайм-жасмин), не может оказаться на малиновой, красной, розовой или оранжевой единице, и наоборот. Никакой другой признак — ни цвет букв, ни надпись, ни крышка — не может переопределить цвет корпуса.\\n\\n⚠️ ТИП ЧАЯ НЕ ЯВЛЯЕТСЯ ПРИЗНАКОМ ПОДВИДА. Слова БЕЛЫЙ ЧАЙ / ЗЕЛЕНЫЙ ЧАЙ / ЧЕРНЫЙ ЧАЙ и АҚ ШАЙЫ / КӨК ШАЙЫ / ҚАРА ШАЙЫ встречаются у нескольких разных подвидов сразу. Никогда не выбирай подвид по типу чая. Название вкуса на этикетке («МАНГО + МАРАКУЙЯ», «ПЕРСИК + ЖАСМИН», «КЛУБНИЧНЫЙ + КИВИ», «ПОМЕЛО + АПЕЛЬСИН») — наоборот, самый прямой признак: прочитал его — используй.\\n\\n- Пиши ТОЧНОЕ канон-имя из метки эталона, не меняя ни символа. Бренд группы указан в плане — подвид обязан быть подвидом ЭТОГО бренда.\\n- Каждую группу решай индивидуально, не копируй подвид соседней группы.\\n- Не уверен — «НЕ ОПРЕДЕЛЁН»: пустое значение лучше уверенной ошибки.\\n- Tamga: подвидов нет — для групп бренда Tamga всегда «НЕ ОПРЕДЕЛЁН».\\n\\nВЫВОД: строго валидный JSON по схеме. Без текста вне JSON.\";\n\nconst parts = [];\nconst hasVariants = rowsAll.some(r => variantOf(r));\nparts.push({ text: 'СПРАВОЧНИК ПОДВИДОВ КОМПАНИИ. Далее эталонные изображения; перед каждым — его канон-имя и бренд'\n  + (hasVariants ? '; у подвида может быть несколько эталонов (другой язык этикетки, другой ракурс или другая тара) — это один и тот же подвид' : '') + ':' });\nconst seen = new Set();\nfor (const r of rowsAll) {\n  const note = VARIANT_NOTE(variantOf(r));\n  if (!seen.has(r.canon_name)) {\n    seen.add(r.canon_name);\n    parts.push({ text: 'Эталон: «' + r.canon_name + '» — бренд ' + r.brand + '.' + (note ? ' (' + note + ')' : '') });\n  } else {\n    parts.push({ text: 'Тот же подвид «' + r.canon_name + '», ' + (note || 'дополнительный эталон') + '.' });\n  }\n  parts.push({ file_data: { mime_type: r.mime_type || 'image/png', file_uri: r.file_url } });\n}\nconst photoPart = { inline_data: { mime_type: photoMime, data: $('Перевод фото в строку').first().json.data } };\nphotoPart.media_resolution = { level: 'MEDIA_RESOLUTION_ULTRA_HIGH' };\nparts.push({ text: 'ЭТО целевое фото:' });\nparts.push(photoPart);\nparts.push({ text: 'ПЛАН ГРУПП (границы и размеры уже проверены, счёт менять нельзя):\\n' + planText\n  + '\\n\\nВерни подвид для КАЖДОЙ группы каждой полки.' });\n\nconst RESPONSE_SCHEMA = {\n  type: 'object',\n  propertyOrdering: ['shelves'],\n  properties: {\n    shelves: {\n      type: 'array',\n      items: {\n        type: 'object',\n        propertyOrdering: ['shelf_index', 'groups'],\n        properties: {\n          shelf_index: { type: 'integer' },\n          groups: {\n            type: 'array',\n            items: {\n              type: 'object',\n              propertyOrdering: ['group_index', 'subtype'],\n              properties: {\n                group_index: { type: 'integer' },\n                subtype: { type: 'string', enum: [...SUBTYPES, UNKNOWN] },\n              },\n              required: ['group_index', 'subtype'],\n            },\n          },\n        },\n        required: ['shelf_index', 'groups'],\n      },\n    },\n  },\n  required: ['shelves'],\n};\n\nreturn [{ json: {\n  gemini_body: {\n    systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },\n    contents: [{ role: 'user', parts }],\n    generationConfig: { temperature: 0, response_mime_type: 'application/json', response_schema: RESPONSE_SCHEMA },\n  },\n  v9_plan: shelvesPlan,\n  refs_count: rowsAll.length,\n  pass2_version: 'v9-groups-noreven',\n} }];"
+   },
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    272,
+    1264
+   ],
+   "id": "be3353bd-b72a-45c9-8a2f-784c21bbf654",
+   "name": "Сборка запроса Pro"
+  },
+  {
+   "parameters": {
+    "method": "POST",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent",
+    "authentication": "genericCredentialType",
+    "genericAuthType": "httpHeaderAuth",
+    "sendBody": true,
+    "specifyBody": "json",
+    "jsonBody": "={{ $json.gemini_body }}",
+    "options": {}
+   },
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.2,
+   "position": [
+    496,
+    1264
+   ],
+   "id": "3cecb048-efae-4ae1-8082-e9c9b899df98",
+   "name": "Gemini Pro (подвиды)",
+   "retryOnFail": true,
+   "maxTries": 3,
+   "waitBetweenTries": 5000,
+   "credentials": {
+    "httpHeaderAuth": {
+     "id": "<CRED_ID>",
+     "name": "<httpHeaderAuth>"
+    }
+   },
+   "onError": "continueRegularOutput"
+  },
+  {
+   "parameters": {
+    "jsCode": "// v9 СЛИЯНИЕ «ГРУППЫ»: имена групп из прохода 2 накладываются на боксы Flash по\n// (полка, номер группы). Границы групп пересчитываются тем же алгоритмом, что в\n// «Сборке v9» (копия — менять синхронно!), поэтому расхождение структуры невозможно.\n// Guard бренда сохранён (v4.2). Отступление от v4.2: «НЕ ОПРЕДЕЛЁН» НЕ затирает\n// подвид Flash в null, а оставляет его и помечает группу в needs_review — у Flash\n// есть уверенное имя, неуверенность проверяющего не повод его терять.\n// Замена тела ноды «Слияние подвидов» для серии v9.\nconst parsed = $('Парсинг обработки Google Vision').first().json;\nconst raw = $input.first().json;\nconst BRANDS = ['Буратино', 'AI TEA', 'Chino', 'Компотай', 'Tamga'];\nconst UNKNOWN = 'НЕ ОПРЕДЕЛЁН';\n\nlet pass2 = null;\ntry {\n  const parts = (raw.candidates && raw.candidates[0] && raw.candidates[0].content && raw.candidates[0].content.parts) || [];\n  const t = [...parts].reverse().find(p => typeof p.text === 'string');\n  if (t) pass2 = JSON.parse(t.text);\n} catch (e) { pass2 = null; }\n\nconst kept = (parsed._detect && parsed._detect.boxes_raw) || [];\nconst ours = kept.filter(b => b && BRANDS.includes(b.label));\n\n// ── группировка: КОПИЯ алгоритма «Сборки v9»\nconst shelfOf = b => Number.isInteger(b.shelf_index) && b.shelf_index > 0 ? b.shelf_index : 0;\nconst byShelf = new Map();\nfor (const b of ours) {\n  const s = shelfOf(b);\n  if (!byShelf.has(s)) byShelf.set(s, []);\n  byShelf.get(s).push(b);\n}\nconst groupsByShelf = new Map();\nfor (const [shelf_index, arr] of byShelf) {\n  arr.sort((p, q) => p.box_2d[1] - q.box_2d[1]);\n  const groups = [];\n  let pos = 0;\n  while (pos < arr.length) {\n    const brand = arr[pos].label, sub = arr[pos].subtype || null;\n    let end = pos;\n    while (end < arr.length && arr[end].label === brand && (arr[end].subtype || null) === sub) end++;\n    groups.push({ group_index: groups.length + 1, brand, boxes: arr.slice(pos, end) });\n    pos = end;\n  }\n  groupsByShelf.set(shelf_index, groups);\n}\n\n// ── наложение имён\nconst stats = [];\nlet changed = 0, needsReview = 0;\nif (pass2 && Array.isArray(pass2.shelves)) {\n  for (const sh of pass2.shelves) {\n    const groups = groupsByShelf.get(sh.shelf_index);\n    if (!groups) { stats.push({ shelf: sh.shelf_index, applied: false, reason: 'у Flash нет такой полки' }); continue; }\n    const details = [];\n    for (const g of (sh.groups || [])) {\n      const grp = groups.find(x => x.group_index === g.group_index);\n      if (!grp) { details.push({ gi: g.group_index, applied: false, reason: 'нет такой группы у Flash' }); continue; }\n      const nv = (g.subtype && g.subtype !== UNKNOWN) ? g.subtype : null;\n      if (nv === null) {                             // НЕ ОПРЕДЕЛЁН → оставить Flash, пометить\n        needsReview++;\n        details.push({ gi: g.group_index, applied: false, reason: 'pass2 не уверен — оставлен Flash', needs_review: true });\n        continue;\n      }\n      if (nv.indexOf(grp.brand) !== 0) {             // guard бренда (v4.2)\n        details.push({ gi: g.group_index, applied: false, reason: 'подпись чужого бренда: ' + nv });\n        continue;\n      }\n      let c = 0;\n      grp.boxes.forEach(b => { if ((b.subtype || null) !== nv) c++; b.subtype = nv; });\n      changed += c;\n      details.push({ gi: g.group_index, applied: true, changed: c, name: nv });\n    }\n    stats.push({ shelf: sh.shelf_index, applied: details.some(d => d.applied), groups: details });\n  }\n} else {\n  stats.push({ shelf: null, applied: false, reason: 'проход 2 не ответил или ответ не разобрался' });\n}\n\n// ── пересборка items — та же группировка, что в «Парсинге» (полка, бренд, подвид, формат)\nconst groups2 = new Map();\nfor (const b of ours) {\n  const shelf = shelfOf(b);\n  const fmt = b.format || null;\n  const key = shelf + '|' + b.label + '|' + (b.subtype || '') + '|' + (fmt || '');\n  if (!groups2.has(key)) groups2.set(key, { shelf, brand: b.label, subtype: b.subtype || null, format: fmt, boxes: [] });\n  groups2.get(key).boxes.push(b);\n}\nconst loc = x => x < 333 ? 'слева' : x < 667 ? 'центр' : 'справа';\nconst items = [...groups2.values()].map(g => {\n  const centers = g.boxes.map(b => (b.box_2d[1] + b.box_2d[3]) / 2);\n  const meanX = centers.reduce((s, v) => s + v, 0) / centers.length;\n  return {\n    product_name: g.brand,\n    product_subtype: g.subtype,\n    package_format: g.format,\n    shelf_index: g.shelf,\n    shelf_location: loc(meanX),\n    front_facing_count: g.boxes.length,\n    confidence: Math.min.apply(null, g.boxes.map(b => typeof b.confidence === 'number' ? b.confidence : 1)),\n    _x: meanX,\n  };\n}).sort((a, b) => a.shelf_index - b.shelf_index || a._x - b._x);\nitems.forEach(i => { delete i._x; });\n\nreturn [{ json: Object.assign({}, parsed, {\n  items,\n  shelves_with_target_product: new Set(items.map(i => i.shelf_index)).size,\n  _pass2: {\n    version: 'v9-groups',\n    shelves_applied: stats.filter(s => s.applied).length,\n    shelves_total: groupsByShelf.size,\n    subtypes_changed: changed,\n    needs_review: needsReview,\n    detail: stats,\n    usage: {\n      prompt_tokens: (raw.usageMetadata && raw.usageMetadata.promptTokenCount) || null,\n      cached_tokens: (raw.usageMetadata && raw.usageMetadata.cachedContentTokenCount) || null,\n      output_tokens: (raw.usageMetadata && raw.usageMetadata.candidatesTokenCount) || null,\n    },\n  },\n}) }];"
+   },
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    720,
+    1264
+   ],
+   "id": "8bc0db37-e753-4822-b5db-e1f14b575d7a",
+   "name": "Слияние подвидов"
+  },
+  {
+   "parameters": {
+    "content": "## Sheets → Data Tables (24.08)\nЛоги → таблица `wf_logs`, строки отчёта → `report_rows`, каталог → реплика `brand_catalog` (копируется из листа Catalog воркфлоу «Sheets Sync» в 05:40).\nВыгрузка в Google Sheets — раз в день в 21:00 тем же «Sheets Sync».\nВ горячем пути Google API больше не дёргается.",
+    "height": 260,
+    "width": 340,
+    "color": 4
+   },
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    1224,
+    1076
+   ],
+   "id": "sticky-sheets-cold-wf2",
+   "name": "Sticky Note8"
+  }
+ ],
+ "connections": {
+  "Валидация входа": {
+   "main": [
+    [
+     {
+      "node": "Создание лога (Started)",
+      "type": "main",
+      "index": 0
+     },
+     {
+      "node": "Загрузка фото",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Создание лога (Started)": {
+   "main": [
+    [],
+    [
+     {
+      "node": "Ошибка лога (Started)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Загрузка фото": {
+   "main": [
+    [
+     {
+      "node": "Закрепляю тип фотографии",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Закрепляю тип фотографии": {
+   "main": [
+    [
+     {
+      "node": "Перевод фото в строку",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Перевод фото в строку": {
+   "main": [
+    [
+     {
+      "node": "Каталог брендов: Config",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Парсинг обработки Google Vision": {
+   "main": [
+    [
+     {
+      "node": "Обновление лога о работе воркфлоу (Processed)",
+      "type": "main",
+      "index": 0
+     },
+     {
+      "node": "Pro-проход включён?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Подготовка данных для занесения в таблицу": {
+   "main": [
+    [
+     {
+      "node": "Занесение данных в таблицу",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Занесение данных в таблицу": {
+   "main": [
+    [
+     {
+      "node": "Завершение лога о работе воркфлоу (Finished)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Обновление лога о работе воркфлоу (Processed)": {
+   "main": [
+    [],
+    [
+     {
+      "node": "Сообщение об ошибке логирования (Processed)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Завершение лога о работе воркфлоу (Finished)": {
+   "main": [
+    [
+     {
+      "node": "Формирование результата",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Сообщение об ошибке логирования (Finished)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Сообщение об ошибке логирования (Finished)": {
+   "main": [
+    [
+     {
+      "node": "Формирование результата",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Каталог брендов: Config": {
+   "main": [
+    [
+     {
+      "node": "Сборка запроса Gemini",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "When Executed by Another Workflow": {
+   "main": [
+    [
+     {
+      "node": "Валидация входа",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Ошибка в обработке фото (Google Vision Error)": {
+   "main": [
+    [],
+    [
+     {
+      "node": "Сообщение об ошибке обработки фото (Google Vision Error)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Gemini Vision (3-flash-preview)": {
+   "main": [
+    [],
+    []
+   ]
+  },
+  "Gemini Vision (3.5-flash)": {
+   "main": [
+    [
+     {
+      "node": "Парсинг обработки Google Vision",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Ошибка в обработке фото (Google Vision Error)",
+      "type": "main",
+      "index": 0
+     },
+     {
+      "node": "Сообщение об ошибке работы wf-2 (Google Vision Error)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Сборка запроса Gemini": {
+   "main": [
+    [
+     {
+      "node": "Gemini Vision (3.5-flash)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Pro-проход включён?": {
+   "main": [
+    [
+     {
+      "node": "Сборка запроса Pro",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Подготовка данных для занесения в таблицу",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Сборка запроса Pro": {
+   "main": [
+    [
+     {
+      "node": "Gemini Pro (подвиды)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Gemini Pro (подвиды)": {
+   "main": [
+    [
+     {
+      "node": "Слияние подвидов",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Слияние подвидов": {
+   "main": [
+    [
+     {
+      "node": "Подготовка данных для занесения в таблицу",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "active": true,
+ "settings": {
+  "executionOrder": "v1",
+  "binaryMode": "separate",
+  "availableInMCP": true,
+  "timeSavedMode": "fixed",
+  "callerPolicy": "workflowsFromSameOwner",
+  "executionTimeout": 900
+ },
+ "nodeGroups": [],
+ "tags": []
+}

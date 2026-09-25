@@ -1,0 +1,25 @@
+name: n8n_v75_replay_check
+description: 'A/B-2 arm «pass 1 + check»: the same recorded pass-1 answers, no LLM pass 2; uncertain groups still go through
+  retrieve_refs for the SigLIP ours/foreign check (max-sim < 0.70 on unnamed groups -> out of the count until review). Pass-1
+  names are kept.'
+mode: replay
+settings:
+  pass2_mode: check
+  pass2_refs: all
+  temperature: 0
+  media_resolution: MEDIA_RESOLUTION_ULTRA_HIGH
+  prompt_detect: detect_v7.5
+  prompt_verify: verify_v9
+  foreign_check: true
+  foreign_action: exclude
+replay_salts:
+  IMG_0644:
+  - bench_test_bgcolor_img1_run_01
+  - bench_test_bgcolor_img1_run_02
+  - bench_test_bgcolor_img1_run_03
+  - bench_test_bgcolor_img1_run_04
+  IMG_0643:
+  - bench_test_bgcolor_img2_run_01
+  - bench_test_bgcolor_img2_run_02
+  - bench_test_bgcolor_img2_run_03
+notes: Folder names in bench/runs were swapped (test_bgcolor_img2 is IMG_0643); frames identified by content.

@@ -1,0 +1,13 @@
+{
+  "_comment": "Fictional demo route sheet. The real one is exported from the customer's system (route code -> store codes, BACKLOG №26).",
+  "stores": [
+    {"store_code": "00-0000001", "store_name": "Демо-точка 1", "address": "ул. Примерная, 1", "route_code": "000000001"},
+    {"store_code": "00-0000002", "store_name": "Демо-точка 2", "address": "пр. Тестовый, 15", "route_code": "000000001"},
+    {"store_code": "00-0000003", "store_name": "Демо-точка 3", "address": "ул. Образцовая, 7", "route_code": "000000001"},
+    {"store_code": "00-0000004", "store_name": "Демо-точка 4", "address": "мкр. Демо, 3", "route_code": "000000002"}
+  ],
+  "agents": [
+    {"agent_id": "A001", "name": "Демо-агент", "phone": "+7 700 000 00 01", "route_code": "000000001", "role": "agent"},
+    {"agent_id": "S001", "name": "Демо-супервайзер", "phone": "+7 700 000 00 02", "route_code": "", "role": "supervisor"}
+  ]
+}

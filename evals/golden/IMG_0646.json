@@ -1,0 +1,291 @@
+{
+ "frame_id": "IMG_0646",
+ "aliases": [],
+ "tier": "silver",
+ "file": "frames/examples/IMG_0646.JPG",
+ "size": [
+  3024,
+  4032
+ ],
+ "variants": [
+  "orig",
+  "tg1280"
+ ],
+ "source": "embedding_experiment 24.08: labels_IMG_*.json + multi_crops_meta.json (YOLO11x rows)",
+ "notes": "Visual labels by zooms (not a field recount), ±1–2 units; packs not labelled; shelf numbers are YOLO rows with our units, top to bottom — the model may number shelves differently (scored by order).",
+ "shelves": [
+  {
+   "shelf_index": 1,
+   "yolo_row": 3,
+   "units": [
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA лимон-лайм-жасмин",
+     "format": null,
+     "box_px": [
+      594,
+      897,
+      823,
+      1418
+     ]
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA лимон-лайм-жасмин",
+     "format": null,
+     "box_px": [
+      798,
+      897,
+      1015,
+      1428
+     ]
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA помело-цветок апельсина",
+     "format": null,
+     "box_px": [
+      999,
+      897,
+      1204,
+      1434
+     ]
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA малина",
+     "format": null,
+     "box_px": [
+      1197,
+      896,
+      1391,
+      1433
+     ]
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA малина",
+     "format": null,
+     "box_px": [
+      1388,
+      900,
+      1573,
+      1434
+     ]
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA персик-жасмин",
+     "format": null,
+     "box_px": [
+      1559,
+      908,
+      1758,
+      1438
+     ]
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA персик-жасмин",
+     "format": null,
+     "box_px": [
+      1734,
+      913,
+      1936,
+      1439
+     ]
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA манго-маракуйя",
+     "format": null,
+     "box_px": [
+      1904,
+      918,
+      2112,
+      1437
+     ]
+    }
+   ],
+   "units_gt": 8,
+   "tags": [
+    "pink_zone"
+   ]
+  },
+  {
+   "shelf_index": 2,
+   "yolo_row": 7,
+   "units": [
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA клубника-киви",
+     "format": null,
+     "box_px": [
+      727,
+      1757,
+      947,
+      2176
+     ]
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA клубника-киви",
+     "format": null,
+     "box_px": [
+      957,
+      1804,
+      1172,
+      2175
+     ]
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA манго-маракуйя",
+     "format": null,
+     "box_px": [
+      1165,
+      1797,
+      1370,
+      2486
+     ]
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA манго-маракуйя",
+     "format": null,
+     "box_px": [
+      1366,
+      1787,
+      1569,
+      2175
+     ]
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA манго-маракуйя",
+     "format": null,
+     "box_px": [
+      1560,
+      1784,
+      1760,
+      2176
+     ]
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA помело-цветок апельсина",
+     "format": null,
+     "box_px": [
+      1751,
+      1781,
+      1954,
+      2175
+     ]
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA помело-цветок апельсина",
+     "format": null,
+     "box_px": [
+      1945,
+      1781,
+      2158,
+      2175
+     ]
+    }
+   ],
+   "units_gt": 7,
+   "tags": [
+    "pink_zone"
+   ]
+  },
+  {
+   "shelf_index": 3,
+   "yolo_row": 9,
+   "units": [
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA малина",
+     "format": null,
+     "box_px": [
+      1016,
+      2774,
+      1206,
+      3071
+     ]
+    }
+   ],
+   "units_gt": 1,
+   "tags": [
+    "pink_zone"
+   ]
+  },
+  {
+   "shelf_index": 4,
+   "yolo_row": 10,
+   "units": [
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA малина",
+     "format": null,
+     "box_px": [
+      821,
+      2786,
+      1022,
+      3422
+     ]
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA персик-жасмин",
+     "format": null,
+     "box_px": [
+      1201,
+      2756,
+      1387,
+      3380
+     ]
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA персик-жасмин",
+     "format": null,
+     "box_px": [
+      1353,
+      2689,
+      1526,
+      3208
+     ]
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA лимон-лайм-жасмин",
+     "format": null,
+     "box_px": [
+      1701,
+      2689,
+      1885,
+      3275
+     ]
+    },
+    {
+     "brand": "AI TEA",
+     "subtype": "AI TEA лимон-лайм-жасмин",
+     "format": null,
+     "box_px": [
+      1865,
+      2661,
+      2047,
+      3072
+     ]
+    }
+   ],
+   "units_gt": 5,
+   "tags": [
+    "pink_zone"
+   ]
+  }
+ ],
+ "units_gt": 21,
+ "foreign_gt": 0
+}

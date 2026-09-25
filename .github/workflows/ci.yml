@@ -1,0 +1,61 @@
+name: ci
+on:
+  push: {branches: [main]}
+  pull_request:
+
+jobs:
+  secrets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_CONFIG: .gitleaks.toml
+
+  backend:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env: {POSTGRES_USER: shelf, POSTGRES_PASSWORD: shelf, POSTGRES_DB: shelf}
+        ports: ["5432:5432"]
+        options: --health-cmd "pg_isready -U shelf" --health-interval 5s --health-retries 20
+    env:
+      DATABASE_URL: postgresql://shelf:shelf@localhost:5432/shelf
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - uses: actions/setup-node@v4   # tests/test_js_parity.py runs the original n8n JS in Node
+        with: {node-version: "22"}
+      - uses: astral-sh/setup-uv@v3
+      - run: uv pip install --system -e "backend[dev]" -e "bot[dev]" -e "mcp_server[dev]" ruff
+      - run: ruff check .
+      - name: backend (incl. n8n JS parity, Postgres saver, pgvector)
+        run: cd backend && python -m pytest -q
+      - name: evals scorers (agree with the legacy bench scorer)
+        run: cd evals && python -m pytest -q
+      - run: cd bot && python -m pytest -q
+      - run: cd mcp_server && python -m pytest -q
+      - run: python -m pytest -q skills/shelf-audit-report/scripts
+
+  frontend:
+    runs-on: ubuntu-latest
+    defaults: {run: {working-directory: frontend}}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: "22", cache: npm, cache-dependency-path: frontend/package-lock.json}
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+
+  compose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker compose config -q
+      - run: docker compose build api frontend mcp

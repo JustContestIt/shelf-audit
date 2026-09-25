@@ -1,0 +1,55 @@
+# Pass-1 reference set = n8n Data Table `brand_catalog` as of 31.08.2026 (bench/brand_catalog_before_31_08.xlsx).
+# 48 rows; `exclude_keys` in settings removes aitea_reven (+__rot) at request time -> 46 refs, as in production.
+# Paths are relative to data/catalog/. Differences from n8n (deliberate, see docs/DECISIONS.md ADR-010):
+#   * files come from refs_1280/ (the same mockups, 1280 px) instead of Google Files API URIs;
+#   * *__pet05_ru rows point to the real PET 0.5 mockups; in n8n three of them pointed to field can photos
+#     (the 'false duplicates' of BACKLOG #31).
+refs:
+  - {key: buratino_klassicheskiy, path: "refs_1280/buratino_klassicheskiy.jpg", source: studio, mime_type: image/jpeg}
+  - {key: buratino_dynya_myata, path: "refs_1280/buratino_dynya_myata.jpg", source: studio, mime_type: image/jpeg}
+  - {key: buratino_granat, path: "refs_1280/buratino_granat.jpg", source: studio, mime_type: image/jpeg}
+  - {key: aitea_malina, path: "refs_1280/aitea_malina.jpg", source: studio, mime_type: image/jpeg}
+  - {key: aitea_guava_tropiki, path: "refs_1280/aitea_guava_tropiki.jpg", source: studio, mime_type: image/jpeg}
+  - {key: aitea_mandarin_lavanda, path: "refs_1280/aitea_mandarin_lavanda.jpg", source: studio, mime_type: image/jpeg}
+  - {key: aitea_reven, path: "refs_1280/aitea_reven.jpg", source: studio, mime_type: image/jpeg}
+  - {key: aitea_pomelo, path: "refs_1280/aitea_pomelo.jpg", source: studio, mime_type: image/jpeg}
+  - {key: aitea_mango_marakuya, path: "refs_1280/aitea_mango_marakuya.jpg", source: studio, mime_type: image/jpeg}
+  - {key: aitea_klubnika_kivi, path: "refs_1280/aitea_klubnika_kivi.jpg", source: studio, mime_type: image/jpeg}
+  - {key: aitea_limon_laim_zhasmin, path: "refs_1280/aitea_limon_laim_zhasmin.jpg", source: studio, mime_type: image/jpeg}
+  - {key: aitea_persik_zhasmin, path: "refs_1280/aitea_persik_zhasmin.jpg", source: studio, mime_type: image/jpeg}
+  - {key: chino_bellini, path: "refs_1280/chino_bellini.jpg", source: studio, mime_type: image/jpeg}
+  - {key: chino_rossini, path: "refs_1280/chino_rossini.jpg", source: studio, mime_type: image/jpeg}
+  - {key: chino_tintoretto, path: "refs_1280/chino_tintoretto.jpg", source: studio, mime_type: image/jpeg}
+  - {key: chino_mimosa, path: "refs_1280/chino_mimosa.jpg", source: studio, mime_type: image/jpeg}
+  - {key: kompotay_yagodny, path: "refs_1280/kompotay_yagodny.jpg", source: studio, mime_type: image/jpeg}
+  - {key: kompotay_granatovy, path: "refs_1280/kompotay_granatovy.jpg", source: studio, mime_type: image/jpeg}
+  - {key: kompotay_slivovy, path: "refs_1280/kompotay_slivovy.jpg", source: studio, mime_type: image/jpeg}
+  - {key: kompotay_vishnevy, path: "refs_1280/kompotay_vishnevy.jpg", source: studio, mime_type: image/jpeg}
+  - {key: kompotay_klassicheskiy, path: "refs_1280/kompotay_klassicheskiy.jpg", source: studio, mime_type: image/jpeg}
+  - {key: tamga, path: "refs_1280/tamga.jpg", source: studio, mime_type: image/jpeg}
+  - {key: aitea_guava_tropiki__rot, path: "refs_1280/aitea_guava_tropiki__rot.jpg", source: studio, mime_type: image/jpeg, variant: rot}
+  - {key: aitea_reven__rot, path: "refs_1280/aitea_reven__rot.jpg", source: studio, mime_type: image/jpeg, variant: rot}
+  - {key: aitea_pomelo__rot, path: "refs_1280/aitea_pomelo__rot.jpg", source: studio, mime_type: image/jpeg, variant: rot}
+  - {key: aitea_klubnika_kivi__rot, path: "refs_1280/aitea_klubnika_kivi__rot.jpg", source: studio, mime_type: image/jpeg, variant: rot}
+  - {key: kompotay_yagodny__can, path: "refs_1280/kompotay_yagodny__can.jpg", source: studio, mime_type: image/jpeg, variant: can}
+  - {key: kompotay_yagodny__sleever, path: "refs_1280/kompotay_yagodny__sleever.jpg", source: studio, mime_type: image/jpeg, variant: sleever}
+  - {key: kompotay_granatovy__can, path: "refs_1280/kompotay_granatovy__can.jpg", source: studio, mime_type: image/jpeg, variant: can}
+  - {key: kompotay_granatovy__sleever, path: "refs_1280/kompotay_granatovy__sleever.jpg", source: studio, mime_type: image/jpeg, variant: sleever}
+  - {key: kompotay_slivovy__can, path: "refs_1280/kompotay_slivovy__can.jpg", source: studio, mime_type: image/jpeg, variant: can}
+  - {key: kompotay_slivovy__sleever, path: "refs_1280/kompotay_slivovy__sleever.jpg", source: studio, mime_type: image/jpeg, variant: sleever}
+  - {key: kompotay_vishnevy__can, path: "refs_1280/kompotay_vishnevy__can.jpg", source: studio, mime_type: image/jpeg, variant: can}
+  - {key: kompotay_vishnevy__sleever, path: "refs_1280/kompotay_vishnevy__sleever.jpg", source: studio, mime_type: image/jpeg, variant: sleever}
+  - {key: kompotay_klassicheskiy__can, path: "refs_1280/kompotay_klassicheskiy__can.jpg", source: studio, mime_type: image/jpeg, variant: can}
+  - {key: kompotay_klassicheskiy__sleever, path: "refs_1280/kompotay_klassicheskiy__sleever.jpg", source: studio, mime_type: image/jpeg, variant: sleever}
+  - {key: aitea_malina__pet05_ru, path: "refs_1280/aitea_malina__pet05_ru.jpg", source: studio, mime_type: image/jpeg, variant: pet05_ru}
+  - {key: aitea_pomelo__pet05_ru, path: "refs_1280/aitea_pomelo__pet05_ru.jpg", source: studio, mime_type: image/jpeg, variant: pet05_ru}
+  - {key: aitea_mango_marakuya__pet05_ru, path: "refs_1280/aitea_mango_marakuya__pet05_ru.jpg", source: studio, mime_type: image/jpeg, variant: pet05_ru}
+  - {key: aitea_klubnika_kivi__pet05_ru, path: "refs_1280/aitea_klubnika_kivi__pet05_ru.jpg", source: studio, mime_type: image/jpeg, variant: pet05_ru}
+  - {key: aitea_limon_laim_zhasmin__pet05_ru, path: "refs_1280/aitea_limon_laim_zhasmin__pet05_ru.jpg", source: studio, mime_type: image/jpeg, variant: pet05_ru}
+  - {key: aitea_persik_zhasmin__pet05_ru, path: "refs_1280/aitea_persik_zhasmin__pet05_ru.jpg", source: studio, mime_type: image/jpeg, variant: pet05_ru}
+  - {key: aitea_pomelo__field_can045, path: "field_refs/aitea_pomelo__FIELD_can045.png", source: field, mime_type: image/png, variant: field_can045}
+  - {key: aitea_klubnika_kivi__field_can045, path: "field_refs/aitea_klubnika_kivi__FIELD_can045.png", source: field, mime_type: image/png, variant: field_can045}
+  - {key: aitea_klubnika_kivi__field_can045__rot, path: "field_refs/aitea_klubnika_kivi__FIELD_can045__rot.jpg", source: field, mime_type: image/jpeg, variant: field_can045__rot}
+  - {key: aitea_persik_zhasmin__field_can045, path: "field_refs/aitea_persik_zhasmin__FIELD_can045.png", source: field, mime_type: image/png, variant: field_can045}
+  - {key: aitea_persik_zhasmin__rot_field_can045, path: "field_refs/aitea_persik_zhasmin__rot_FIELD_can045.jpg", source: field, mime_type: image/jpeg, variant: rot_field_can045}
+  - {key: aitea_limon_laim_zhasmin__field_pet045, path: "field_refs/aitea_limon_laim_zhasmin__FIELD_pet045.png", source: field, mime_type: image/png, variant: field_pet045}

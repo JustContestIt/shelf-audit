@@ -1,0 +1,19 @@
+name: ab2_check
+description: 'A/B-2 arm «pass 1 + check»: no LLM pass 2; uncertain groups go through RAG only for the SigLIP ours/foreign
+  check (the best arm on recorded n8n answers).'
+mode: record
+settings:
+  prompt_detect: detect_v7.5
+  prompt_verify: verify_v9
+  pass2_mode: check
+  pass2_refs: topk
+  rag_top_k: 3
+  temperature: 0
+  foreign_check: true
+frames:
+- gold
+- silver
+variants:
+- orig
+- tg1280
+repeats: 3

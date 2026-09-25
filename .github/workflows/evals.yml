@@ -1,0 +1,40 @@
+# Evals on a small subset for every PR that touches the pipeline.
+# Customer photos are not in git: the job pulls them from private storage (secret DATA_ARCHIVE_URL,
+# e.g. a signed URL of a zip with data/frames/examples + data/catalog). Without it only the scorer tests run.
+name: evals
+on:
+  pull_request:
+    paths: ["backend/app/**", "evals/**"]
+  workflow_dispatch:
+    inputs:
+      config: {description: "evals/configs/<name>.yaml", default: "evals/configs/smoke_replay.yaml"}
+
+jobs:
+  evals:
+    runs-on: ubuntu-latest
+    env:
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      LANGSMITH_API_KEY: ${{ secrets.LANGSMITH_API_KEY }}
+      LANGSMITH_TRACING: ${{ secrets.LANGSMITH_API_KEY != '' }}
+      DATA_ARCHIVE_URL: ${{ secrets.DATA_ARCHIVE_URL }}   # secrets are not allowed in step `if:` — go through env
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - uses: astral-sh/setup-uv@v3
+      - run: uv pip install --system -e "backend[dev]"
+      - run: cd evals && python -m pytest -q
+      - name: fetch data (private)
+        if: ${{ env.DATA_ARCHIVE_URL != '' }}
+        run: curl -fsSL "$DATA_ARCHIVE_URL" -o data.zip && unzip -q data.zip -d data
+      - name: replay smoke (recorded answers through the whole graph)
+        if: ${{ hashFiles('data/frames/examples/IMG_0644.JPG') != '' }}
+        run: |
+          python evals/tools/n8n_to_cache.py --config evals/configs/smoke_replay.yaml
+          python -m evals.run --config evals/configs/smoke_replay.yaml
+      - name: live subset (manual run with a key)
+        if: ${{ github.event_name == 'workflow_dispatch' && env.GEMINI_API_KEY != '' }}
+        run: python -m evals.run --config ${{ inputs.config }} --mode record ${{ env.LANGSMITH_API_KEY != '' && '--langsmith' || '' }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: eval-results, path: evals/results/}

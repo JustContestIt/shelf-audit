@@ -1,0 +1,2416 @@
+{
+ "source": "test results/pass1&2_31_08_2026_3.txt",
+ "frame": "IMG_0644",
+ "pass1": {
+  "shelves_with_target_product": 5,
+  "items": [
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA помело-цветок апельсина",
+    "package_format": "банка 0,45 л",
+    "shelf_index": 1,
+    "shelf_location": "слева",
+    "front_facing_count": 1,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA гуава-тропики",
+    "package_format": "банка 0,45 л",
+    "shelf_index": 1,
+    "shelf_location": "центр",
+    "front_facing_count": 1,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA манго-маракуйя",
+    "package_format": "банка 0,45 л",
+    "shelf_index": 1,
+    "shelf_location": "центр",
+    "front_facing_count": 1,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA клубника-киви",
+    "package_format": "банка 0,45 л",
+    "shelf_index": 1,
+    "shelf_location": "центр",
+    "front_facing_count": 2,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA лимон-лайм-жасмин",
+    "package_format": "банка 0,45 л",
+    "shelf_index": 1,
+    "shelf_location": "центр",
+    "front_facing_count": 1,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA малина",
+    "package_format": "банка 0,45 л",
+    "shelf_index": 1,
+    "shelf_location": "центр",
+    "front_facing_count": 2,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA персик-жасмин",
+    "package_format": "банка 0,45 л",
+    "shelf_index": 1,
+    "shelf_location": "справа",
+    "front_facing_count": 2,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA мандарин-лаванда",
+    "package_format": "банка 0,45 л",
+    "shelf_index": 1,
+    "shelf_location": "справа",
+    "front_facing_count": 1,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA помело-цветок апельсина",
+    "package_format": "банка 0,45 л",
+    "shelf_index": 2,
+    "shelf_location": "центр",
+    "front_facing_count": 1,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA гуава-тропики",
+    "package_format": "банка 0,45 л",
+    "shelf_index": 2,
+    "shelf_location": "центр",
+    "front_facing_count": 1,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA манго-маракуйя",
+    "package_format": "банка 0,45 л",
+    "shelf_index": 2,
+    "shelf_location": "центр",
+    "front_facing_count": 1,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA клубника-киви",
+    "package_format": "банка 0,45 л",
+    "shelf_index": 2,
+    "shelf_location": "центр",
+    "front_facing_count": 1,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA лимон-лайм-жасмин",
+    "package_format": "банка 0,45 л",
+    "shelf_index": 2,
+    "shelf_location": "центр",
+    "front_facing_count": 2,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA малина",
+    "package_format": "банка 0,45 л",
+    "shelf_index": 2,
+    "shelf_location": "центр",
+    "front_facing_count": 2,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA персик-жасмин",
+    "package_format": "банка 0,45 л",
+    "shelf_index": 2,
+    "shelf_location": "справа",
+    "front_facing_count": 2,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA мандарин-лаванда",
+    "package_format": "банка 0,45 л",
+    "shelf_index": 2,
+    "shelf_location": "справа",
+    "front_facing_count": 1,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA малина",
+    "package_format": "ПЭТ 0,5 л",
+    "shelf_index": 3,
+    "shelf_location": "центр",
+    "front_facing_count": 2,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA персик-жасмин",
+    "package_format": "ПЭТ 0,5 л",
+    "shelf_index": 3,
+    "shelf_location": "центр",
+    "front_facing_count": 3,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA манго-маракуйя",
+    "package_format": "ПЭТ 0,5 л",
+    "shelf_index": 3,
+    "shelf_location": "центр",
+    "front_facing_count": 3,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA гуава-тропики",
+    "package_format": "ПЭТ 0,5 л",
+    "shelf_index": 3,
+    "shelf_location": "центр",
+    "front_facing_count": 2,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA помело-цветок апельсина",
+    "package_format": "ПЭТ 0,5 л",
+    "shelf_index": 3,
+    "shelf_location": "справа",
+    "front_facing_count": 1,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA малина",
+    "package_format": "ПЭТ 1 л",
+    "shelf_index": 4,
+    "shelf_location": "слева",
+    "front_facing_count": 2,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA персик-жасмин",
+    "package_format": "ПЭТ 1 л",
+    "shelf_index": 4,
+    "shelf_location": "центр",
+    "front_facing_count": 1,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA лимон-лайм-жасмин",
+    "package_format": "ПЭТ 1 л",
+    "shelf_index": 4,
+    "shelf_location": "центр",
+    "front_facing_count": 2,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA помело-цветок апельсина",
+    "package_format": "ПЭТ 1 л",
+    "shelf_index": 4,
+    "shelf_location": "центр",
+    "front_facing_count": 1,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA манго-маракуйя",
+    "package_format": "ПЭТ 1 л",
+    "shelf_index": 4,
+    "shelf_location": "центр",
+    "front_facing_count": 2,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA гуава-тропики",
+    "package_format": "ПЭТ 1 л",
+    "shelf_index": 4,
+    "shelf_location": "справа",
+    "front_facing_count": 2,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA малина",
+    "package_format": "ПЭТ 1 л",
+    "shelf_index": 5,
+    "shelf_location": "слева",
+    "front_facing_count": 2,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA персик-жасмин",
+    "package_format": "ПЭТ 1 л",
+    "shelf_index": 5,
+    "shelf_location": "центр",
+    "front_facing_count": 1,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA лимон-лайм-жасмин",
+    "package_format": "ПЭТ 1 л",
+    "shelf_index": 5,
+    "shelf_location": "центр",
+    "front_facing_count": 2,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA помело-цветок апельсина",
+    "package_format": "ПЭТ 1 л",
+    "shelf_index": 5,
+    "shelf_location": "центр",
+    "front_facing_count": 1,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA манго-маракуйя",
+    "package_format": "ПЭТ 1 л",
+    "shelf_index": 5,
+    "shelf_location": "центр",
+    "front_facing_count": 2,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA гуава-тропики",
+    "package_format": "ПЭТ 1 л",
+    "shelf_index": 5,
+    "shelf_location": "центр",
+    "front_facing_count": 2,
+    "confidence": 0.98
+   }
+  ],
+  "store_code_on_card": null,
+  "overall_confidence": 0.98,
+  "notes": "Обнаружены банки и бутылки AI TEA различных вкусов и объемов. Банки-двойники Zigi-Yai помечены как ЧУЖОЙ.",
+  "_detect": {
+   "boxes_total": 58,
+   "boxes_bad": 0,
+   "dedup_dropped": 0,
+   "slivers_dropped": 0,
+   "slivers_raw": [],
+   "foreign_units": 5,
+   "format_null": 0,
+   "format_geo": {
+    "enabled": true,
+    "anchor": {
+     "ok": true,
+     "w_rel": 0.0938,
+     "cans": 22
+    },
+    "groups": []
+   },
+   "finish_reason": "STOP",
+   "boxes_raw": [
+    {
+     "box_2d": [
+      81,
+      308,
+      174,
+      353
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA помело-цветок апельсина",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      81,
+      351,
+      174,
+      397
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA гуава-тропики",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      81,
+      395,
+      174,
+      441
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA манго-маракуйя",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      81,
+      439,
+      174,
+      484
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA клубника-киви",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      81,
+      483,
+      174,
+      528
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA клубника-киви",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      81,
+      526,
+      174,
+      571
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA лимон-лайм-жасмин",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      81,
+      570,
+      174,
+      615
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA малина",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      81,
+      614,
+      174,
+      659
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA малина",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      81,
+      658,
+      174,
+      703
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA персик-жасмин",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      81,
+      701,
+      174,
+      747
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA персик-жасмин",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      81,
+      745,
+      174,
+      791
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA мандарин-лаванда",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      302,
+      317,
+      385,
+      360
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA помело-цветок апельсина",
+     "format": "банка 0,45 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      302,
+      358,
+      385,
+      400
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA гуава-тропики",
+     "format": "банка 0,45 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      302,
+      398,
+      385,
+      441
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA манго-маракуйя",
+     "format": "банка 0,45 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      302,
+      439,
+      385,
+      481
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA клубника-киви",
+     "format": "банка 0,45 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      302,
+      479,
+      385,
+      520
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA лимон-лайм-жасмин",
+     "format": "банка 0,45 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      302,
+      518,
+      385,
+      560
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA лимон-лайм-жасмин",
+     "format": "банка 0,45 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      302,
+      558,
+      385,
+      600
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA малина",
+     "format": "банка 0,45 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      302,
+      598,
+      385,
+      641
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA малина",
+     "format": "банка 0,45 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      302,
+      639,
+      385,
+      681
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA персик-жасмин",
+     "format": "банка 0,45 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      302,
+      679,
+      385,
+      721
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA персик-жасмин",
+     "format": "банка 0,45 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      302,
+      719,
+      385,
+      765
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA мандарин-лаванда",
+     "format": "банка 0,45 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      464,
+      306,
+      561,
+      347
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA малина",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 3,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      464,
+      344,
+      561,
+      385
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA малина",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 3,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      464,
+      383,
+      561,
+      424
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA персик-жасмин",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 3,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      464,
+      421,
+      561,
+      462
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA персик-жасмин",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 3,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      464,
+      459,
+      561,
+      500
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA персик-жасмин",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 3,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      464,
+      498,
+      561,
+      538
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA манго-маракуйя",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 3,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      464,
+      536,
+      561,
+      576
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA манго-маракуйя",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 3,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      464,
+      574,
+      561,
+      613
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA манго-маракуйя",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 3,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      464,
+      611,
+      561,
+      651
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA гуава-тропики",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 3,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      464,
+      649,
+      561,
+      689
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA гуава-тропики",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 3,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      464,
+      687,
+      561,
+      727
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA помело-цветок апельсина",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 3,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      624,
+      268,
+      744,
+      318
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA малина",
+     "format": "ПЭТ 1 л",
+     "shelf_index": 4,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      624,
+      316,
+      744,
+      365
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA малина",
+     "format": "ПЭТ 1 л",
+     "shelf_index": 4,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      624,
+      362,
+      744,
+      412
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA персик-жасмин",
+     "format": "ПЭТ 1 л",
+     "shelf_index": 4,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      624,
+      410,
+      732,
+      457
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA лимон-лайм-жасмин",
+     "format": "ПЭТ 1 л",
+     "shelf_index": 4,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      624,
+      454,
+      732,
+      499
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA лимон-лайм-жасмин",
+     "format": "ПЭТ 1 л",
+     "shelf_index": 4,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      624,
+      492,
+      744,
+      541
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA помело-цветок апельсина",
+     "format": "ПЭТ 1 л",
+     "shelf_index": 4,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      598,
+      539,
+      713,
+      581
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA манго-маракуйя",
+     "format": "ПЭТ 1 л",
+     "shelf_index": 4,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      611,
+      579,
+      729,
+      625
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA манго-маракуйя",
+     "format": "ПЭТ 1 л",
+     "shelf_index": 4,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      611,
+      623,
+      729,
+      669
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA гуава-тропики",
+     "format": "ПЭТ 1 л",
+     "shelf_index": 4,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      611,
+      667,
+      731,
+      713
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA гуава-тропики",
+     "format": "ПЭТ 1 л",
+     "shelf_index": 4,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      781,
+      278,
+      891,
+      326
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA малина",
+     "format": "ПЭТ 1 л",
+     "shelf_index": 5,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      781,
+      321,
+      876,
+      356
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA малина",
+     "format": "ПЭТ 1 л",
+     "shelf_index": 5,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      781,
+      363,
+      891,
+      410
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA персик-жасмин",
+     "format": "ПЭТ 1 л",
+     "shelf_index": 5,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      781,
+      407,
+      891,
+      454
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA лимон-лайм-жасмин",
+     "format": "ПЭТ 1 л",
+     "shelf_index": 5,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      781,
+      451,
+      891,
+      497
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA лимон-лайм-жасмин",
+     "format": "ПЭТ 1 л",
+     "shelf_index": 5,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      781,
+      493,
+      891,
+      538
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA помело-цветок апельсина",
+     "format": "ПЭТ 1 л",
+     "shelf_index": 5,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      781,
+      535,
+      891,
+      582
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA манго-маракуйя",
+     "format": "ПЭТ 1 л",
+     "shelf_index": 5,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      781,
+      579,
+      891,
+      623
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA манго-маракуйя",
+     "format": "ПЭТ 1 л",
+     "shelf_index": 5,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      781,
+      621,
+      891,
+      667
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA гуава-тропики",
+     "format": "ПЭТ 1 л",
+     "shelf_index": 5,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      781,
+      665,
+      891,
+      711
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA гуава-тропики",
+     "format": "ПЭТ 1 л",
+     "shelf_index": 5,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      81,
+      258,
+      173,
+      304
+     ],
+     "label": "ЧУЖОЙ",
+     "subtype": null,
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.95
+    },
+    {
+     "box_2d": [
+      217,
+      244,
+      302,
+      290
+     ],
+     "label": "ЧУЖОЙ",
+     "subtype": null,
+     "format": "банка 0,45 л",
+     "shelf_index": 2,
+     "confidence": 0.95
+    },
+    {
+     "box_2d": [
+      217,
+      288,
+      302,
+      332
+     ],
+     "label": "ЧУЖОЙ",
+     "subtype": null,
+     "format": "банка 0,45 л",
+     "shelf_index": 2,
+     "confidence": 0.95
+    },
+    {
+     "box_2d": [
+      302,
+      240,
+      385,
+      286
+     ],
+     "label": "ЧУЖОЙ",
+     "subtype": null,
+     "format": "банка 0,45 л",
+     "shelf_index": 2,
+     "confidence": 0.95
+    },
+    {
+     "box_2d": [
+      302,
+      284,
+      385,
+      321
+     ],
+     "label": "ЧУЖОЙ",
+     "subtype": null,
+     "format": "банка 0,45 л",
+     "shelf_index": 2,
+     "confidence": 0.95
+    }
+   ]
+  },
+  "_usage": {
+   "prompt_tokens": 54581,
+   "cached_tokens": 52439,
+   "output_tokens": 5412
+  }
+ },
+ "pass2": {
+  "shelves_with_target_product": 5,
+  "items": [
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA гуава-тропики",
+    "package_format": "банка 0,45 л",
+    "shelf_index": 1,
+    "shelf_location": "слева",
+    "front_facing_count": 1,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA помело-цветок апельсина",
+    "package_format": "банка 0,45 л",
+    "shelf_index": 1,
+    "shelf_location": "центр",
+    "front_facing_count": 1,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA манго-маракуйя",
+    "package_format": "банка 0,45 л",
+    "shelf_index": 1,
+    "shelf_location": "центр",
+    "front_facing_count": 1,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA клубника-киви",
+    "package_format": "банка 0,45 л",
+    "shelf_index": 1,
+    "shelf_location": "центр",
+    "front_facing_count": 2,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA лимон-лайм-жасмин",
+    "package_format": "банка 0,45 л",
+    "shelf_index": 1,
+    "shelf_location": "центр",
+    "front_facing_count": 1,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA малина",
+    "package_format": "банка 0,45 л",
+    "shelf_index": 1,
+    "shelf_location": "центр",
+    "front_facing_count": 2,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA персик-жасмин",
+    "package_format": "банка 0,45 л",
+    "shelf_index": 1,
+    "shelf_location": "справа",
+    "front_facing_count": 2,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA мандарин-лаванда",
+    "package_format": "банка 0,45 л",
+    "shelf_index": 1,
+    "shelf_location": "справа",
+    "front_facing_count": 1,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA гуава-тропики",
+    "package_format": "банка 0,45 л",
+    "shelf_index": 2,
+    "shelf_location": "центр",
+    "front_facing_count": 1,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA помело-цветок апельсина",
+    "package_format": "банка 0,45 л",
+    "shelf_index": 2,
+    "shelf_location": "центр",
+    "front_facing_count": 1,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA манго-маракуйя",
+    "package_format": "банка 0,45 л",
+    "shelf_index": 2,
+    "shelf_location": "центр",
+    "front_facing_count": 1,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA клубника-киви",
+    "package_format": "банка 0,45 л",
+    "shelf_index": 2,
+    "shelf_location": "центр",
+    "front_facing_count": 1,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA лимон-лайм-жасмин",
+    "package_format": "банка 0,45 л",
+    "shelf_index": 2,
+    "shelf_location": "центр",
+    "front_facing_count": 2,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA малина",
+    "package_format": "банка 0,45 л",
+    "shelf_index": 2,
+    "shelf_location": "центр",
+    "front_facing_count": 2,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA персик-жасмин",
+    "package_format": "банка 0,45 л",
+    "shelf_index": 2,
+    "shelf_location": "справа",
+    "front_facing_count": 2,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA мандарин-лаванда",
+    "package_format": "банка 0,45 л",
+    "shelf_index": 2,
+    "shelf_location": "справа",
+    "front_facing_count": 1,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA малина",
+    "package_format": "ПЭТ 0,5 л",
+    "shelf_index": 3,
+    "shelf_location": "центр",
+    "front_facing_count": 2,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA персик-жасмин",
+    "package_format": "ПЭТ 0,5 л",
+    "shelf_index": 3,
+    "shelf_location": "центр",
+    "front_facing_count": 3,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA манго-маракуйя",
+    "package_format": "ПЭТ 0,5 л",
+    "shelf_index": 3,
+    "shelf_location": "центр",
+    "front_facing_count": 3,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA гуава-тропики",
+    "package_format": "ПЭТ 0,5 л",
+    "shelf_index": 3,
+    "shelf_location": "центр",
+    "front_facing_count": 2,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA помело-цветок апельсина",
+    "package_format": "ПЭТ 0,5 л",
+    "shelf_index": 3,
+    "shelf_location": "справа",
+    "front_facing_count": 1,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA малина",
+    "package_format": "ПЭТ 1 л",
+    "shelf_index": 4,
+    "shelf_location": "слева",
+    "front_facing_count": 2,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA персик-жасмин",
+    "package_format": "ПЭТ 1 л",
+    "shelf_index": 4,
+    "shelf_location": "центр",
+    "front_facing_count": 1,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA лимон-лайм-жасмин",
+    "package_format": "ПЭТ 1 л",
+    "shelf_index": 4,
+    "shelf_location": "центр",
+    "front_facing_count": 2,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA помело-цветок апельсина",
+    "package_format": "ПЭТ 1 л",
+    "shelf_index": 4,
+    "shelf_location": "центр",
+    "front_facing_count": 1,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA манго-маракуйя",
+    "package_format": "ПЭТ 1 л",
+    "shelf_index": 4,
+    "shelf_location": "центр",
+    "front_facing_count": 2,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA гуава-тропики",
+    "package_format": "ПЭТ 1 л",
+    "shelf_index": 4,
+    "shelf_location": "справа",
+    "front_facing_count": 2,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA малина",
+    "package_format": "ПЭТ 1 л",
+    "shelf_index": 5,
+    "shelf_location": "слева",
+    "front_facing_count": 2,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA персик-жасмин",
+    "package_format": "ПЭТ 1 л",
+    "shelf_index": 5,
+    "shelf_location": "центр",
+    "front_facing_count": 1,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA лимон-лайм-жасмин",
+    "package_format": "ПЭТ 1 л",
+    "shelf_index": 5,
+    "shelf_location": "центр",
+    "front_facing_count": 2,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA помело-цветок апельсина",
+    "package_format": "ПЭТ 1 л",
+    "shelf_index": 5,
+    "shelf_location": "центр",
+    "front_facing_count": 1,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA манго-маракуйя",
+    "package_format": "ПЭТ 1 л",
+    "shelf_index": 5,
+    "shelf_location": "центр",
+    "front_facing_count": 2,
+    "confidence": 0.98
+   },
+   {
+    "product_name": "AI TEA",
+    "product_subtype": "AI TEA гуава-тропики",
+    "package_format": "ПЭТ 1 л",
+    "shelf_index": 5,
+    "shelf_location": "центр",
+    "front_facing_count": 2,
+    "confidence": 0.98
+   }
+  ],
+  "store_code_on_card": null,
+  "overall_confidence": 0.98,
+  "notes": "Обнаружены банки и бутылки AI TEA различных вкусов и объемов. Банки-двойники Zigi-Yai помечены как ЧУЖОЙ.",
+  "_detect": {
+   "boxes_total": 58,
+   "boxes_bad": 0,
+   "dedup_dropped": 0,
+   "slivers_dropped": 0,
+   "slivers_raw": [],
+   "foreign_units": 5,
+   "format_null": 0,
+   "format_geo": {
+    "enabled": true,
+    "anchor": {
+     "ok": true,
+     "w_rel": 0.0938,
+     "cans": 22
+    },
+    "groups": []
+   },
+   "finish_reason": "STOP",
+   "boxes_raw": [
+    {
+     "box_2d": [
+      81,
+      308,
+      174,
+      353
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA гуава-тропики",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      81,
+      351,
+      174,
+      397
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA помело-цветок апельсина",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      81,
+      395,
+      174,
+      441
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA манго-маракуйя",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      81,
+      439,
+      174,
+      484
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA клубника-киви",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      81,
+      483,
+      174,
+      528
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA клубника-киви",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      81,
+      526,
+      174,
+      571
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA лимон-лайм-жасмин",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      81,
+      570,
+      174,
+      615
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA малина",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      81,
+      614,
+      174,
+      659
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA малина",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      81,
+      658,
+      174,
+      703
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA персик-жасмин",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      81,
+      701,
+      174,
+      747
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA персик-жасмин",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      81,
+      745,
+      174,
+      791
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA мандарин-лаванда",
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      302,
+      317,
+      385,
+      360
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA гуава-тропики",
+     "format": "банка 0,45 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      302,
+      358,
+      385,
+      400
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA помело-цветок апельсина",
+     "format": "банка 0,45 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      302,
+      398,
+      385,
+      441
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA манго-маракуйя",
+     "format": "банка 0,45 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      302,
+      439,
+      385,
+      481
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA клубника-киви",
+     "format": "банка 0,45 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      302,
+      479,
+      385,
+      520
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA лимон-лайм-жасмин",
+     "format": "банка 0,45 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      302,
+      518,
+      385,
+      560
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA лимон-лайм-жасмин",
+     "format": "банка 0,45 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      302,
+      558,
+      385,
+      600
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA малина",
+     "format": "банка 0,45 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      302,
+      598,
+      385,
+      641
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA малина",
+     "format": "банка 0,45 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      302,
+      639,
+      385,
+      681
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA персик-жасмин",
+     "format": "банка 0,45 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      302,
+      679,
+      385,
+      721
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA персик-жасмин",
+     "format": "банка 0,45 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      302,
+      719,
+      385,
+      765
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA мандарин-лаванда",
+     "format": "банка 0,45 л",
+     "shelf_index": 2,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      464,
+      306,
+      561,
+      347
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA малина",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 3,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      464,
+      344,
+      561,
+      385
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA малина",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 3,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      464,
+      383,
+      561,
+      424
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA персик-жасмин",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 3,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      464,
+      421,
+      561,
+      462
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA персик-жасмин",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 3,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      464,
+      459,
+      561,
+      500
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA персик-жасмин",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 3,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      464,
+      498,
+      561,
+      538
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA манго-маракуйя",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 3,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      464,
+      536,
+      561,
+      576
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA манго-маракуйя",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 3,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      464,
+      574,
+      561,
+      613
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA манго-маракуйя",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 3,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      464,
+      611,
+      561,
+      651
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA гуава-тропики",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 3,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      464,
+      649,
+      561,
+      689
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA гуава-тропики",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 3,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      464,
+      687,
+      561,
+      727
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA помело-цветок апельсина",
+     "format": "ПЭТ 0,5 л",
+     "shelf_index": 3,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      624,
+      268,
+      744,
+      318
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA малина",
+     "format": "ПЭТ 1 л",
+     "shelf_index": 4,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      624,
+      316,
+      744,
+      365
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA малина",
+     "format": "ПЭТ 1 л",
+     "shelf_index": 4,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      624,
+      362,
+      744,
+      412
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA персик-жасмин",
+     "format": "ПЭТ 1 л",
+     "shelf_index": 4,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      624,
+      410,
+      732,
+      457
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA лимон-лайм-жасмин",
+     "format": "ПЭТ 1 л",
+     "shelf_index": 4,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      624,
+      454,
+      732,
+      499
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA лимон-лайм-жасмин",
+     "format": "ПЭТ 1 л",
+     "shelf_index": 4,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      624,
+      492,
+      744,
+      541
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA помело-цветок апельсина",
+     "format": "ПЭТ 1 л",
+     "shelf_index": 4,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      598,
+      539,
+      713,
+      581
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA манго-маракуйя",
+     "format": "ПЭТ 1 л",
+     "shelf_index": 4,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      611,
+      579,
+      729,
+      625
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA манго-маракуйя",
+     "format": "ПЭТ 1 л",
+     "shelf_index": 4,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      611,
+      623,
+      729,
+      669
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA гуава-тропики",
+     "format": "ПЭТ 1 л",
+     "shelf_index": 4,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      611,
+      667,
+      731,
+      713
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA гуава-тропики",
+     "format": "ПЭТ 1 л",
+     "shelf_index": 4,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      781,
+      278,
+      891,
+      326
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA малина",
+     "format": "ПЭТ 1 л",
+     "shelf_index": 5,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      781,
+      321,
+      876,
+      356
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA малина",
+     "format": "ПЭТ 1 л",
+     "shelf_index": 5,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      781,
+      363,
+      891,
+      410
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA персик-жасмин",
+     "format": "ПЭТ 1 л",
+     "shelf_index": 5,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      781,
+      407,
+      891,
+      454
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA лимон-лайм-жасмин",
+     "format": "ПЭТ 1 л",
+     "shelf_index": 5,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      781,
+      451,
+      891,
+      497
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA лимон-лайм-жасмин",
+     "format": "ПЭТ 1 л",
+     "shelf_index": 5,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      781,
+      493,
+      891,
+      538
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA помело-цветок апельсина",
+     "format": "ПЭТ 1 л",
+     "shelf_index": 5,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      781,
+      535,
+      891,
+      582
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA манго-маракуйя",
+     "format": "ПЭТ 1 л",
+     "shelf_index": 5,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      781,
+      579,
+      891,
+      623
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA манго-маракуйя",
+     "format": "ПЭТ 1 л",
+     "shelf_index": 5,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      781,
+      621,
+      891,
+      667
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA гуава-тропики",
+     "format": "ПЭТ 1 л",
+     "shelf_index": 5,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      781,
+      665,
+      891,
+      711
+     ],
+     "label": "AI TEA",
+     "subtype": "AI TEA гуава-тропики",
+     "format": "ПЭТ 1 л",
+     "shelf_index": 5,
+     "confidence": 0.98
+    },
+    {
+     "box_2d": [
+      81,
+      258,
+      173,
+      304
+     ],
+     "label": "ЧУЖОЙ",
+     "subtype": null,
+     "format": "банка 0,45 л",
+     "shelf_index": 1,
+     "confidence": 0.95
+    },
+    {
+     "box_2d": [
+      217,
+      244,
+      302,
+      290
+     ],
+     "label": "ЧУЖОЙ",
+     "subtype": null,
+     "format": "банка 0,45 л",
+     "shelf_index": 2,
+     "confidence": 0.95
+    },
+    {
+     "box_2d": [
+      217,
+      288,
+      302,
+      332
+     ],
+     "label": "ЧУЖОЙ",
+     "subtype": null,
+     "format": "банка 0,45 л",
+     "shelf_index": 2,
+     "confidence": 0.95
+    },
+    {
+     "box_2d": [
+      302,
+      240,
+      385,
+      286
+     ],
+     "label": "ЧУЖОЙ",
+     "subtype": null,
+     "format": "банка 0,45 л",
+     "shelf_index": 2,
+     "confidence": 0.95
+    },
+    {
+     "box_2d": [
+      302,
+      284,
+      385,
+      321
+     ],
+     "label": "ЧУЖОЙ",
+     "subtype": null,
+     "format": "банка 0,45 л",
+     "shelf_index": 2,
+     "confidence": 0.95
+    }
+   ]
+  },
+  "_usage": {
+   "prompt_tokens": 54581,
+   "cached_tokens": 52439,
+   "output_tokens": 5412
+  },
+  "_pass2": {
+   "version": "v9-groups",
+   "shelves_applied": 5,
+   "shelves_total": 5,
+   "subtypes_changed": 4,
+   "needs_review": 0,
+   "detail": [
+    {
+     "shelf": 1,
+     "applied": true,
+     "groups": [
+      {
+       "gi": 1,
+       "applied": true,
+       "changed": 1,
+       "name": "AI TEA гуава-тропики"
+      },
+      {
+       "gi": 2,
+       "applied": true,
+       "changed": 1,
+       "name": "AI TEA помело-цветок апельсина"
+      },
+      {
+       "gi": 3,
+       "applied": true,
+       "changed": 0,
+       "name": "AI TEA манго-маракуйя"
+      },
+      {
+       "gi": 4,
+       "applied": true,
+       "changed": 0,
+       "name": "AI TEA клубника-киви"
+      },
+      {
+       "gi": 5,
+       "applied": true,
+       "changed": 0,
+       "name": "AI TEA лимон-лайм-жасмин"
+      },
+      {
+       "gi": 6,
+       "applied": true,
+       "changed": 0,
+       "name": "AI TEA малина"
+      },
+      {
+       "gi": 7,
+       "applied": true,
+       "changed": 0,
+       "name": "AI TEA персик-жасмин"
+      },
+      {
+       "gi": 8,
+       "applied": true,
+       "changed": 0,
+       "name": "AI TEA мандарин-лаванда"
+      }
+     ]
+    },
+    {
+     "shelf": 2,
+     "applied": true,
+     "groups": [
+      {
+       "gi": 1,
+       "applied": true,
+       "changed": 1,
+       "name": "AI TEA гуава-тропики"
+      },
+      {
+       "gi": 2,
+       "applied": true,
+       "changed": 1,
+       "name": "AI TEA помело-цветок апельсина"
+      },
+      {
+       "gi": 3,
+       "applied": true,
+       "changed": 0,
+       "name": "AI TEA манго-маракуйя"
+      },
+      {
+       "gi": 4,
+       "applied": true,
+       "changed": 0,
+       "name": "AI TEA клубника-киви"
+      },
+      {
+       "gi": 5,
+       "applied": true,
+       "changed": 0,
+       "name": "AI TEA лимон-лайм-жасмин"
+      },
+      {
+       "gi": 6,
+       "applied": true,
+       "changed": 0,
+       "name": "AI TEA малина"
+      },
+      {
+       "gi": 7,
+       "applied": true,
+       "changed": 0,
+       "name": "AI TEA персик-жасмин"
+      },
+      {
+       "gi": 8,
+       "applied": true,
+       "changed": 0,
+       "name": "AI TEA мандарин-лаванда"
+      }
+     ]
+    },
+    {
+     "shelf": 3,
+     "applied": true,
+     "groups": [
+      {
+       "gi": 1,
+       "applied": true,
+       "changed": 0,
+       "name": "AI TEA малина"
+      },
+      {
+       "gi": 2,
+       "applied": true,
+       "changed": 0,
+       "name": "AI TEA персик-жасмин"
+      },
+      {
+       "gi": 3,
+       "applied": true,
+       "changed": 0,
+       "name": "AI TEA манго-маракуйя"
+      },
+      {
+       "gi": 4,
+       "applied": true,
+       "changed": 0,
+       "name": "AI TEA гуава-тропики"
+      },
+      {
+       "gi": 5,
+       "applied": true,
+       "changed": 0,
+       "name": "AI TEA помело-цветок апельсина"
+      }
+     ]
+    },
+    {
+     "shelf": 4,
+     "applied": true,
+     "groups": [
+      {
+       "gi": 1,
+       "applied": true,
+       "changed": 0,
+       "name": "AI TEA малина"
+      },
+      {
+       "gi": 2,
+       "applied": true,
+       "changed": 0,
+       "name": "AI TEA персик-жасмин"
+      },
+      {
+       "gi": 3,
+       "applied": true,
+       "changed": 0,
+       "name": "AI TEA лимон-лайм-жасмин"
+      },
+      {
+       "gi": 4,
+       "applied": true,
+       "changed": 0,
+       "name": "AI TEA помело-цветок апельсина"
+      },
+      {
+       "gi": 5,
+       "applied": true,
+       "changed": 0,
+       "name": "AI TEA манго-маракуйя"
+      },
+      {
+       "gi": 6,
+       "applied": true,
+       "changed": 0,
+       "name": "AI TEA гуава-тропики"
+      }
+     ]
+    },
+    {
+     "shelf": 5,
+     "applied": true,
+     "groups": [
+      {
+       "gi": 1,
+       "applied": true,
+       "changed": 0,
+       "name": "AI TEA малина"
+      },
+      {
+       "gi": 2,
+       "applied": true,
+       "changed": 0,
+       "name": "AI TEA персик-жасмин"
+      },
+      {
+       "gi": 3,
+       "applied": true,
+       "changed": 0,
+       "name": "AI TEA лимон-лайм-жасмин"
+      },
+      {
+       "gi": 4,
+       "applied": true,
+       "changed": 0,
+       "name": "AI TEA помело-цветок апельсина"
+      },
+      {
+       "gi": 5,
+       "applied": true,
+       "changed": 0,
+       "name": "AI TEA манго-маракуйя"
+      },
+      {
+       "gi": 6,
+       "applied": true,
+       "changed": 0,
+       "name": "AI TEA гуава-тропики"
+      }
+     ]
+    }
+   ],
+   "usage": {
+    "prompt_tokens": 54136,
+    "cached_tokens": 48596,
+    "output_tokens": 1182
+   }
+  }
+ }
+}

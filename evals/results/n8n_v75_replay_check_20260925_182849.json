@@ -1,0 +1,269 @@
+{
+ "name": "n8n_v75_replay_check",
+ "description": "A/B-2 arm «pass 1 + check»: the same recorded pass-1 answers, no LLM pass 2; uncertain groups still go through retrieve_refs for the SigLIP ours/foreign check (max-sim < 0.70 on unnamed groups -> out of the count until review). Pass-1 names are kept.",
+ "created_at": "2026-09-25T13:28:49+00:00",
+ "mode": "replay",
+ "config": {
+  "settings": {
+   "pass2_mode": "check",
+   "pass2_refs": "all",
+   "temperature": 0,
+   "media_resolution": "MEDIA_RESOLUTION_ULTRA_HIGH",
+   "prompt_detect": "detect_v7.5",
+   "prompt_verify": "verify_v9",
+   "foreign_check": true,
+   "foreign_action": "exclude"
+  },
+  "frames": [
+   "IMG_0644",
+   "IMG_0643"
+  ],
+  "variants": [
+   "orig"
+  ],
+  "repeats": "replay_salts",
+  "prompt": "v7.5-bgcolor-noreven",
+  "verify_prompt": "v9-bgcolor-noreven",
+  "models": [
+   "gemini-3.5-flash",
+   "gemini-3-flash-preview"
+  ]
+ },
+ "summary": {
+  "count_exact_shelf_rate": 0.75,
+  "count_mae": 0.3438,
+  "subtype_acc": 0.9728,
+  "subtype_acc_pink": 0.9602,
+  "contamination": 5,
+  "pack_acc": 0.9461,
+  "stability_sigma_subtype_err": 0.61,
+  "cost_usd_per_photo": 0.0946,
+  "latency_p50_s": null,
+  "latency_p95_s": null,
+  "n_runs": 7,
+  "n_failed": 0,
+  "n_frames": 2,
+  "n_shelves": 32,
+  "n_units": 410
+ },
+ "slices": {
+  "tier:gold": {
+   "count_exact_shelf_rate": 0.75,
+   "subtype_acc": 0.9728,
+   "subtype_acc_pink": 0.9602,
+   "contamination": 5,
+   "pack_acc": 0.9461,
+   "n_runs": 7
+  },
+  "variant:orig": {
+   "count_exact_shelf_rate": 0.75,
+   "subtype_acc": 0.9728,
+   "subtype_acc_pink": 0.9602,
+   "contamination": 5,
+   "pack_acc": 0.9461,
+   "n_runs": 7
+  },
+  "tag:foreign_nearby": {
+   "shelves": 8,
+   "count_exact_shelf_rate": 0.75,
+   "subtype_errors_per_shelf": 0.0
+  },
+  "tag:pink_zone": {
+   "shelves": 26,
+   "count_exact_shelf_rate": 0.6923,
+   "subtype_errors_per_shelf": 0.4231
+  },
+  "tag:mixed_packs": {
+   "shelves": 3,
+   "count_exact_shelf_rate": 0.0,
+   "subtype_errors_per_shelf": 1.0
+  }
+ },
+ "per_frame": [
+  {
+   "frame_id": "IMG_0644",
+   "variant": "orig",
+   "repeat": "bench_test_bgcolor_img1_run_01",
+   "tier": "gold",
+   "status": "awaiting_review",
+   "shelves": 5,
+   "units_gt": 53,
+   "units_pred": 52,
+   "count_exact_shelves": 2,
+   "subtype_errors": 3,
+   "contamination": 1,
+   "pack_errors": 0,
+   "cost_usd": 0.12993,
+   "latency_s": null,
+   "pass2": {
+    "version": null,
+    "subtypes_changed": null,
+    "needs_review": null
+   },
+   "errors": [
+    "П1.1: чужая → AI TEA (в счёте!)",
+    "П3.9: клубника-киви → помело-цветок апельсина",
+    "П3.10: клубника-киви → помело-цветок апельсина",
+    "П3.11: клубника-киви → помело-цветок апельсина",
+    "П4: потеряно единиц 1",
+    "П5: потеряно единиц 1"
+   ]
+  },
+  {
+   "frame_id": "IMG_0644",
+   "variant": "orig",
+   "repeat": "bench_test_bgcolor_img1_run_02",
+   "tier": "gold",
+   "status": "awaiting_review",
+   "shelves": 5,
+   "units_gt": 53,
+   "units_pred": 52,
+   "count_exact_shelves": 4,
+   "subtype_errors": 2,
+   "contamination": 0,
+   "pack_errors": 0,
+   "cost_usd": 0.07181,
+   "latency_s": null,
+   "pass2": {
+    "version": null,
+    "subtypes_changed": null,
+    "needs_review": null
+   },
+   "errors": [
+    "П3.9: клубника-киви → помело-цветок апельсина",
+    "П3.10: клубника-киви → помело-цветок апельсина",
+    "П5: потеряно единиц 1"
+   ]
+  },
+  {
+   "frame_id": "IMG_0644",
+   "variant": "orig",
+   "repeat": "bench_test_bgcolor_img1_run_03",
+   "tier": "gold",
+   "status": "awaiting_review",
+   "shelves": 5,
+   "units_gt": 53,
+   "units_pred": 53,
+   "count_exact_shelves": 5,
+   "subtype_errors": 0,
+   "contamination": 0,
+   "pack_errors": 0,
+   "cost_usd": 0.1305,
+   "latency_s": null,
+   "pass2": {
+    "version": null,
+    "subtypes_changed": null,
+    "needs_review": null
+   },
+   "errors": [
+    null
+   ]
+  },
+  {
+   "frame_id": "IMG_0644",
+   "variant": "orig",
+   "repeat": "bench_test_bgcolor_img1_run_04",
+   "tier": "gold",
+   "status": "awaiting_review",
+   "shelves": 5,
+   "units_gt": 53,
+   "units_pred": 57,
+   "count_exact_shelves": 4,
+   "subtype_errors": 3,
+   "contamination": 4,
+   "pack_errors": 20,
+   "cost_usd": 0.05996,
+   "latency_s": null,
+   "pass2": {
+    "version": null,
+    "subtypes_changed": null,
+    "needs_review": null
+   },
+   "errors": [
+    "П2.1: чужая → персик-жасмин (в счёте!)",
+    "П2.2: чужая → персик-жасмин (в счёте!)",
+    "П2.3: чужая → персик-жасмин (в счёте!)",
+    "П2.4: чужая → персик-жасмин (в счёте!)",
+    "П3.9: клубника-киви → помело-цветок апельсина",
+    "П3.10: клубника-киви → помело-цветок апельсина",
+    "П3.11: клубника-киви → помело-цветок апельсина"
+   ]
+  },
+  {
+   "frame_id": "IMG_0643",
+   "variant": "orig",
+   "repeat": "bench_test_bgcolor_img2_run_01",
+   "tier": "gold",
+   "status": "awaiting_review",
+   "shelves": 4,
+   "units_gt": 66,
+   "units_pred": 65,
+   "count_exact_shelves": 3,
+   "subtype_errors": 1,
+   "contamination": 0,
+   "pack_errors": 0,
+   "cost_usd": 0.13799,
+   "latency_s": null,
+   "pass2": {
+    "version": null,
+    "subtypes_changed": null,
+    "needs_review": null
+   },
+   "errors": [
+    "П2.13: К. классический → К. ягодный",
+    "П2: потеряно единиц 1"
+   ]
+  },
+  {
+   "frame_id": "IMG_0643",
+   "variant": "orig",
+   "repeat": "bench_test_bgcolor_img2_run_02",
+   "tier": "gold",
+   "status": "awaiting_review",
+   "shelves": 4,
+   "units_gt": 66,
+   "units_pred": 65,
+   "count_exact_shelves": 3,
+   "subtype_errors": 1,
+   "contamination": 0,
+   "pack_errors": 0,
+   "cost_usd": 0.06559,
+   "latency_s": null,
+   "pass2": {
+    "version": null,
+    "subtypes_changed": null,
+    "needs_review": null
+   },
+   "errors": [
+    "П2.13: К. классический → К. ягодный",
+    "П2: потеряно единиц 1"
+   ]
+  },
+  {
+   "frame_id": "IMG_0643",
+   "variant": "orig",
+   "repeat": "bench_test_bgcolor_img2_run_03",
+   "tier": "gold",
+   "status": "awaiting_review",
+   "shelves": 4,
+   "units_gt": 66,
+   "units_pred": 65,
+   "count_exact_shelves": 3,
+   "subtype_errors": 1,
+   "contamination": 0,
+   "pack_errors": 0,
+   "cost_usd": 0.0664,
+   "latency_s": null,
+   "pass2": {
+    "version": null,
+    "subtypes_changed": null,
+    "needs_review": null
+   },
+   "errors": [
+    "П2.13: К. классический → К. ягодный",
+    "П2: потеряно единиц 1"
+   ]
+  }
+ ],
+ "notes": "Folder names in bench/runs were swapped (test_bgcolor_img2 is IMG_0643); frames identified by content."
+}

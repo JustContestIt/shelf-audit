@@ -1,0 +1,17 @@
+name: ab2_pass2_off
+description: 'A/B-2: pass 2 off (count and subtypes from pass 1 only).'
+mode: record
+settings:
+  prompt_detect: detect_v7.5
+  prompt_verify: verify_v9
+  pass2_mode: 'off'
+  pass2_refs: topk
+  rag_top_k: 3
+  temperature: 0
+frames:
+- gold
+- silver
+variants:
+- orig
+- tg1280
+repeats: 3

@@ -1,0 +1,4315 @@
+{
+ "name": "Vision Assistance - Main WF v9.2 (Sheets Cold)",
+ "nodes": [
+  {
+   "parameters": {
+    "updates": [
+     "message",
+     "callback_query"
+    ],
+    "additionalFields": {}
+   },
+   "type": "n8n-nodes-base.telegramTrigger",
+   "typeVersion": 1.2,
+   "position": [
+    -944,
+    864
+   ],
+   "id": "be7dfe16-944f-4d7f-adcc-2b673f375ada",
+   "name": "Входящее сообщение",
+   "webhookId": "<WEBHOOK_ID>",
+   "credentials": {
+    "telegramApi": {
+     "id": "<CRED_ID>",
+     "name": "<telegramApi>"
+    }
+   }
+  },
+  {
+   "parameters": {
+    "documentId": {
+     "__rl": true,
+     "value": "<GOOGLE_ID>",
+     "mode": "list",
+     "cachedResultName": "<REDACTED>",
+     "cachedResultUrl": "<REDACTED>"
+    },
+    "sheetName": {
+     "__rl": true,
+     "value": "gid=0",
+     "mode": "list",
+     "cachedResultName": "<REDACTED>",
+     "cachedResultUrl": "<REDACTED>"
+    },
+    "filtersUI": {
+     "values": []
+    },
+    "options": {}
+   },
+   "type": "n8n-nodes-base.googleSheets",
+   "typeVersion": 4.7,
+   "position": [
+    112,
+    1072
+   ],
+   "id": "f6026735-d7ff-40a4-8a37-80dbd83775ed",
+   "name": "Список авторизованных пользователей",
+   "retryOnFail": true,
+   "credentials": {
+    "googleSheetsOAuth2Api": {
+     "id": "<CRED_ID>",
+     "name": "<googleSheetsOAuth2Api>"
+    }
+   }
+  },
+  {
+   "parameters": {
+    "jsCode": "const inItems = $input.all().map(i => i.json);\n// вход либо из кэша (один item с __rows), либо строками листа\nconst rows = (inItems.length === 1 && Array.isArray(inItems[0].__rows)) ? inItems[0].__rows : inItems;\nconst u = $('Выделяю переменные пользователя').first().json;\nconst norm = p => String(p || '').replace(/\\D/g, '').replace(/^8/, '7');\nconst st = $getWorkflowStaticData('global');\n\n// Ключ агента = Telegram user_id. Своего номера у представителей не существует,\n// прежний AgentNumber был выдуманным (и читался из колонки, которой в листе нет).\n// Идентификация для аналитика — route_code: 1 маршрут = 1 агент.\nconst pick = (r, keys) => {\n  for (const k of keys) {\n    const v = r[k];\n    if (v !== undefined && v !== null && String(v).trim() !== '') return String(v).trim();\n  }\n  return '';\n};\n\nconst pack = (r, action, extra) => [{ json: {\n  ...u,\n  action,\n  stores: r.Stores || '',\n  agent_id: String(u.user_id),\n  route_code: pick(r, ['route_code', 'RouteCode', 'Route Code', 'Маршрут']),\n  ...(extra || {}),\n} }];\n\n// 1) уже привязан по TelegramId\nconst byId = rows.find(r => String(r.TelegramId || '') === String(u.user_id));\nif (byId) return pack(byId, 'proceed');\n\n// 2) пришёл собственный контакт → ищем по телефону\nif (u.is_contact && String(u.contact_user_id) === String(u.user_id)) {\n  const byPhone = rows.find(r => norm(r.UserPhone) === norm(u.contact_phone));\n  if (byPhone) {\n    st.adminsAt = 0;  // сразу после регистрации кэш протух: TelegramId допишется в лист\n    return pack(byPhone, 'registered', { match_phone: byPhone.UserPhone });\n  }\n  return [{ json: { ...u, action: 'reject' } }];\n}\n\n// 3) не привязан и это не контакт\nreturn [{ json: { ...u, action: 'ask_contact' } }];"
+   },
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    464,
+    928
+   ],
+   "id": "c8aafecf-9f79-42f3-9dee-1d246b55b2ca",
+   "name": "Проверка совпадения с базой",
+   "alwaysOutputData": false
+  },
+  {
+   "parameters": {
+    "jsCode": "const u = $input.first().json;\nconst msg = u.message || u.edited_message || {};\nconst from = msg.from || (u.callback_query && u.callback_query.from) || {};\nconst contact = msg.contact || null;\nconst msgText = msg ? msg.text : '';\nconst photo = msg.photo || '';\nconst doc = msg.document || null;   // №10: «отправить файлом» — фото без пережатия Telegram\n\n// ── Документ-как-фото ─────────────────────────────────────────\n// Принимаем только то, что реально ест Gemini: JPEG / PNG / WEBP / HEIC / HEIF.\n// mime приходит от клиента и врать может, поэтому достаточно совпадения ЛИБО mime,\n// ЛИБО расширения имени файла; окончательный mime всё равно определит WF-2 по байтам.\nconst IMG_MIME = /^image\\/(jpe?g|png|webp|heic|heif)$/i;\nconst IMG_EXT  = /\\.(jpe?g|png|webp|heic|heif)$/i;\nconst TG_MAX   = 20 * 1024 * 1024;   // потолок getFile облачного Bot API: больше бот не скачает\n\nconst docIsImage = !!doc && (IMG_MIME.test(String(doc.mime_type || '')) || IMG_EXT.test(String(doc.file_name || '')));\nconst docTooBig  = !!doc && Number(doc.file_size || 0) > TG_MAX;\n\nlet kind, badReason = null;\nif (u.callback_query)                      kind = 'callback';\nelse if (photo.length)                     kind = 'photo';\nelse if (doc && docIsImage && !docTooBig)  kind = 'photo';                 // ← документ идёт как фото\nelse if (doc)                            { kind = 'other'; badReason = !docIsImage ? 'not_image' : 'too_big'; }\nelse if (contact)                          kind = 'contact';\nelse if (msg.text)                         kind = 'text';\nelse                                       kind = 'other';\n\nreturn [{ json: {\n  user_id: from.id,\n  chat_id: (msg.chat && msg.chat.id) || (u.callback_query && u.callback_query.message.chat.id),\n  is_contact: !!contact,\n  contact_phone:  contact ? contact.phone_number : null,\n  contact_user_id: contact ? contact.user_id : null,\n  update_kind: kind,\n  text: msgText,\n  photoFileId: photo.length ? photo[photo.length - 1].file_id : (kind === 'photo' && doc ? doc.file_id : null),\n\n  // диагностика — видно в execution data, дальше по пайплайну не требуется\n  input_kind: photo.length ? 'photo' : (doc ? 'document' : null),\n  doc_name:   doc ? (doc.file_name || null) : null,\n  doc_mime:   doc ? (doc.mime_type || null) : null,\n  doc_size:   doc ? (Number(doc.file_size) || null) : null,\n  bad_reason: badReason,\n}}];"
+   },
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    -736,
+    864
+   ],
+   "id": "bff444c4-4ae3-43d7-b619-7fd216bfa2b1",
+   "name": "Выделяю переменные пользователя"
+  },
+  {
+   "parameters": {
+    "content": "# Авторизация\n",
+    "height": 736,
+    "width": 1632
+   },
+   "type": "n8n-nodes-base.stickyNote",
+   "position": [
+    -304,
+    848
+   ],
+   "typeVersion": 1,
+   "id": "37f971f5-1345-448b-aaf9-758ee179ec9c",
+   "name": "Sticky Note"
+  },
+  {
+   "parameters": {
+    "chatId": "={{ $('Проверка совпадения с базой').item.json.chat_id }}",
+    "text": "=Номер {{ $('Выделяю переменные пользователя').item.json.contact_phone }} не найден. Свяжитесь с руководством.",
+    "additionalFields": {
+     "appendAttribution": false,
+     "parse_mode": "Markdown"
+    }
+   },
+   "type": "n8n-nodes-base.telegram",
+   "typeVersion": 1.2,
+   "position": [
+    944,
+    1392
+   ],
+   "id": "722a7b47-675d-4e26-8156-f45732f754bc",
+   "name": "Не авторизованный пользователь",
+   "webhookId": "<WEBHOOK_ID>",
+   "credentials": {
+    "telegramApi": {
+     "id": "<CRED_ID>",
+     "name": "<telegramApi>"
+    }
+   }
+  },
+  {
+   "parameters": {
+    "chatId": "={{ $('Входящее сообщение').item.json.message.chat.id }}",
+    "text": "Этот чат предназначен только для определения количества товаров на полках. Пожалуйста отправьте фотографию.",
+    "additionalFields": {
+     "appendAttribution": false,
+     "parse_mode": "Markdown"
+    }
+   },
+   "type": "n8n-nodes-base.telegram",
+   "typeVersion": 1.2,
+   "position": [
+    1776,
+    432
+   ],
+   "id": "64ab0987-8d93-4865-9efc-d8bcc86e8007",
+   "name": "Просьба отправить фото",
+   "webhookId": "<WEBHOOK_ID>",
+   "credentials": {
+    "telegramApi": {
+     "id": "<CRED_ID>",
+     "name": "<telegramApi>"
+    }
+   }
+  },
+  {
+   "parameters": {
+    "content": "# Логирование (Обработка текста)",
+    "height": 288,
+    "width": 464,
+    "color": 4
+   },
+   "type": "n8n-nodes-base.stickyNote",
+   "position": [
+    1936,
+    352
+   ],
+   "typeVersion": 1,
+   "id": "ec7217da-84aa-4669-81af-81544b0d132f",
+   "name": "Sticky Note6"
+  },
+  {
+   "parameters": {
+    "resource": "row",
+    "dataTableId": {
+     "__rl": true,
+     "value": "wf_logs",
+     "mode": "name"
+    },
+    "columns": {
+     "mappingMode": "defineBelow",
+     "value": {
+      "run_id": "={{ $execution.id }}",
+      "chat_id": "={{ String($('Выделяю переменные пользователя').item.json.user_id) }}",
+      "status": "Not started",
+      "confidence": "",
+      "notes_google": "",
+      "notes_user": "=Пользователь {{ $json.result.chat.username }} (tgID={{ $json.result.from.id }}), написал текст.",
+      "created_at": "={{ new Date().toISOString() }}",
+      "updated_at": "={{ new Date().toISOString() }}",
+      "synced": "-"
+     },
+     "matchingColumns": [],
+     "schema": [
+      {
+       "id": "run_id",
+       "displayName": "run_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "chat_id",
+       "displayName": "chat_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "status",
+       "displayName": "status",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "confidence",
+       "displayName": "confidence",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "notes_google",
+       "displayName": "notes_google",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "notes_user",
+       "displayName": "notes_user",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "created_at",
+       "displayName": "created_at",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "updated_at",
+       "displayName": "updated_at",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "synced",
+       "displayName": "synced",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      }
+     ]
+    }
+   },
+   "type": "n8n-nodes-base.dataTable",
+   "typeVersion": 1,
+   "position": [
+    2000,
+    432
+   ],
+   "id": "dff5496c-24e1-4d2a-85a2-44089b9f170d",
+   "name": "Создание лога о работе воркфлоу (Обработка текста)",
+   "onError": "continueErrorOutput"
+  },
+  {
+   "parameters": {
+    "chatId": "=<CHAT_ID>",
+    "text": "=Ошибка в логгировании на обработке текста. \nТелеграм ID чата: {{ $('Выделяю переменные пользователя').item.json.chat_id }}.\nВремя: {{ new Date().toISOString() }}.\nОшибка: {{ $json.error }}",
+    "additionalFields": {
+     "appendAttribution": false,
+     "parse_mode": "Markdown"
+    }
+   },
+   "type": "n8n-nodes-base.telegram",
+   "typeVersion": 1.2,
+   "position": [
+    2224,
+    448
+   ],
+   "id": "e9fb1c4e-89e8-430e-a8e3-a6117bd6c090",
+   "name": "Сообщение об ошибке логирования (Обработка текста)",
+   "webhookId": "<WEBHOOK_ID>",
+   "credentials": {
+    "telegramApi": {
+     "id": "<CRED_ID>",
+     "name": "<telegramApi>"
+    }
+   }
+  },
+  {
+   "parameters": {
+    "jsCode": "const TTL_MIN = 15;\nconst s = $input.first().json || {};\nconst upd = s.updated_at || '';\nconst code = String(s.current_store_code || '').trim();\nconst name = String(s.current_store_name || '').trim();\n\nconst ts = upd ? new Date(upd).getTime() : 0;\nconst alive = !!ts && (Date.now() - ts) < TTL_MIN * 60 * 1000;\nconst ready = !!(code && alive);\n\nreturn [{ json: {\n  store_ready: ready,\n  current_store_code: ready ? code : null,\n  current_store: ready ? name : null,\n} }];"
+   },
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    3312,
+    880
+   ],
+   "id": "6a405ade-a22f-4f26-afe6-058f715c7c81",
+   "name": "Проверка сессии магазина"
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict",
+      "version": 3
+     },
+     "conditions": [
+      {
+       "id": "9be2bd85-f653-489b-87bf-79dfc2321ee9",
+       "leftValue": "={{ $json.store_ready }}",
+       "rightValue": false,
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2.3,
+   "position": [
+    3504,
+    880
+   ],
+   "id": "45030c3d-b237-486f-aa27-63b2dd86d7c0",
+   "name": "Магазин выбран?"
+  },
+  {
+   "parameters": {
+    "jsCode": "\nconst PER_PAGE = 8;\n\n// Показываем день недели полностью; фильтр по r.days по-прежнему идёт по сокращению.\nconst DAY_FULL = { 'Пн': 'Понедельник', 'Вт': 'Вторник', 'Ср': 'Среда', 'Чт': 'Четверг',\n                   'Пт': 'Пятница', 'Сб': 'Суббота', 'Вс': 'Воскресенье' };\nconst dayName = d => DAY_FULL[String(d || '').trim()] || d;\nconst esc = s => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');\n\nfunction dayList(rows, mode, day) {\n  if (mode === 'a') return rows;\n  return rows.filter(r => String(r.days || '').split(',').map(s => s.trim()).includes(day));\n}\n\nfunction label(r) {\n  const n = String(r.store_name || '').trim();\n  const a = String(r.address || '').trim();\n  const name = n.length > 30 ? n.slice(0, 29) + '…' : n;\n  const addr = a.length > 32 ? a.slice(0, 31) + '…' : a;\n  return addr ? name + ' — ' + addr : name;\n}\n\nfunction keyboard(list, page, route, mode) {\n  const total = Math.max(1, Math.ceil(list.length / PER_PAGE));\n  const cur = Math.min(Math.max(1, page), total);\n  const kb = list.slice((cur - 1) * PER_PAGE, cur * PER_PAGE)\n    .map(r => [{ text: label(r), callback_data: 'store:' + r.store_code }]);\n  const nav = [];\n  if (total > 1) {\n    if (cur > 1) nav.push({ text: '◀️', callback_data: 'page:' + (cur - 1) + '|' + route + '|' + mode });\n    nav.push({ text: cur + ' / ' + total, callback_data: 'noop' });\n    if (cur < total) nav.push({ text: '▶️', callback_data: 'page:' + (cur + 1) + '|' + route + '|' + mode });\n  }\n  if (mode === 'd') nav.push({ text: '📋 Все точки', callback_data: 'all|' + route });\n  if (mode === 'a') nav.push({ text: '📅 Только сегодня', callback_data: 'page:1|' + route + '|d' });\n  if (nav.length) kb.push(nav);\n  return kb;\n}\n\nconst p = $('Точки: параметры').first().json;\nconst all = $input.all().map(i => i.json).filter(r => r && r.store_code);\nconst rows = dayList(all, p.mode, p.day);\nconst chat_id = $('Выделяю переменные пользователя').first().json.chat_id;\n\nif (!p.route_code) {\n  return [{ json: { chat_id, text: '⚠️ Вам не назначен маршрут. Сообщите администратору и заново отправьте фотографию.',\n                    reply_markup: { inline_keyboard: [] } } }];\n}\nif (!all.length) {\n  return [{ json: { chat_id, text: '⚠️ Маршрут ' + esc(p.route_code) + ' пуст или не загружен. Сообщите администратору.',\n                    reply_markup: { inline_keyboard: [] } } }];\n}\nif (!rows.length) {\n  return [{ json: { chat_id,\n    text: 'На сегодня (<b>' + dayName(p.day) + '</b>) точек в маршруте нет.',\n    reply_markup: { inline_keyboard: [[{ text: '📋 Показать все мои точки', callback_data: 'all|' + p.route_code }]] } } }];\n}\n\nreturn [{ json: {\n  chat_id,\n  text: 'Выберите магазин — ' + (p.mode === 'a' ? 'все точки маршрута' : '<b>' + dayName(p.day) + '</b>') + ', точек: ' + rows.length,\n  reply_markup: { inline_keyboard: keyboard(rows, p.page, p.route_code, p.mode) },\n} }];"
+   },
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    4928,
+    896
+   ],
+   "id": "e602e0fe-86dd-4d2c-974f-5ce7a748aebb",
+   "name": "Создание кнопок магазинов"
+  },
+  {
+   "parameters": {
+    "method": "POST",
+    "url": "=https://api.telegram.org/bot8889907170:AAF_gKmTwWlnOF1WT9Pch9KzvuhNmhGw1Wg/sendMessage",
+    "sendBody": true,
+    "bodyParameters": {
+     "parameters": [
+      {
+       "name": "chat_id",
+       "value": "={{ $json.chat_id }}"
+      },
+      {
+       "name": "text",
+       "value": "={{ $json.text }}"
+      },
+      {
+       "name": "parse_mode",
+       "value": "HTML"
+      },
+      {
+       "name": "reply_markup",
+       "value": "={{ $json.reply_markup }}"
+      }
+     ]
+    },
+    "options": {}
+   },
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.4,
+   "position": [
+    5104,
+    896
+   ],
+   "id": "23bec3b6-5360-403b-8b0c-0219c5e6a256",
+   "name": "Отправка запроса магазина"
+  },
+  {
+   "parameters": {
+    "jsCode": "const user = $input.first().json;\nconst chat_id = user.chat_id || user.user_id;\nconst action = 'ask_contact';\nconst isStart = ($('Проверка совпадения с базой').first().json.text || '').trim() === '/start';\nconst text = isStart\n  ? 'Здравствуйте! Это ассистент для отчётов по растановке товаров на полке. Чтобы начать — нажмите на кнопку \"Поделиться номером\", мы проверим доступ.'\n  : 'Сначала нужно авторизоваться. Поделитесь номером телефона:';\nconst reply_markup = { keyboard: [[{ text: '📱 Поделиться номером', request_contact: true }]], resize_keyboard: true, one_time_keyboard: true };\nconst telegram = { chat_id, text, reply_markup };\n\nreturn [{ json: {\n  action,\n  chat_id,\n  telegram\n}}];"
+   },
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    944,
+    1200
+   ],
+   "id": "36377e11-d02d-446d-8b12-781ae2209668",
+   "name": "Создание запроса телефона"
+  },
+  {
+   "parameters": {
+    "rules": {
+     "values": [
+      {
+       "conditions": {
+        "options": {
+         "caseSensitive": true,
+         "leftValue": "",
+         "typeValidation": "strict",
+         "version": 3
+        },
+        "conditions": [
+         {
+          "leftValue": "={{ $json.action }}",
+          "rightValue": "proceed",
+          "operator": {
+           "type": "string",
+           "operation": "equals"
+          },
+          "id": "adfe5468-ee26-468c-8d10-506717b334c6"
+         }
+        ],
+        "combinator": "and"
+       },
+       "renameOutput": true,
+       "outputKey": "proceed"
+      },
+      {
+       "conditions": {
+        "options": {
+         "caseSensitive": true,
+         "leftValue": "",
+         "typeValidation": "strict",
+         "version": 3
+        },
+        "conditions": [
+         {
+          "id": "5ffda346-0463-4bc0-bd47-7ad07453c09b",
+          "leftValue": "={{ $json.action }}",
+          "rightValue": "registered",
+          "operator": {
+           "type": "string",
+           "operation": "equals"
+          }
+         }
+        ],
+        "combinator": "and"
+       },
+       "renameOutput": true,
+       "outputKey": "registered"
+      },
+      {
+       "conditions": {
+        "options": {
+         "caseSensitive": true,
+         "leftValue": "",
+         "typeValidation": "strict",
+         "version": 3
+        },
+        "conditions": [
+         {
+          "id": "0811fca9-feaa-4584-ac03-44ec2d28f228",
+          "leftValue": "={{ $json.action }}",
+          "rightValue": "ask_contact",
+          "operator": {
+           "type": "string",
+           "operation": "equals"
+          }
+         }
+        ],
+        "combinator": "and"
+       },
+       "renameOutput": true,
+       "outputKey": "ask_contact"
+      },
+      {
+       "conditions": {
+        "options": {
+         "caseSensitive": true,
+         "leftValue": "",
+         "typeValidation": "strict",
+         "version": 3
+        },
+        "conditions": [
+         {
+          "id": "adf98839-1a5f-4778-91b7-055aec063bab",
+          "leftValue": "={{ $json.action }}",
+          "rightValue": "reject",
+          "operator": {
+           "type": "string",
+           "operation": "equals"
+          }
+         }
+        ],
+        "combinator": "and"
+       },
+       "renameOutput": true,
+       "outputKey": "reject"
+      }
+     ]
+    },
+    "options": {}
+   },
+   "type": "n8n-nodes-base.switch",
+   "typeVersion": 3.4,
+   "position": [
+    656,
+    896
+   ],
+   "id": "061b3846-f57f-4a9e-83c6-7559ea378803",
+   "name": "Результат проверки"
+  },
+  {
+   "parameters": {
+    "rules": {
+     "values": [
+      {
+       "conditions": {
+        "options": {
+         "caseSensitive": true,
+         "leftValue": "",
+         "typeValidation": "strict",
+         "version": 3
+        },
+        "conditions": [
+         {
+          "id": "c24031ac-dc36-43f3-a784-3bf703ac472e",
+          "leftValue": "={{ $('Выделяю переменные пользователя').item.json.update_kind }}",
+          "rightValue": "text",
+          "operator": {
+           "type": "string",
+           "operation": "equals",
+           "name": "filter.operator.equals"
+          }
+         }
+        ],
+        "combinator": "and"
+       },
+       "renameOutput": true,
+       "outputKey": "text"
+      },
+      {
+       "conditions": {
+        "options": {
+         "caseSensitive": true,
+         "leftValue": "",
+         "typeValidation": "strict",
+         "version": 3
+        },
+        "conditions": [
+         {
+          "id": "7ec3c586-24d0-4611-9312-82ec88bc5292",
+          "leftValue": "={{ $('Выделяю переменные пользователя').item.json.update_kind }}",
+          "rightValue": "photo",
+          "operator": {
+           "type": "string",
+           "operation": "equals"
+          }
+         }
+        ],
+        "combinator": "and"
+       },
+       "renameOutput": true,
+       "outputKey": "photo"
+      },
+      {
+       "conditions": {
+        "options": {
+         "caseSensitive": true,
+         "leftValue": "",
+         "typeValidation": "strict",
+         "version": 3
+        },
+        "conditions": [
+         {
+          "id": "671019ac-8dbf-45a5-b155-bd8443701e6b",
+          "leftValue": "={{ $('Выделяю переменные пользователя').item.json.update_kind }}",
+          "rightValue": "callback",
+          "operator": {
+           "type": "string",
+           "operation": "equals"
+          }
+         }
+        ],
+        "combinator": "and"
+       },
+       "renameOutput": true,
+       "outputKey": "button push"
+      },
+      {
+       "conditions": {
+        "options": {
+         "caseSensitive": true,
+         "leftValue": "",
+         "typeValidation": "strict",
+         "version": 3
+        },
+        "conditions": [
+         {
+          "id": "676e406c-9054-4474-ac5c-c09d6649adb4",
+          "leftValue": "={{ $('Выделяю переменные пользователя').item.json.update_kind }}",
+          "rightValue": "other",
+          "operator": {
+           "type": "string",
+           "operation": "equals",
+           "name": "filter.operator.equals"
+          }
+         }
+        ],
+        "combinator": "and"
+       },
+       "renameOutput": true,
+       "outputKey": "other"
+      }
+     ]
+    },
+    "options": {}
+   },
+   "type": "n8n-nodes-base.switch",
+   "typeVersion": 3.4,
+   "position": [
+    1376,
+    848
+   ],
+   "id": "c0fc3c4d-a703-48d8-94e1-29ce8514479f",
+   "name": "Вариант сообщения"
+  },
+  {
+   "parameters": {
+    "chatId": "={{ $json.TelegramId }}",
+    "text": "Готово, вы зарегистрированы. Отправьте фото полки.",
+    "replyMarkup": "replyKeyboardRemove",
+    "replyKeyboardRemove": {
+     "remove_keyboard": true
+    },
+    "additionalFields": {
+     "appendAttribution": false
+    }
+   },
+   "type": "n8n-nodes-base.telegram",
+   "typeVersion": 1.2,
+   "position": [
+    1136,
+    1008
+   ],
+   "id": "48b0a3c5-7235-4cc2-96a0-ded2712a9f49",
+   "name": "Регистрация прошла успешно",
+   "webhookId": "<WEBHOOK_ID>",
+   "credentials": {
+    "telegramApi": {
+     "id": "<CRED_ID>",
+     "name": "<telegramApi>"
+    }
+   }
+  },
+  {
+   "parameters": {
+    "chatId": "={{ $('Проверка совпадения с базой').item.json.chat_id }}",
+    "text": "={{ $('Выделяю переменные пользователя').item.json.bad_reason === 'not_image'\n  ? '📄 Это не изображение. Пришлите фото полки — обычным фото или файлом (JPG, PNG, HEIC). Файлом лучше: Telegram не сжимает его, и распознавание точнее.'\n  : $('Выделяю переменные пользователя').item.json.bad_reason === 'too_big'\n  ? '📦 Файл больше 20 МБ. Пришлите тот же кадр обычным фото или уменьшите размер.'\n  : 'Вы сделали неизвестный для ассистента запрос. Обратитесь к руководству.' }}",
+    "additionalFields": {
+     "appendAttribution": false,
+     "parse_mode": "Markdown"
+    }
+   },
+   "type": "n8n-nodes-base.telegram",
+   "typeVersion": 1.2,
+   "position": [
+    1392,
+    1152
+   ],
+   "id": "291afdd9-96e4-4bad-9b90-d828bf57f2df",
+   "name": "Неизвестный запрос",
+   "webhookId": "<WEBHOOK_ID>",
+   "credentials": {
+    "telegramApi": {
+     "id": "<CRED_ID>",
+     "name": "<telegramApi>"
+    }
+   }
+  },
+  {
+   "parameters": {
+    "chatId": "={{ $json.chat_id }}",
+    "text": "={{ $json.telegram.text }}",
+    "replyMarkup": "replyKeyboard",
+    "replyKeyboard": {
+     "rows": [
+      {
+       "row": {
+        "buttons": [
+         {
+          "text": "={{ $json.telegram.reply_markup.keyboard[0][0].text }}",
+          "additionalFields": {
+           "request_contact": true
+          }
+         }
+        ]
+       }
+      }
+     ]
+    },
+    "replyKeyboardOptions": {
+     "resize_keyboard": true,
+     "one_time_keyboard": true,
+     "selective": false
+    },
+    "additionalFields": {
+     "appendAttribution": false
+    }
+   },
+   "type": "n8n-nodes-base.telegram",
+   "typeVersion": 1.2,
+   "position": [
+    1136,
+    1200
+   ],
+   "id": "03e5ba1f-b678-4c9d-9054-a5547e29dd3e",
+   "name": "Отправка запроса телефона",
+   "webhookId": "<WEBHOOK_ID>",
+   "credentials": {
+    "telegramApi": {
+     "id": "<CRED_ID>",
+     "name": "<telegramApi>"
+    }
+   }
+  },
+  {
+   "parameters": {
+    "operation": "update",
+    "documentId": {
+     "__rl": true,
+     "value": "<GOOGLE_ID>",
+     "mode": "list",
+     "cachedResultName": "<REDACTED>",
+     "cachedResultUrl": "<REDACTED>"
+    },
+    "sheetName": {
+     "__rl": true,
+     "value": "gid=0",
+     "mode": "list",
+     "cachedResultName": "<REDACTED>",
+     "cachedResultUrl": "<REDACTED>"
+    },
+    "columns": {
+     "mappingMode": "defineBelow",
+     "value": {
+      "UserPhone": "={{ $json.match_phone }}",
+      "TelegramId": "={{ $json.user_id }}"
+     },
+     "matchingColumns": [
+      "UserPhone"
+     ],
+     "schema": [
+      {
+       "id": "TelegramId",
+       "displayName": "TelegramId",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "Username",
+       "displayName": "Username",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "UserPhone",
+       "displayName": "UserPhone",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true,
+       "removed": false
+      },
+      {
+       "id": "Agent Number",
+       "displayName": "Agent Number",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "Stores",
+       "displayName": "Stores",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "canBeUsedToMatch": true
+      },
+      {
+       "id": "row_number",
+       "displayName": "row_number",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "number",
+       "canBeUsedToMatch": true,
+       "readOnly": true,
+       "removed": true
+      }
+     ],
+     "attemptToConvertTypes": false,
+     "convertFieldsToString": false
+    },
+    "options": {}
+   },
+   "type": "n8n-nodes-base.googleSheets",
+   "typeVersion": 4.7,
+   "position": [
+    944,
+    1008
+   ],
+   "id": "4233c2a9-f92e-4d4f-a753-871ab88a674c",
+   "name": "Регистрация Telegram ID",
+   "credentials": {
+    "googleSheetsOAuth2Api": {
+     "id": "<CRED_ID>",
+     "name": "<googleSheetsOAuth2Api>"
+    }
+   }
+  },
+  {
+   "parameters": {
+    "workflowId": {
+     "__rl": true,
+     "value": "X2QYdoFuV4krrzOl",
+     "mode": "list",
+     "cachedResultUrl": "<REDACTED>",
+     "cachedResultName": "<REDACTED>"
+    },
+    "workflowInputs": {
+     "mappingMode": "defineBelow",
+     "value": {
+      "chat_id": "={{ $json.chat_id }}",
+      "message_id": "={{ $json.message_id }}",
+      "agent_id": "={{ $json.agent_id }}",
+      "route_code": "={{ $json.route_code }}",
+      "store_code": "={{ $json.store_code }}",
+      "file_id": "={{ $json.file_id }}",
+      "source": "={{ $json.source }}",
+      "store_name": "={{ $json.store_name }}"
+     },
+     "matchingColumns": [],
+     "schema": [
+      {
+       "id": "file_id",
+       "displayName": "file_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "canBeUsedToMatch": true,
+       "type": "string"
+      },
+      {
+       "id": "chat_id",
+       "displayName": "chat_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "canBeUsedToMatch": true,
+       "type": "number"
+      },
+      {
+       "id": "agent_id",
+       "displayName": "agent_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "canBeUsedToMatch": true,
+       "type": "string"
+      },
+      {
+       "id": "store_name",
+       "displayName": "store_name",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "canBeUsedToMatch": true,
+       "type": "string"
+      },
+      {
+       "id": "message_id",
+       "displayName": "message_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "canBeUsedToMatch": true,
+       "type": "number"
+      },
+      {
+       "id": "source",
+       "displayName": "source",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "canBeUsedToMatch": true,
+       "type": "string"
+      },
+      {
+       "id": "store_code",
+       "displayName": "store_code",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "canBeUsedToMatch": true,
+       "type": "string"
+      },
+      {
+       "id": "route_code",
+       "displayName": "route_code",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "canBeUsedToMatch": true,
+       "type": "string"
+      }
+     ],
+     "attemptToConvertTypes": false,
+     "convertFieldsToString": true
+    },
+    "mode": "each",
+    "options": {
+     "waitForSubWorkflow": true
+    }
+   },
+   "type": "n8n-nodes-base.executeWorkflow",
+   "typeVersion": 1.3,
+   "position": [
+    4160,
+    1424
+   ],
+   "id": "2d171c92-f459-43e6-a996-180adddebd14",
+   "name": "Обработка фото",
+   "onError": "continueErrorOutput"
+  },
+  {
+   "parameters": {
+    "rules": {
+     "values": [
+      {
+       "conditions": {
+        "options": {
+         "caseSensitive": true,
+         "leftValue": "",
+         "typeValidation": "strict",
+         "version": 3
+        },
+        "conditions": [
+         {
+          "id": "sp-cond-page",
+          "leftValue": "={{ (() => { const d = $('Входящее сообщение').item.json.callback_query.data || ''; return d.startsWith('page:') || d.startsWith('all|'); })() }}",
+          "rightValue": "",
+          "operator": {
+           "type": "boolean",
+           "operation": "true",
+           "singleValue": true
+          }
+         }
+        ],
+        "combinator": "and"
+       },
+       "renameOutput": true,
+       "outputKey": "page"
+      },
+      {
+       "conditions": {
+        "options": {
+         "caseSensitive": true,
+         "leftValue": "",
+         "typeValidation": "strict",
+         "version": 3
+        },
+        "conditions": [
+         {
+          "id": "f888024c-4924-4edc-9662-e97e76c97efb",
+          "leftValue": "={{ $('Входящее сообщение').item.json.callback_query.data }}",
+          "rightValue": "approve:",
+          "operator": {
+           "type": "string",
+           "operation": "startsWith"
+          }
+         }
+        ],
+        "combinator": "and"
+       },
+       "renameOutput": true,
+       "outputKey": "approve"
+      },
+      {
+       "conditions": {
+        "options": {
+         "caseSensitive": true,
+         "leftValue": "",
+         "typeValidation": "strict",
+         "version": 3
+        },
+        "conditions": [
+         {
+          "id": "4676ac25-e6bd-461f-b1e8-8b236a37df71",
+          "leftValue": "={{ $('Входящее сообщение').item.json.callback_query.data }}",
+          "rightValue": "reject:",
+          "operator": {
+           "type": "string",
+           "operation": "startsWith"
+          }
+         }
+        ],
+        "combinator": "and"
+       },
+       "renameOutput": true,
+       "outputKey": "reject"
+      }
+     ]
+    },
+    "options": {
+     "fallbackOutput": "extra"
+    }
+   },
+   "type": "n8n-nodes-base.switch",
+   "typeVersion": 3.4,
+   "id": "d38aef13-0ee1-4161-bdc1-f0331f92222b",
+   "name": "Тип callback",
+   "position": [
+    80,
+    272
+   ]
+  },
+  {
+   "parameters": {
+    "jsCode": "\nconst PER_PAGE = 8;\n\nfunction dayList(rows, mode, day) {\n  if (mode === 'a') return rows;\n  return rows.filter(r => String(r.days || '').split(',').map(s => s.trim()).includes(day));\n}\n\nfunction label(r) {\n  const n = String(r.store_name || '').trim();\n  const a = String(r.address || '').trim();\n  const name = n.length > 30 ? n.slice(0, 29) + '…' : n;\n  const addr = a.length > 32 ? a.slice(0, 31) + '…' : a;\n  return addr ? name + ' — ' + addr : name;\n}\n\nfunction keyboard(list, page, route, mode) {\n  const total = Math.max(1, Math.ceil(list.length / PER_PAGE));\n  const cur = Math.min(Math.max(1, page), total);\n  const kb = list.slice((cur - 1) * PER_PAGE, cur * PER_PAGE)\n    .map(r => [{ text: label(r), callback_data: 'store:' + r.store_code }]);\n  const nav = [];\n  if (total > 1) {\n    if (cur > 1) nav.push({ text: '◀️', callback_data: 'page:' + (cur - 1) + '|' + route + '|' + mode });\n    nav.push({ text: cur + ' / ' + total, callback_data: 'noop' });\n    if (cur < total) nav.push({ text: '▶️', callback_data: 'page:' + (cur + 1) + '|' + route + '|' + mode });\n  }\n  if (mode === 'd') nav.push({ text: '📋 Все точки', callback_data: 'all|' + route });\n  if (mode === 'a') nav.push({ text: '📅 Только сегодня', callback_data: 'page:1|' + route + '|d' });\n  if (nav.length) kb.push(nav);\n  return kb;\n}\n\nconst p = $('Страница: параметры').first().json;\nconst all = $input.all().map(i => i.json).filter(r => r && r.store_code);\nconst rows = dayList(all, p.mode, p.day);\n\nlet kb, answer = p.answer_text || '';\nif (!rows.length) {\n  kb = p.mode === 'd'\n    ? [[{ text: '📋 Показать все мои точки', callback_data: 'all|' + p.route_code }]]\n    : [];\n  answer = answer || 'На сегодня точек нет';\n} else {\n  kb = keyboard(rows, p.page, p.route_code, p.mode);\n}\n\nreturn [{ json: {\n  chat_id: p.chat_id,\n  message_id: p.message_id,\n  reply_markup: { inline_keyboard: kb },\n  answer_text: answer,\n} }];"
+   },
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "id": "98f3cb8e-e470-43bc-ab5d-d8f84a0fd827",
+   "name": "Клавиатура страницы",
+   "position": [
+    736,
+    -16
+   ]
+  },
+  {
+   "parameters": {
+    "method": "POST",
+    "url": "=https://api.telegram.org/bot8889907170:AAF_gKmTwWlnOF1WT9Pch9KzvuhNmhGw1Wg/editMessageReplyMarkup",
+    "sendBody": true,
+    "bodyParameters": {
+     "parameters": [
+      {
+       "name": "chat_id",
+       "value": "={{ $json.chat_id }}"
+      },
+      {
+       "name": "message_id",
+       "value": "={{ $json.message_id }}"
+      },
+      {
+       "name": "reply_markup",
+       "value": "={{ $json.reply_markup }}"
+      }
+     ]
+    },
+    "options": {}
+   },
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.4,
+   "id": "4c4a2dac-1306-4162-b5d9-3316e16bd768",
+   "name": "Обновление клавиатуры",
+   "position": [
+    928,
+    -16
+   ],
+   "onError": "continueRegularOutput"
+  },
+  {
+   "parameters": {
+    "jsCode": "\nconst PER_PAGE = 8;\n\nfunction dayList(rows, mode, day) {\n  if (mode === 'a') return rows;\n  return rows.filter(r => String(r.days || '').split(',').map(s => s.trim()).includes(day));\n}\n\nfunction label(r) {\n  const n = String(r.store_name || '').trim();\n  const a = String(r.address || '').trim();\n  const name = n.length > 30 ? n.slice(0, 29) + '…' : n;\n  const addr = a.length > 32 ? a.slice(0, 31) + '…' : a;\n  return addr ? name + ' — ' + addr : name;\n}\n\nfunction keyboard(list, page, route, mode) {\n  const total = Math.max(1, Math.ceil(list.length / PER_PAGE));\n  const cur = Math.min(Math.max(1, page), total);\n  const kb = list.slice((cur - 1) * PER_PAGE, cur * PER_PAGE)\n    .map(r => [{ text: label(r), callback_data: 'store:' + r.store_code }]);\n  const nav = [];\n  if (total > 1) {\n    if (cur > 1) nav.push({ text: '◀️', callback_data: 'page:' + (cur - 1) + '|' + route + '|' + mode });\n    nav.push({ text: cur + ' / ' + total, callback_data: 'noop' });\n    if (cur < total) nav.push({ text: '▶️', callback_data: 'page:' + (cur + 1) + '|' + route + '|' + mode });\n  }\n  if (mode === 'd') nav.push({ text: '📋 Все точки', callback_data: 'all|' + route });\n  if (mode === 'a') nav.push({ text: '📅 Только сегодня', callback_data: 'page:1|' + route + '|d' });\n  if (nav.length) kb.push(nav);\n  return kb;\n}\n\nconst p = $('Перерисовка: параметры').first().json;\nconst all = $input.all().map(i => i.json).filter(r => r && r.store_code);\nconst rows = dayList(all, p.mode, p.day);\n\nlet kb, answer = p.answer_text || '';\nif (!rows.length) {\n  kb = p.mode === 'd'\n    ? [[{ text: '📋 Показать все мои точки', callback_data: 'all|' + p.route_code }]]\n    : [];\n  answer = answer || 'На сегодня точек нет';\n} else {\n  kb = keyboard(rows, p.page, p.route_code, p.mode);\n}\n\nreturn [{ json: {\n  chat_id: p.chat_id,\n  message_id: p.message_id,\n  reply_markup: { inline_keyboard: kb },\n  answer_text: answer,\n} }];"
+   },
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "id": "42db08f3-211b-4169-8351-6f7d09b08538",
+   "name": "Клавиатура страницы1",
+   "position": [
+    2400,
+    1824
+   ]
+  },
+  {
+   "parameters": {
+    "method": "POST",
+    "url": "=https://api.telegram.org/bot8889907170:AAF_gKmTwWlnOF1WT9Pch9KzvuhNmhGw1Wg/editMessageReplyMarkup",
+    "sendBody": true,
+    "bodyParameters": {
+     "parameters": [
+      {
+       "name": "chat_id",
+       "value": "={{ $json.chat_id }}"
+      },
+      {
+       "name": "message_id",
+       "value": "={{ $json.message_id }}"
+      },
+      {
+       "name": "reply_markup",
+       "value": "={{ $json.reply_markup }}"
+      }
+     ]
+    },
+    "options": {}
+   },
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.4,
+   "id": "<GOOGLE_ID>",
+   "name": "Обновление клавиатуры1",
+   "position": [
+    2592,
+    1824
+   ],
+   "onError": "continueRegularOutput"
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict",
+      "version": 3
+     },
+     "conditions": [
+      {
+       "id": "sp-cond-found",
+       "leftValue": "={{ $json.found }}",
+       "rightValue": false,
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2.3,
+   "id": "8db9bdc8-2713-4784-9238-c82d0de8e8fc",
+   "name": "Магазин найден?",
+   "position": [
+    2192,
+    1536
+   ]
+  },
+  {
+   "parameters": {
+    "resource": "callback",
+    "queryId": "={{ $('Входящее сообщение').item.json.callback_query.id }}",
+    "additionalFields": {
+     "text": "Магазин выбран! ✅"
+    }
+   },
+   "type": "n8n-nodes-base.telegram",
+   "typeVersion": 1.2,
+   "position": [
+    2608,
+    1520
+   ],
+   "id": "fbab3527-0d58-4fd0-b254-283250df520e",
+   "name": "Ответить на callback",
+   "webhookId": "<WEBHOOK_ID>",
+   "credentials": {
+    "telegramApi": {
+     "id": "<CRED_ID>",
+     "name": "<telegramApi>"
+    }
+   }
+  },
+  {
+   "parameters": {
+    "resource": "callback",
+    "queryId": "={{ $('Входящее сообщение').item.json.callback_query.id }}",
+    "additionalFields": {}
+   },
+   "type": "n8n-nodes-base.telegram",
+   "typeVersion": 1.2,
+   "id": "74d0575f-ddf7-4f92-88e4-6dc0547b4058",
+   "name": "Ответ на пустоту",
+   "position": [
+    320,
+    592
+   ],
+   "webhookId": "<WEBHOOK_ID>",
+   "credentials": {
+    "telegramApi": {
+     "id": "<CRED_ID>",
+     "name": "<telegramApi>"
+    }
+   },
+   "onError": "continueRegularOutput"
+  },
+  {
+   "parameters": {
+    "resource": "callback",
+    "queryId": "={{ $('Входящее сообщение').item.json.callback_query.id }}",
+    "additionalFields": {
+     "text": "={{ $('Клавиатура страницы').item.json.answer_text || '' }}"
+    }
+   },
+   "type": "n8n-nodes-base.telegram",
+   "typeVersion": 1.2,
+   "id": "f254bc91-1137-4950-a325-b632de22286e",
+   "name": "Ответ на обновление клавиатуры",
+   "position": [
+    1136,
+    -16
+   ],
+   "webhookId": "<WEBHOOK_ID>",
+   "credentials": {
+    "telegramApi": {
+     "id": "<CRED_ID>",
+     "name": "<telegramApi>"
+    }
+   },
+   "onError": "continueRegularOutput"
+  },
+  {
+   "parameters": {
+    "resource": "callback",
+    "queryId": "={{ $('Входящее сообщение').item.json.callback_query.id }}",
+    "additionalFields": {
+     "text": "={{ $('Клавиатура страницы1').item.json.answer_text || '' }}"
+    }
+   },
+   "type": "n8n-nodes-base.telegram",
+   "typeVersion": 1.2,
+   "id": "<GOOGLE_ID>",
+   "name": "Ответ на обновление клавиатуры1",
+   "position": [
+    2784,
+    1824
+   ],
+   "webhookId": "<WEBHOOK_ID>",
+   "credentials": {
+    "telegramApi": {
+     "id": "<CRED_ID>",
+     "name": "<telegramApi>"
+    }
+   },
+   "onError": "continueRegularOutput"
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict",
+      "version": 3
+     },
+     "conditions": [
+      {
+       "id": "bl-cond-album",
+       "leftValue": "={{ $('Входящее сообщение').item.json.message.media_group_id || '' }}",
+       "rightValue": "",
+       "operator": {
+        "type": "string",
+        "operation": "notEmpty",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2.3,
+   "id": "e05c4fa8-5219-4544-aa4c-2c2539b56c38",
+   "name": "Альбом?",
+   "position": [
+    1952,
+    864
+   ]
+  },
+  {
+   "parameters": {},
+   "type": "n8n-nodes-base.wait",
+   "typeVersion": 1.1,
+   "id": "<GOOGLE_ID>",
+   "name": "Ожидание альбома",
+   "position": [
+    2208,
+    768
+   ],
+   "webhookId": "<WEBHOOK_ID>"
+  },
+  {
+   "parameters": {
+    "jsCode": "const u = $('Входящее сообщение').first().json;\nconst vars = $('Выделяю переменные пользователя').first().json;\nconst a = $('Проверка совпадения с базой').first().json;\nconst sess = $('Проверка сессии магазина').first().json;\n\nlet rows = [];\ntry { rows = $('Моя пачка').first().json.rows || []; } catch (e) { rows = []; }  // одиночное фото\n\nconst files = rows.length\n  ? rows.map(r => ({ file_id: String(r.file_id), message_id: Number(r.message_id) || 0, row_key: String(r.row_key) }))\n  : [{ file_id: vars.photoFileId,\n       message_id: u.message.message_id,\n       row_key: String(vars.chat_id) + '_' + String(u.message.message_id) }];\n\nreturn files.map(f => ({ json: {\n  file_id:    f.file_id,\n  chat_id:    vars.chat_id,\n  agent_id:   a.agent_id,\n  route_code: a.route_code,\n  store_name: sess.current_store,\n  store_code: sess.current_store_code,\n  message_id: f.message_id,\n  row_key:    f.row_key,\n  source:     'direct',\n} }));"
+   },
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "id": "095fb671-2a14-4d43-831b-98d5ffa21c74",
+   "name": "Сбор очереди",
+   "position": [
+    3712,
+    736
+   ]
+  },
+  {
+   "parameters": {
+    "jsCode": "const u = $('Входящее сообщение').first().json;\nconst vars = $('Выделяю переменные пользователя').first().json;\n\nlet rows = [];\ntry { rows = $('Моя пачка').first().json.rows || []; } catch (e) { rows = []; }\n\nconst keys = rows.length\n  ? rows.map(r => String(r.row_key))\n  : [String(vars.chat_id) + '_' + String(u.message.message_id)];\n\nreturn keys.map(row_key => ({ json: { row_key } }));"
+   },
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "id": "264d8226-4c68-4010-93a9-203f3a812d59",
+   "name": "Отложить фото",
+   "position": [
+    4160,
+    896
+   ]
+  },
+  {
+   "parameters": {
+    "jsCode": "const all = $input.all().map(i => i.json);\nconst ok  = all.filter(r => r.status === 'ok');\nconst err = all.filter(r => r.status !== 'ok');\nconst items = ok.reduce((s, r) => s + (Number(r.items_count) || 0), 0);\nconst rowKey = r => String(r.chat_id) + '_' + String(r.message_id);\n\n// очередь, отданная в WF-2 — источник правды по row_key (ошибочные прогоны его не возвращают)\nlet queued = [];\ntry { queued = $('Сбор очереди').all().map(i => i.json); } catch (e) {}\nif (!queued.length) { try { queued = $('Сбор очереди (pending)').all().map(i => i.json); } catch (e) {} }\nconst ok_keys = ok.map(rowKey).filter(k => k.indexOf('undefined') === -1);\nconst all_keys = queued.map(q => String(q.row_key)).filter(Boolean);\nconst err_keys = all_keys.filter(k => ok_keys.indexOf(k) === -1);\n\nconst first = ok[0] || err[0] || {};\nconst chat_id = first.chat_id || $('Выделяю переменные пользователя').first().json.chat_id;\nconst store = first.store_name || '—';\n\n// сжатая выкладка по одному фото: строки таблицы, сгруппированные по полке\nfunction readout(r, num, many) {\n  const rows = (r.items_brief || []).filter(it => it && it.name);\n  if (!rows.length) return (many ? 'Фото ' + num + ': ' : '') + 'наших брендов не найдено';\n  const byShelf = {};\n  let total = 0;\n  for (const it of rows) {\n    const shelf = (it.shelf === 0 || it.shelf) ? String(it.shelf) : '—';\n    const label = it.subtype ? (it.name + ' ' + it.subtype) : it.name;\n    const cnt = Number(it.count) || 0;\n    total += cnt;\n    (byShelf[shelf] = byShelf[shelf] || []).push(label + ' ×' + cnt);\n  }\n  const head = (many ? '📸 Фото ' + num + ' — ' : '') + total + ' бут., ' + rows.length + ' поз.'\n    + (r.low_confidence ? ' ⚠️' : '');\n  const shelfLines = Object.keys(byShelf)\n    .sort((a, b) => (parseInt(a) || 0) - (parseInt(b) || 0))\n    .map(s => '  Полка ' + s + ': ' + byShelf[s].join(', '));\n  return [head, ...shelfLines].join('\\n');\n}\n\nconst many = ok.length > 1;\nconst blocks = ok.map((r, i) => readout(r, i + 1, many));\n\nlet text = 'Готово ✅\\nМагазин: ' + store\n  + '\\nФото обработано: ' + ok.length + ' из ' + all.length\n  + '\\nПозиций распознано: ' + items;\nif (blocks.length) text += '\\n\\n' + blocks.join('\\n\\n');\nif (err.length) text += '\\n\\n❌ Не обработалось: ' + err.length + '. Отправьте эти фото ещё раз.';\ntext += '\\n\\nСверьте счёт с полкой: всё верно — присылайте следующее фото; неточно — переснимите ближе и без бликов, затем пришлите заново.';\n\nreturn [{ json: {\n  chat_id, text,\n  ok_keys, err_keys,\n  ok_reports: ok.map(r => ({ key: rowKey(r), report_id: r.report_id || '' })),\n} }];"
+   },
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "id": "c50e51f6-4cf9-4d1c-8ebd-6ae4126ac0f1",
+   "name": "Сводка",
+   "position": [
+    4400,
+    1504
+   ]
+  },
+  {
+   "parameters": {
+    "jsCode": "const s = $input.first().json;\nconst iso = new Date().toISOString();\nconst rep = {};\n(s.ok_reports || []).forEach(x => { rep[x.key] = x.report_id || ''; });\n\nreturn [\n  ...(s.ok_keys  || []).map(k => ({ json: { row_key: k, status: 'done',  processed_at: iso, report_id: rep[k] || '' } })),\n  ...(s.err_keys || []).map(k => ({ json: { row_key: k, status: 'error', processed_at: iso, report_id: '' } })),\n];"
+   },
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "id": "261545dd-4865-4b70-8fef-8a4cc8a8f637",
+   "name": "Разметка строк",
+   "position": [
+    4624,
+    1504
+   ]
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict",
+      "version": 3
+     },
+     "conditions": [
+      {
+       "id": "bl-cond-pending",
+       "leftValue": "={{ !!$json.row_key }}",
+       "rightValue": "",
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2.3,
+   "id": "fe691770-5484-420e-a7e3-3c89154cc87f",
+   "name": "Есть отложенные?",
+   "position": [
+    3184,
+    1520
+   ]
+  },
+  {
+   "parameters": {
+    "jsCode": "const rows = $input.first().json.rows || [];\nconst store = $('Обработка выбора магазина').first().json;\nconst cb = $('Входящее сообщение').first().json.callback_query;\nconst a = $('Проверка совпадения с базой').first().json;\n\nreturn rows.map(r => ({ json: {\n  file_id:    String(r.file_id),\n  chat_id:    cb.message.chat.id,\n  agent_id:   a.agent_id,\n  route_code: a.route_code,\n  store_name: store.store_name,\n  store_code: store.store_code,\n  message_id: Number(r.message_id) || 0,\n  row_key:    String(r.row_key),\n  source:     'pending',\n} }));"
+   },
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "id": "e86ac36f-93f5-42d6-8c34-17c46e96a1ab",
+   "name": "Сбор очереди (pending)",
+   "position": [
+    3568,
+    1424
+   ]
+  },
+  {
+   "parameters": {
+    "chatId": "={{ $('Входящее сообщение').item.json.callback_query.message.chat.id }}",
+    "text": "=Магазин выбран ✅ Пришлите фото полки.",
+    "additionalFields": {
+     "appendAttribution": false
+    }
+   },
+   "type": "n8n-nodes-base.telegram",
+   "typeVersion": 1.2,
+   "id": "362aab59-3b32-4d9a-b124-d070417dcf84",
+   "name": "Просьба прислать фото",
+   "position": [
+    3408,
+    1616
+   ],
+   "webhookId": "<WEBHOOK_ID>",
+   "credentials": {
+    "telegramApi": {
+     "id": "<CRED_ID>",
+     "name": "<telegramApi>"
+    }
+   }
+  },
+  {
+   "parameters": {
+    "content": "# Быстрая маршрутизация\n",
+    "height": 832,
+    "width": 1280,
+    "color": 5
+   },
+   "type": "n8n-nodes-base.stickyNote",
+   "position": [
+    48,
+    -80
+   ],
+   "typeVersion": 1,
+   "id": "6476a421-f035-4120-bf21-eb04fd2c74d1",
+   "name": "Sticky Note1"
+  },
+  {
+   "parameters": {
+    "chatId": "={{ $('Выделяю переменные пользователя').item.json.chat_id }}",
+    "text": "={{ $json.text }}",
+    "additionalFields": {
+     "appendAttribution": false
+    }
+   },
+   "type": "n8n-nodes-base.telegram",
+   "typeVersion": 1.2,
+   "position": [
+    4864,
+    1312
+   ],
+   "id": "4ffcfb2b-0a7e-4746-992e-5688ec56bde6",
+   "name": "Отправка результата",
+   "webhookId": "<WEBHOOK_ID>",
+   "executeOnce": true,
+   "credentials": {
+    "telegramApi": {
+     "id": "<CRED_ID>",
+     "name": "<telegramApi>"
+    }
+   }
+  },
+  {
+   "parameters": {
+    "content": "# Когда магазин выбрали",
+    "height": 240,
+    "width": 1264,
+    "color": "#6B1F9E"
+   },
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    1728,
+    1456
+   ],
+   "id": "fc4c8f6f-772c-424f-ac7d-60b1b58c761a",
+   "name": "Sticky Note2"
+  },
+  {
+   "parameters": {
+    "content": "# Выбран не корректный магазин",
+    "height": 240,
+    "width": 992,
+    "color": 5
+   },
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    1968,
+    1760
+   ],
+   "id": "39236ddf-e169-4050-af39-cc2ee8c4ee6a",
+   "name": "Sticky Note3"
+  },
+  {
+   "parameters": {
+    "content": "# Подготовка фото/групп фото",
+    "height": 368,
+    "width": 1392,
+    "color": "#6B1F9E"
+   },
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    1728,
+    704
+   ],
+   "id": "<GOOGLE_ID>",
+   "name": "Sticky Note4"
+  },
+  {
+   "parameters": {
+    "content": "# Логирование и отправка фото на обработку",
+    "height": 1280,
+    "width": 896,
+    "color": 3
+   },
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    3152,
+    528
+   ],
+   "id": "9e7061a2-23aa-4597-85a2-c8a1e3b22517",
+   "name": "Sticky Note5"
+  },
+  {
+   "parameters": {
+    "content": "# Спрашиваем о магазине",
+    "height": 288,
+    "width": 1200,
+    "color": "#9EA031"
+   },
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    4096,
+    800
+   ],
+   "id": "e3c428e5-b002-4bbf-8c3e-d6d623742309",
+   "name": "Sticky Note7"
+  },
+  {
+   "parameters": {
+    "content": "# Обработка и отправка результата о фото",
+    "height": 592,
+    "width": 976,
+    "color": "#318132"
+   },
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    4096,
+    1104
+   ],
+   "id": "781ca4e9-0e82-436d-b8f5-dd64c3eccbfb",
+   "name": "Sticky Note8"
+  },
+  {
+   "parameters": {
+    "jsCode": "const r = $input.first().json || {};\nconst found = !!(r && r.store_code);\nreturn [{ json: {\n  found,\n  store_code: found ? String(r.store_code) : null,\n  store_name: found ? String(r.store_name || '') : null,\n  address:    found ? String(r.address || '') : null,\n} }];"
+   },
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "id": "822f5475-8d0a-49f2-9fcd-b5d35d83b2b5",
+   "name": "Обработка выбора магазина",
+   "position": [
+    1984,
+    1536
+   ]
+  },
+  {
+   "parameters": {
+    "operation": "deleteMessage",
+    "chatId": "={{ $('Входящее сообщение').item.json.callback_query.message.chat.id }}",
+    "messageId": "={{ $('Входящее сообщение').item.json.callback_query.message.message_id }}"
+   },
+   "type": "n8n-nodes-base.telegram",
+   "typeVersion": 1.2,
+   "id": "d755432f-d170-493d-bc4f-0bed7de9ba91",
+   "name": "Удаление клавиатуры магазина",
+   "position": [
+    3568,
+    1248
+   ],
+   "webhookId": "<WEBHOOK_ID>",
+   "credentials": {
+    "telegramApi": {
+     "id": "<CRED_ID>",
+     "name": "<telegramApi>"
+    }
+   },
+   "onError": "continueRegularOutput"
+  },
+  {
+   "parameters": {
+    "chatId": "={{ $('Выделяю переменные пользователя').item.json.chat_id }}",
+    "text": "⏳ Подождите, фото обрабатывается…",
+    "additionalFields": {
+     "appendAttribution": false
+    }
+   },
+   "type": "n8n-nodes-base.telegram",
+   "typeVersion": 1.2,
+   "position": [
+    3568,
+    1088
+   ],
+   "id": "fdbf069f-b528-4bf1-9424-4ac5d24b7e2c",
+   "name": "Фото обрабатывается",
+   "webhookId": "<WEBHOOK_ID>",
+   "credentials": {
+    "telegramApi": {
+     "id": "<CRED_ID>",
+     "name": "<telegramApi>"
+    }
+   },
+   "onError": "continueRegularOutput"
+  },
+  {
+   "parameters": {
+    "jsCode": "function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }\n\nfunction readout(r) {\n  const rows = (r.items_brief || []).filter(it => it && it.name);\n  if (!rows.length) return 'Наших брендов на фото не найдено.';\n  const NL = String.fromCharCode(10);\n  const byShelf = {};\n  for (const it of rows) {\n    const shelf = (it.shelf === 0 || it.shelf) ? String(it.shelf) : '—';\n    const name  = it.subtype ? it.subtype : it.name;\n    const fmt   = it.format ? String(it.format) : 'объём ?';\n    const cnt   = Number(it.count) || 0;\n    (byShelf[shelf] = byShelf[shelf] || []).push(esc(name) + ' · ' + esc(fmt) + ' ×' + cnt);\n  }\n  const blocks = Object.keys(byShelf).sort((a,b)=>(parseInt(a)||0)-(parseInt(b)||0))\n    .map(s => '    <u>Полка ' + esc(s) + ':</u>' + NL + '        ' + byShelf[s].join(',' + NL + '        '));\n  return [''].concat(blocks).join(NL);\n}\n\nconst fallbackChat = (() => { try { return $('Выделяю переменные пользователя').first().json.chat_id; } catch (e) { return null; } })();\nconst NL = String.fromCharCode(10);\nconst out = [];\nfor (const it of $input.all()) {\n  const r = it.json || {};\n  const ok = r.status === 'ok' && r.report_id;\n  if (ok) {\n    const head = (r.route_code ? '<b>Маршрут: ' + esc(r.route_code) + '</b>' + NL : '')\n      + 'Магазин: ' + esc(r.store_name || '—');\n    const text = head + NL + readout(r)\n      + NL + NL + 'Всё верно?' + NL + 'Нажмите кнопку утвердить, если данные корректны.'\n      + NL + 'И кнопку переснять в случае ошибок.';\n    const reply_markup = JSON.stringify({ inline_keyboard: [[\n      { text: '✅ Утвердить', callback_data: 'approve:' + r.report_id },\n      { text: '🔄 Переснять',  callback_data: 'reject:'  + r.report_id },\n    ]] });\n    out.push({ json: { kind: 'ok', chat_id: r.chat_id || fallbackChat, report_id: r.report_id, text, reply_markup } });\n  } else {\n    out.push({ json: { kind: 'err', chat_id: r.chat_id || fallbackChat, text: '❌ Фото не обработалось. Пришлите его ещё раз.' } });\n  }\n}\nreturn out;"
+   },
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "id": "f84c1018-7d5d-41f4-b3b2-fdd28d26dd49",
+   "name": "Карточка результата",
+   "position": [
+    4400,
+    1296
+   ]
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict",
+      "version": 3
+     },
+     "conditions": [
+      {
+       "id": "af-cond-ok",
+       "leftValue": "={{ $json.kind }}",
+       "rightValue": "ok",
+       "operator": {
+        "type": "string",
+        "operation": "equals"
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2.3,
+   "id": "778ab5ab-f3cb-4e88-8a4b-b7e715782537",
+   "name": "Кнопки?",
+   "position": [
+    4624,
+    1296
+   ]
+  },
+  {
+   "parameters": {
+    "method": "POST",
+    "url": "=https://api.telegram.org/bot8889907170:AAF_gKmTwWlnOF1WT9Pch9KzvuhNmhGw1Wg/sendMessage",
+    "sendBody": true,
+    "bodyParameters": {
+     "parameters": [
+      {
+       "name": "chat_id",
+       "value": "={{ $json.chat_id }}"
+      },
+      {
+       "name": "text",
+       "value": "={{ $json.text }}"
+      },
+      {
+       "name": "reply_markup",
+       "value": "={{ $json.reply_markup }}"
+      },
+      {
+       "name": "parse_mode",
+       "value": "HTML"
+      }
+     ]
+    },
+    "options": {}
+   },
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.4,
+   "id": "50915c0e-4681-4163-af67-2e7472ade398",
+   "name": "Отправка карточки",
+   "position": [
+    4864,
+    1136
+   ],
+   "onError": "continueRegularOutput"
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict",
+      "version": 3
+     },
+     "conditions": [
+      {
+       "id": "bc68e5b3-e9db-4325-8ea3-9b1f6af9875f",
+       "leftValue": "={{ $json.update_kind === 'callback' && !(($('Входящее сообщение').item.json.callback_query.data || '').startsWith('store:')) }}",
+       "rightValue": "",
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2.3,
+   "position": [
+    -544,
+    864
+   ],
+   "id": "f5165d04-753b-49a6-9a64-f1b87bc5f743",
+   "name": "Быстрый ответ?"
+  },
+  {
+   "parameters": {
+    "resource": "callback",
+    "queryId": "={{ $('Входящее сообщение').item.json.callback_query.id }}",
+    "additionalFields": {
+     "text": "Утверждено ✅"
+    }
+   },
+   "type": "n8n-nodes-base.telegram",
+   "typeVersion": 1.2,
+   "id": "20483e3f-b124-448b-a3e2-633622922d2d",
+   "name": "Ответ: утверждено",
+   "position": [
+    320,
+    208
+   ],
+   "webhookId": "<WEBHOOK_ID>",
+   "credentials": {
+    "telegramApi": {
+     "id": "<CRED_ID>",
+     "name": "<telegramApi>"
+    }
+   },
+   "onError": "continueRegularOutput"
+  },
+  {
+   "parameters": {
+    "method": "POST",
+    "url": "=https://api.telegram.org/bot8889907170:AAF_gKmTwWlnOF1WT9Pch9KzvuhNmhGw1Wg/editMessageText",
+    "sendBody": true,
+    "bodyParameters": {
+     "parameters": [
+      {
+       "name": "chat_id",
+       "value": "={{ $('Входящее сообщение').item.json.callback_query.message.chat.id }}"
+      },
+      {
+       "name": "message_id",
+       "value": "={{ $('Входящее сообщение').item.json.callback_query.message.message_id }}"
+      },
+      {
+       "name": "text",
+       "value": "={{ ($('Входящее сообщение').item.json.callback_query.message.text || '').split('Всё верно?')[0].trimEnd().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/^( *)(Полка .*?:)/gm,'$1<u>$2</u>') + String.fromCharCode(10,10) + '✅ Данные утверждены и записаны.' }}"
+      },
+      {
+       "name": "parse_mode",
+       "value": "HTML"
+      }
+     ]
+    },
+    "options": {}
+   },
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.4,
+   "id": "77614de6-2799-40b5-b0c6-cacc06e8ddb4",
+   "name": "Карточка → утверждено",
+   "position": [
+    528,
+    208
+   ],
+   "onError": "continueRegularOutput"
+  },
+  {
+   "parameters": {
+    "operation": "get",
+    "resource": "row",
+    "dataTableId": {
+     "__rl": true,
+     "value": "report_rows",
+     "mode": "name"
+    },
+    "matchType": "allConditions",
+    "filters": {
+     "conditions": [
+      {
+       "keyName": "report_id",
+       "condition": "eq",
+       "keyValue": "={{ (($('Входящее сообщение').item.json.callback_query.data) || '').split(':').slice(1).join(':') }}"
+      }
+     ]
+    },
+    "returnAll": true,
+    "options": {}
+   },
+   "type": "n8n-nodes-base.dataTable",
+   "typeVersion": 1,
+   "position": [
+    928,
+    208
+   ],
+   "id": "2421bc6e-d66c-427c-9607-a6ec9f58acf0",
+   "name": "Строки отчёта: approve"
+  },
+  {
+   "parameters": {
+    "operation": "update",
+    "resource": "row",
+    "dataTableId": {
+     "__rl": true,
+     "value": "report_rows",
+     "mode": "name"
+    },
+    "matchType": "allConditions",
+    "filters": {
+     "conditions": [
+      {
+       "keyName": "report_id",
+       "condition": "eq",
+       "keyValue": "={{ (($('Входящее сообщение').item.json.callback_query.data) || '').split(':').slice(1).join(':') }}"
+      }
+     ]
+    },
+    "columns": {
+     "mappingMode": "defineBelow",
+     "value": {
+      "status": "утверждено"
+     },
+     "matchingColumns": [],
+     "schema": [
+      {
+       "id": "report_id",
+       "displayName": "report_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "report_date",
+       "displayName": "report_date",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "route_code",
+       "displayName": "route_code",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "store_code",
+       "displayName": "store_code",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "store_name",
+       "displayName": "store_name",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "product_name",
+       "displayName": "product_name",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "product_subtype",
+       "displayName": "product_subtype",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "package_format",
+       "displayName": "package_format",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "shelf_index",
+       "displayName": "shelf_index",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "position",
+       "displayName": "position",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "front_facing_count",
+       "displayName": "front_facing_count",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "status",
+       "displayName": "status",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "created_at",
+       "displayName": "created_at",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "synced",
+       "displayName": "synced",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      }
+     ]
+    }
+   },
+   "type": "n8n-nodes-base.dataTable",
+   "typeVersion": 1,
+   "position": [
+    1136,
+    208
+   ],
+   "id": "9eb1f697-5276-4a9b-bc33-3918cc4a4a90",
+   "name": "Пометить утверждено",
+   "executeOnce": true
+  },
+  {
+   "parameters": {
+    "resource": "callback",
+    "queryId": "={{ $('Входящее сообщение').item.json.callback_query.id }}",
+    "additionalFields": {
+     "text": "Переснимите фото 🔄"
+    }
+   },
+   "type": "n8n-nodes-base.telegram",
+   "typeVersion": 1.2,
+   "id": "a4c38438-ae99-47a3-ab6b-0259ccf87943",
+   "name": "Ответ: переснимите",
+   "position": [
+    320,
+    416
+   ],
+   "webhookId": "<WEBHOOK_ID>",
+   "credentials": {
+    "telegramApi": {
+     "id": "<CRED_ID>",
+     "name": "<telegramApi>"
+    }
+   },
+   "onError": "continueRegularOutput"
+  },
+  {
+   "parameters": {
+    "method": "POST",
+    "url": "=https://api.telegram.org/bot8889907170:AAF_gKmTwWlnOF1WT9Pch9KzvuhNmhGw1Wg/editMessageText",
+    "sendBody": true,
+    "bodyParameters": {
+     "parameters": [
+      {
+       "name": "chat_id",
+       "value": "={{ $('Входящее сообщение').item.json.callback_query.message.chat.id }}"
+      },
+      {
+       "name": "message_id",
+       "value": "={{ $('Входящее сообщение').item.json.callback_query.message.message_id }}"
+      },
+      {
+       "name": "text",
+       "value": "={{ ($('Входящее сообщение').item.json.callback_query.message.text || '').split('Всё верно?')[0].trimEnd().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/^( *)(Полка .*?:)/gm,'$1<u>$2</u>') + String.fromCharCode(10,10) + '🔄 Отклонено. Переснимите полку ближе и без бликов, затем пришлите фото заново.' }}"
+      },
+      {
+       "name": "parse_mode",
+       "value": "HTML"
+      }
+     ]
+    },
+    "options": {}
+   },
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.4,
+   "id": "6822d1ab-62c3-46a0-aad7-a6d8d59ed1b3",
+   "name": "Карточка → отклонено",
+   "position": [
+    528,
+    416
+   ],
+   "onError": "continueRegularOutput"
+  },
+  {
+   "parameters": {
+    "operation": "get",
+    "resource": "row",
+    "dataTableId": {
+     "__rl": true,
+     "value": "report_rows",
+     "mode": "name"
+    },
+    "matchType": "allConditions",
+    "filters": {
+     "conditions": [
+      {
+       "keyName": "report_id",
+       "condition": "eq",
+       "keyValue": "={{ (($('Входящее сообщение').item.json.callback_query.data) || '').split(':').slice(1).join(':') }}"
+      }
+     ]
+    },
+    "returnAll": true,
+    "options": {}
+   },
+   "type": "n8n-nodes-base.dataTable",
+   "typeVersion": 1,
+   "position": [
+    720,
+    416
+   ],
+   "id": "3b3fd6a9-e814-412e-9e79-cbf9e12d67e0",
+   "name": "Строки отчёта: reject"
+  },
+  {
+   "parameters": {
+    "operation": "update",
+    "resource": "row",
+    "dataTableId": {
+     "__rl": true,
+     "value": "report_rows",
+     "mode": "name"
+    },
+    "matchType": "allConditions",
+    "filters": {
+     "conditions": [
+      {
+       "keyName": "report_id",
+       "condition": "eq",
+       "keyValue": "={{ (($('Входящее сообщение').item.json.callback_query.data) || '').split(':').slice(1).join(':') }}"
+      }
+     ]
+    },
+    "columns": {
+     "mappingMode": "defineBelow",
+     "value": {
+      "status": "отклонено"
+     },
+     "matchingColumns": [],
+     "schema": [
+      {
+       "id": "report_id",
+       "displayName": "report_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "report_date",
+       "displayName": "report_date",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "route_code",
+       "displayName": "route_code",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "store_code",
+       "displayName": "store_code",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "store_name",
+       "displayName": "store_name",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "product_name",
+       "displayName": "product_name",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "product_subtype",
+       "displayName": "product_subtype",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "package_format",
+       "displayName": "package_format",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "shelf_index",
+       "displayName": "shelf_index",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "position",
+       "displayName": "position",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "front_facing_count",
+       "displayName": "front_facing_count",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "status",
+       "displayName": "status",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "created_at",
+       "displayName": "created_at",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "synced",
+       "displayName": "synced",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      }
+     ]
+    }
+   },
+   "type": "n8n-nodes-base.dataTable",
+   "typeVersion": 1,
+   "position": [
+    928,
+    416
+   ],
+   "id": "8eb1ff52-76c5-49c6-8ced-0bd49fb0c9a5",
+   "name": "Пометить отклонено",
+   "executeOnce": true
+  },
+  {
+   "parameters": {
+    "chatId": "={{ $('Выделяю переменные пользователя').item.json.chat_id }}",
+    "text": "⏳ Подождите, фото обрабатывается…",
+    "additionalFields": {
+     "appendAttribution": false
+    }
+   },
+   "type": "n8n-nodes-base.telegram",
+   "typeVersion": 1.2,
+   "position": [
+    3712,
+    576
+   ],
+   "id": "bffa6e6c-2a25-4fab-8b57-78efc44b6dcf",
+   "name": "Фото обрабатывается1",
+   "webhookId": "<WEBHOOK_ID>",
+   "credentials": {
+    "telegramApi": {
+     "id": "<CRED_ID>",
+     "name": "<telegramApi>"
+    }
+   },
+   "onError": "continueRegularOutput"
+  },
+  {
+   "parameters": {
+    "chatId": "={{ $('Выделяю переменные пользователя').item.json.chat_id }}",
+    "text": "Отправьте следующую фотографию.",
+    "additionalFields": {
+     "appendAttribution": false,
+     "parse_mode": "Markdown"
+    }
+   },
+   "type": "n8n-nodes-base.telegram",
+   "typeVersion": 1.2,
+   "position": [
+    736,
+    208
+   ],
+   "id": "0b8011cf-99e2-444e-9d31-88ef4f76145c",
+   "name": "Следующая фотография",
+   "webhookId": "<WEBHOOK_ID>",
+   "executeOnce": true,
+   "credentials": {
+    "telegramApi": {
+     "id": "<CRED_ID>",
+     "name": "<telegramApi>"
+    }
+   },
+   "onError": "continueRegularOutput"
+  },
+  {
+   "parameters": {
+    "jsCode": "// Кэш листа Admins в staticData — минус один поход в Google Sheets на каждое действие.\nconst TTL_MS = 60 * 1000;\nconst st = $getWorkflowStaticData('global');\nconst fresh = !!(Array.isArray(st.adminsRows) && st.adminsRows.length\n                 && st.adminsAt && (Date.now() - st.adminsAt) < TTL_MS);\nreturn [{ json: { fresh, __rows: fresh ? st.adminsRows : [] } }];"
+   },
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    -272,
+    944
+   ],
+   "id": "5fc8d64d-5d1c-4eef-aef7-15dcd1c71bd0",
+   "name": "Кэш Admins"
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict",
+      "version": 3
+     },
+     "conditions": [
+      {
+       "id": "if-admins-cache-c1",
+       "leftValue": "={{ $json.fresh }}",
+       "rightValue": "",
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2.3,
+   "position": [
+    -96,
+    944
+   ],
+   "id": "014dda3a-fc12-4e43-b652-3a47b2bd24d0",
+   "name": "Кэш свежий?"
+  },
+  {
+   "parameters": {
+    "jsCode": "// Свежие строки из Sheets кладём в кэш и передаём дальше как есть.\nconst rows = $input.all().map(i => i.json);\nconst st = $getWorkflowStaticData('global');\nst.adminsRows = rows;\nst.adminsAt = Date.now();\nreturn rows.length ? rows.map(json => ({ json })) : [{ json: { __rows: [] } }];"
+   },
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    272,
+    1072
+   ],
+   "id": "a2b4a0d7-c6ef-4e19-89b8-f2aed6169c2f",
+   "name": "Кэш Admins: сохранить"
+  },
+  {
+   "parameters": {
+    "operation": "get",
+    "dataTableId": {
+     "__rl": true,
+     "value": "sessions",
+     "mode": "name"
+    },
+    "matchType": "allConditions",
+    "filters": {
+     "conditions": [
+      {
+       "keyName": "agent_id",
+       "keyValue": "={{ $('Проверка совпадения с базой').item.json.agent_id }}"
+      }
+     ]
+    },
+    "limit": 1
+   },
+   "type": "n8n-nodes-base.dataTable",
+   "typeVersion": 1,
+   "position": [
+    2976,
+    880
+   ],
+   "id": "b0131b2e-129a-4649-a677-42157b272392",
+   "name": "Сессия: чтение",
+   "alwaysOutputData": true,
+   "notesInFlow": false,
+   "notes": "Сессия агента. alwaysOutputData=ON — пустая сессия должна дойти до проверки."
+  },
+  {
+   "parameters": {
+    "operation": "upsert",
+    "dataTableId": {
+     "__rl": true,
+     "value": "sessions",
+     "mode": "name"
+    },
+    "matchType": "allConditions",
+    "filters": {
+     "conditions": [
+      {
+       "keyName": "agent_id",
+       "keyValue": "={{ $('Проверка совпадения с базой').item.json.agent_id }}"
+      }
+     ]
+    },
+    "columns": {
+     "mappingMode": "defineBelow",
+     "value": {
+      "agent_id": "={{ $('Проверка совпадения с базой').item.json.agent_id }}",
+      "chat_id": "={{ $('Входящее сообщение').item.json.callback_query.message.chat.id }}",
+      "current_store_code": "={{ $('Обработка выбора магазина').item.json.store_code }}",
+      "current_store_name": "={{ $('Обработка выбора магазина').item.json.store_name }}",
+      "route_code": "={{ $('Маршрут: выбранная точка').item.json.route_code }}",
+      "updated_at": "={{ new Date().toISOString() }}"
+     },
+     "matchingColumns": [],
+     "schema": [
+      {
+       "id": "agent_id",
+       "displayName": "agent_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "chat_id",
+       "displayName": "chat_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "route_code",
+       "displayName": "route_code",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "current_store_code",
+       "displayName": "current_store_code",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "current_store_name",
+       "displayName": "current_store_name",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "updated_at",
+       "displayName": "updated_at",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      }
+     ],
+     "attemptToConvertTypes": false,
+     "convertFieldsToString": true
+    },
+    "options": {}
+   },
+   "type": "n8n-nodes-base.dataTable",
+   "typeVersion": 1,
+   "position": [
+    2400,
+    1520
+   ],
+   "id": "f12a4597-ed7d-46db-ab99-9186d1f5dc94",
+   "name": "Сессия: сохранить магазин"
+  },
+  {
+   "parameters": {
+    "jsCode": "// Первый показ кнопок: маршрут агента, сегодняшний день, страница 1.\nconst DAYS = ['Вс','Пн','Вт','Ср','Чт','Пт','Сб'];\nconst today = DAYS[new Date(Date.now() + 5*3600*1000).getUTCDay()];  // tzdata нет — фикс. UTC+5\nconst a = $('Проверка совпадения с базой').first().json;\nreturn [{ json: {\n  route_code: String(a.route_code || ''),\n  day: today,\n  mode: 'd',\n  page: 1,\n  answer_text: '',\n} }];"
+   },
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    4560,
+    896
+   ],
+   "id": "d9a87a74-fe4d-491d-85ae-0f818d6ed4c6",
+   "name": "Точки: параметры"
+  },
+  {
+   "parameters": {
+    "operation": "get",
+    "dataTableId": {
+     "__rl": true,
+     "value": "routes",
+     "mode": "name"
+    },
+    "matchType": "allConditions",
+    "filters": {
+     "conditions": [
+      {
+       "keyName": "route_code",
+       "keyValue": "={{ $json.route_code }}"
+      }
+     ]
+    },
+    "returnAll": true
+   },
+   "type": "n8n-nodes-base.dataTable",
+   "typeVersion": 1,
+   "position": [
+    4752,
+    896
+   ],
+   "id": "5271536d-91a8-4fb5-9c57-91f33edd32ab",
+   "name": "Маршрут: точки",
+   "alwaysOutputData": true,
+   "notesInFlow": false,
+   "notes": "Все точки маршрута агента. Фильтр по дню недели — в Code-ноде дальше."
+  },
+  {
+   "parameters": {
+    "jsCode": "// Пагинация и переключение «сегодня ↔ все точки». Маршрут едет в callback_data,\n// поэтому быстрая ветка обходится без чтения Admins.\nconst DAYS = ['Вс','Пн','Вт','Ср','Чт','Пт','Сб'];\nconst today = DAYS[new Date(Date.now() + 5*3600*1000).getUTCDay()];  // tzdata нет — фикс. UTC+5\nconst cb = $('Входящее сообщение').first().json.callback_query;\nconst data = String(cb.data || '');\n\nlet page = 1, route = '', mode = 'd';\nif (data.startsWith('page:')) {\n  const p = data.slice(5).split('|');      // n | route_code | mode\n  page = parseInt(p[0], 10) || 1;\n  route = String(p[1] || '');\n  mode = (p[2] === 'a') ? 'a' : 'd';\n} else if (data.startsWith('all|')) {\n  route = String(data.slice(4) || '');\n  mode = 'a';\n}\n\nreturn [{ json: {\n  route_code: route,\n  day: today,\n  mode,\n  page,\n  answer_text: '',\n  chat_id: cb.message.chat.id,\n  message_id: cb.message.message_id,\n} }];"
+   },
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    320,
+    -16
+   ],
+   "id": "44a80a60-c8ea-4ca6-b949-75ddf5aaa9c4",
+   "name": "Страница: параметры"
+  },
+  {
+   "parameters": {
+    "operation": "get",
+    "dataTableId": {
+     "__rl": true,
+     "value": "routes",
+     "mode": "name"
+    },
+    "matchType": "allConditions",
+    "filters": {
+     "conditions": [
+      {
+       "keyName": "route_code",
+       "keyValue": "={{ $json.route_code }}"
+      }
+     ]
+    },
+    "returnAll": true
+   },
+   "type": "n8n-nodes-base.dataTable",
+   "typeVersion": 1,
+   "position": [
+    528,
+    -16
+   ],
+   "id": "8700da09-6349-4cbc-b7ea-2983aca24132",
+   "name": "Маршрут: точки (страница)",
+   "alwaysOutputData": true
+  },
+  {
+   "parameters": {
+    "operation": "get",
+    "dataTableId": {
+     "__rl": true,
+     "value": "U9OxgUjHY1zMJ9oP",
+     "mode": "list",
+     "cachedResultName": "<REDACTED>",
+     "cachedResultUrl": "<REDACTED>"
+    },
+    "matchType": "allConditions",
+    "filters": {
+     "conditions": [
+      {
+       "keyName": "store_code",
+       "keyValue": "={{ ($('Входящее сообщение').item.json.callback_query.data || '').replace(/^store:/, '').trim() }}"
+      },
+      {
+       "keyName": "route_code",
+       "keyValue": "={{ $('Проверка совпадения с базой').item.json.route_code }}"
+      }
+     ]
+    },
+    "limit": 1
+   },
+   "type": "n8n-nodes-base.dataTable",
+   "typeVersion": 1,
+   "position": [
+    1776,
+    1536
+   ],
+   "id": "b3c8b4a1-89bb-4863-a4e8-0f364a3d43ca",
+   "name": "Маршрут: выбранная точка",
+   "alwaysOutputData": true,
+   "notesInFlow": false,
+   "notes": "Точка по коду из callback_data, в пределах маршрута агента."
+  },
+  {
+   "parameters": {
+    "jsCode": "// Агент нажал кнопку из устаревшей клавиатуры — перерисовываем список заново.\nconst DAYS = ['Вс','Пн','Вт','Ср','Чт','Пт','Сб'];\nconst today = DAYS[new Date(Date.now() + 5*3600*1000).getUTCDay()];  // tzdata нет — фикс. UTC+5\nconst a = $('Проверка совпадения с базой').first().json;\nconst cb = $('Входящее сообщение').first().json.callback_query;\nreturn [{ json: {\n  route_code: String(a.route_code || ''),\n  day: today,\n  mode: 'd',\n  page: 1,\n  answer_text: 'Список точек обновился — выберите ещё раз',\n  chat_id: cb.message.chat.id,\n  message_id: cb.message.message_id,\n} }];"
+   },
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    2000,
+    1824
+   ],
+   "id": "21a4c4e7-6239-40f2-b6a9-b09e5d70f999",
+   "name": "Перерисовка: параметры"
+  },
+  {
+   "parameters": {
+    "operation": "get",
+    "dataTableId": {
+     "__rl": true,
+     "value": "routes",
+     "mode": "name"
+    },
+    "matchType": "allConditions",
+    "filters": {
+     "conditions": [
+      {
+       "keyName": "route_code",
+       "keyValue": "={{ $json.route_code }}"
+      }
+     ]
+    },
+    "returnAll": true
+   },
+   "type": "n8n-nodes-base.dataTable",
+   "typeVersion": 1,
+   "position": [
+    2208,
+    1824
+   ],
+   "id": "6db508a7-b424-4437-9e2c-6dd1b0364ec0",
+   "name": "Маршрут: точки (перерисовка)",
+   "alwaysOutputData": true
+  },
+  {
+   "parameters": {
+    "dataTableId": {
+     "__rl": true,
+     "value": "photo_buffer",
+     "mode": "name"
+    },
+    "columns": {
+     "mappingMode": "defineBelow",
+     "value": {
+      "row_key": "={{ $('Проверка совпадения с базой').item.json.chat_id }}_{{ $('Входящее сообщение').item.json.message.message_id }}",
+      "agent_id": "={{ $('Проверка совпадения с базой').item.json.agent_id }}",
+      "chat_id": "={{ $('Проверка совпадения с базой').item.json.chat_id }}",
+      "message_id": "={{ $('Входящее сообщение').item.json.message.message_id }}",
+      "media_group_id": "={{ $('Входящее сообщение').item.json.message.media_group_id || '' }}",
+      "file_id": "={{ $('Проверка совпадения с базой').item.json.photoFileId }}",
+      "status": "new",
+      "claimed_by": "-"
+     },
+     "matchingColumns": [],
+     "schema": [
+      {
+       "id": "row_key",
+       "displayName": "row_key",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "agent_id",
+       "displayName": "agent_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "chat_id",
+       "displayName": "chat_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "message_id",
+       "displayName": "message_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "number",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "media_group_id",
+       "displayName": "media_group_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "file_id",
+       "displayName": "file_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "status",
+       "displayName": "status",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "claimed_by",
+       "displayName": "claimed_by",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "report_id",
+       "displayName": "report_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      }
+     ],
+     "attemptToConvertTypes": false,
+     "convertFieldsToString": true
+    },
+    "options": {}
+   },
+   "type": "n8n-nodes-base.dataTable",
+   "typeVersion": 1,
+   "position": [
+    1760,
+    864
+   ],
+   "id": "d3cc35d4-9b4e-4852-9def-20949b7bb9bb",
+   "name": "Буфер: фото",
+   "notesInFlow": false,
+   "notes": "row_key = chat_id_message_id — закрывает #18 (file_id не уникален)."
+  },
+  {
+   "parameters": {
+    "operation": "update",
+    "dataTableId": {
+     "__rl": true,
+     "value": "photo_buffer",
+     "mode": "name"
+    },
+    "matchType": "allConditions",
+    "filters": {
+     "conditions": [
+      {
+       "keyName": "media_group_id",
+       "keyValue": "={{ $('Входящее сообщение').item.json.message.media_group_id }}"
+      },
+      {
+       "keyName": "status",
+       "keyValue": "new"
+      },
+      {
+       "keyName": "claimed_by",
+       "keyValue": "-"
+      }
+     ]
+    },
+    "columns": {
+     "mappingMode": "defineBelow",
+     "value": {
+      "claimed_by": "={{ $execution.id }}"
+     },
+     "matchingColumns": [],
+     "schema": [
+      {
+       "id": "row_key",
+       "displayName": "row_key",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "agent_id",
+       "displayName": "agent_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "chat_id",
+       "displayName": "chat_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "message_id",
+       "displayName": "message_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "number",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "media_group_id",
+       "displayName": "media_group_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "file_id",
+       "displayName": "file_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "status",
+       "displayName": "status",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "claimed_by",
+       "displayName": "claimed_by",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "report_id",
+       "displayName": "report_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      }
+     ],
+     "attemptToConvertTypes": false,
+     "convertFieldsToString": true
+    },
+    "options": {}
+   },
+   "type": "n8n-nodes-base.dataTable",
+   "typeVersion": 1,
+   "position": [
+    2400,
+    768
+   ],
+   "id": "0df0bcdf-4eee-4d26-8fab-93b00136dd7a",
+   "name": "Буфер: захват",
+   "alwaysOutputData": true,
+   "notesInFlow": false,
+   "notes": "Оптимистичный захват альбома: транзакций в Data Tables нет."
+  },
+  {
+   "parameters": {
+    "operation": "get",
+    "dataTableId": {
+     "__rl": true,
+     "value": "photo_buffer",
+     "mode": "name"
+    },
+    "matchType": "allConditions",
+    "filters": {
+     "conditions": [
+      {
+       "keyName": "media_group_id",
+       "keyValue": "={{ $('Входящее сообщение').item.json.message.media_group_id }}"
+      },
+      {
+       "keyName": "claimed_by",
+       "keyValue": "={{ $execution.id }}"
+      }
+     ]
+    },
+    "returnAll": true
+   },
+   "type": "n8n-nodes-base.dataTable",
+   "typeVersion": 1,
+   "position": [
+    2592,
+    768
+   ],
+   "id": "ec5ef7b7-1d02-4803-99b7-40a56c522bd7",
+   "name": "Буфер: группа",
+   "notesInFlow": false,
+   "notes": "Строки, которые захватил ЭТОТ прогон. Пусто → ветка останавливается сама."
+  },
+  {
+   "parameters": {
+    "jsCode": "// Строки альбома, которые захватил ИМЕННО этот прогон. Пусто → молча выходим.\nconst rows = $input.all().map(i => i.json).filter(r => r && r.row_key);\nif (!rows.length) return [];\nrows.sort((a, b) => (Number(a.message_id) || 0) - (Number(b.message_id) || 0));\nreturn [{ json: { count: rows.length, rows } }];"
+   },
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    2768,
+    768
+   ],
+   "id": "a1de4bd0-6ffe-4d77-92f8-4e00b7d08f49",
+   "name": "Моя пачка"
+  },
+  {
+   "parameters": {
+    "operation": "update",
+    "dataTableId": {
+     "__rl": true,
+     "value": "photo_buffer",
+     "mode": "name"
+    },
+    "matchType": "allConditions",
+    "filters": {
+     "conditions": [
+      {
+       "keyName": "row_key",
+       "keyValue": "={{ $json.row_key }}"
+      }
+     ]
+    },
+    "columns": {
+     "mappingMode": "defineBelow",
+     "value": {
+      "status": "processing"
+     },
+     "matchingColumns": [],
+     "schema": [
+      {
+       "id": "row_key",
+       "displayName": "row_key",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "agent_id",
+       "displayName": "agent_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "chat_id",
+       "displayName": "chat_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "message_id",
+       "displayName": "message_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "number",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "media_group_id",
+       "displayName": "media_group_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "file_id",
+       "displayName": "file_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "status",
+       "displayName": "status",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "claimed_by",
+       "displayName": "claimed_by",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "report_id",
+       "displayName": "report_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      }
+     ],
+     "attemptToConvertTypes": false,
+     "convertFieldsToString": true
+    },
+    "options": {}
+   },
+   "type": "n8n-nodes-base.dataTable",
+   "typeVersion": 1,
+   "position": [
+    3872,
+    1184
+   ],
+   "id": "212858ea-54c8-492b-9cea-8d9ee9ba7e52",
+   "name": "Буфер: в работу"
+  },
+  {
+   "parameters": {
+    "operation": "update",
+    "dataTableId": {
+     "__rl": true,
+     "value": "photo_buffer",
+     "mode": "name"
+    },
+    "matchType": "allConditions",
+    "filters": {
+     "conditions": [
+      {
+       "keyName": "row_key",
+       "keyValue": "={{ $json.row_key }}"
+      }
+     ]
+    },
+    "columns": {
+     "mappingMode": "defineBelow",
+     "value": {
+      "status": "pending",
+      "claimed_by": "-"
+     },
+     "matchingColumns": [],
+     "schema": [
+      {
+       "id": "row_key",
+       "displayName": "row_key",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "agent_id",
+       "displayName": "agent_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "chat_id",
+       "displayName": "chat_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "message_id",
+       "displayName": "message_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "number",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "media_group_id",
+       "displayName": "media_group_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "file_id",
+       "displayName": "file_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "status",
+       "displayName": "status",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "claimed_by",
+       "displayName": "claimed_by",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "report_id",
+       "displayName": "report_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      }
+     ],
+     "attemptToConvertTypes": false,
+     "convertFieldsToString": true
+    },
+    "options": {}
+   },
+   "type": "n8n-nodes-base.dataTable",
+   "typeVersion": 1,
+   "position": [
+    4368,
+    896
+   ],
+   "id": "b32b1f9e-0d06-4eb4-a9d8-4ccbf2f1570e",
+   "name": "Буфер: в pending"
+  },
+  {
+   "parameters": {
+    "operation": "update",
+    "dataTableId": {
+     "__rl": true,
+     "value": "photo_buffer",
+     "mode": "name"
+    },
+    "matchType": "allConditions",
+    "filters": {
+     "conditions": [
+      {
+       "keyName": "row_key",
+       "keyValue": "={{ $json.row_key }}"
+      }
+     ]
+    },
+    "columns": {
+     "mappingMode": "defineBelow",
+     "value": {
+      "status": "={{ $json.status }}",
+      "report_id": "={{ $json.report_id }}"
+     },
+     "matchingColumns": [],
+     "schema": [
+      {
+       "id": "row_key",
+       "displayName": "row_key",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "agent_id",
+       "displayName": "agent_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "chat_id",
+       "displayName": "chat_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "message_id",
+       "displayName": "message_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "number",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "media_group_id",
+       "displayName": "media_group_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "file_id",
+       "displayName": "file_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "status",
+       "displayName": "status",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      },
+      {
+       "id": "claimed_by",
+       "displayName": "claimed_by",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": true
+      },
+      {
+       "id": "report_id",
+       "displayName": "report_id",
+       "required": false,
+       "defaultMatch": false,
+       "display": true,
+       "type": "string",
+       "readOnly": false,
+       "removed": false
+      }
+     ],
+     "attemptToConvertTypes": false,
+     "convertFieldsToString": true
+    },
+    "options": {}
+   },
+   "type": "n8n-nodes-base.dataTable",
+   "typeVersion": 1,
+   "position": [
+    4864,
+    1504
+   ],
+   "id": "dda4adcd-206e-4609-a3d9-96d13c6bf041",
+   "name": "Буфер: отметить"
+  },
+  {
+   "parameters": {
+    "operation": "get",
+    "dataTableId": {
+     "__rl": true,
+     "value": "photo_buffer",
+     "mode": "name"
+    },
+    "matchType": "allConditions",
+    "filters": {
+     "conditions": [
+      {
+       "keyName": "agent_id",
+       "keyValue": "={{ $('Проверка совпадения с базой').item.json.agent_id }}"
+      },
+      {
+       "keyName": "status",
+       "keyValue": "pending"
+      }
+     ]
+    },
+    "returnAll": true
+   },
+   "type": "n8n-nodes-base.dataTable",
+   "typeVersion": 1,
+   "position": [
+    2832,
+    1520
+   ],
+   "id": "bf93061c-3013-418c-a920-4b63e235980e",
+   "name": "Буфер: pending агента",
+   "alwaysOutputData": true
+  },
+  {
+   "parameters": {
+    "jsCode": "const rows = $input.all().map(i => i.json).filter(r => r && r.row_key);\nreturn [{ json: { count: rows.length, rows } }];"
+   },
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    3392,
+    1248
+   ],
+   "id": "39709102-c251-4cd3-902b-68b17adbaaf1",
+   "name": "Отложенные: пачка"
+  },
+  {
+   "parameters": {
+    "content": "## Sheets → Data Tables (24.08)\nЛог текста → `wf_logs`; approve/reject читает и правит строки отчёта в `report_rows` (в Google Sheets строк ещё нет — они уезжают раз в день воркфлоу «Sheets Sync» в 21:00, уже с финальным статусом).\nAdmins и «Регистрация Telegram ID» остались в Sheets: Admins за кэшем, регистрация — редкая.",
+    "height": 240,
+    "width": 360,
+    "color": 4
+   },
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    888,
+    -72
+   ],
+   "id": "sticky-sheets-cold-main",
+   "name": "Sticky Note Sheets Cold"
+  }
+ ],
+ "connections": {
+  "Входящее сообщение": {
+   "main": [
+    [
+     {
+      "node": "Выделяю переменные пользователя",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Проверка совпадения с базой": {
+   "main": [
+    [
+     {
+      "node": "Результат проверки",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Выделяю переменные пользователя": {
+   "main": [
+    [
+     {
+      "node": "Быстрый ответ?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Просьба отправить фото": {
+   "main": [
+    [
+     {
+      "node": "Создание лога о работе воркфлоу (Обработка текста)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Создание лога о работе воркфлоу (Обработка текста)": {
+   "main": [
+    [],
+    [
+     {
+      "node": "Сообщение об ошибке логирования (Обработка текста)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Проверка сессии магазина": {
+   "main": [
+    [
+     {
+      "node": "Магазин выбран?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Магазин выбран?": {
+   "main": [
+    [
+     {
+      "node": "Фото обрабатывается1",
+      "type": "main",
+      "index": 0
+     },
+     {
+      "node": "Сбор очереди",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Отложить фото",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Создание кнопок магазинов": {
+   "main": [
+    [
+     {
+      "node": "Отправка запроса магазина",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Создание запроса телефона": {
+   "main": [
+    [
+     {
+      "node": "Отправка запроса телефона",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Результат проверки": {
+   "main": [
+    [
+     {
+      "node": "Вариант сообщения",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Регистрация Telegram ID",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Создание запроса телефона",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Не авторизованный пользователь",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Вариант сообщения": {
+   "main": [
+    [
+     {
+      "node": "Просьба отправить фото",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Буфер: фото",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Маршрут: выбранная точка",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Неизвестный запрос",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Регистрация Telegram ID": {
+   "main": [
+    [
+     {
+      "node": "Регистрация прошла успешно",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Обработка фото": {
+   "main": [
+    [
+     {
+      "node": "Карточка результата",
+      "type": "main",
+      "index": 0
+     },
+     {
+      "node": "Сводка",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Карточка результата",
+      "type": "main",
+      "index": 0
+     },
+     {
+      "node": "Сводка",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Тип callback": {
+   "main": [
+    [
+     {
+      "node": "Страница: параметры",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Ответ: утверждено",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Ответ: переснимите",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Ответ на пустоту",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Клавиатура страницы": {
+   "main": [
+    [
+     {
+      "node": "Обновление клавиатуры",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Обновление клавиатуры": {
+   "main": [
+    [
+     {
+      "node": "Ответ на обновление клавиатуры",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Клавиатура страницы1": {
+   "main": [
+    [
+     {
+      "node": "Обновление клавиатуры1",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Обновление клавиатуры1": {
+   "main": [
+    [
+     {
+      "node": "Ответ на обновление клавиатуры1",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Магазин найден?": {
+   "main": [
+    [
+     {
+      "node": "Сессия: сохранить магазин",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Перерисовка: параметры",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Альбом?": {
+   "main": [
+    [
+     {
+      "node": "Ожидание альбома",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Сессия: чтение",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Ожидание альбома": {
+   "main": [
+    [
+     {
+      "node": "Буфер: захват",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Сбор очереди": {
+   "main": [
+    [
+     {
+      "node": "Буфер: в работу",
+      "type": "main",
+      "index": 0
+     },
+     {
+      "node": "Обработка фото",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Отложить фото": {
+   "main": [
+    [
+     {
+      "node": "Буфер: в pending",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Сводка": {
+   "main": [
+    [
+     {
+      "node": "Разметка строк",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Разметка строк": {
+   "main": [
+    [
+     {
+      "node": "Буфер: отметить",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Есть отложенные?": {
+   "main": [
+    [
+     {
+      "node": "Отложенные: пачка",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Просьба прислать фото",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Сбор очереди (pending)": {
+   "main": [
+    [
+     {
+      "node": "Буфер: в работу",
+      "type": "main",
+      "index": 0
+     },
+     {
+      "node": "Обработка фото",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Ответить на callback": {
+   "main": [
+    [
+     {
+      "node": "Буфер: pending агента",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Обработка выбора магазина": {
+   "main": [
+    [
+     {
+      "node": "Магазин найден?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Карточка результата": {
+   "main": [
+    [
+     {
+      "node": "Кнопки?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Кнопки?": {
+   "main": [
+    [
+     {
+      "node": "Отправка карточки",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Отправка результата",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Быстрый ответ?": {
+   "main": [
+    [
+     {
+      "node": "Тип callback",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Кэш Admins",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Ответ: утверждено": {
+   "main": [
+    [
+     {
+      "node": "Карточка → утверждено",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Карточка → утверждено": {
+   "main": [
+    [
+     {
+      "node": "Следующая фотография",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Строки отчёта: approve": {
+   "main": [
+    [
+     {
+      "node": "Пометить утверждено",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Ответ: переснимите": {
+   "main": [
+    [
+     {
+      "node": "Карточка → отклонено",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Карточка → отклонено": {
+   "main": [
+    [
+     {
+      "node": "Строки отчёта: reject",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Строки отчёта: reject": {
+   "main": [
+    [
+     {
+      "node": "Пометить отклонено",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Следующая фотография": {
+   "main": [
+    [
+     {
+      "node": "Строки отчёта: approve",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Кэш Admins": {
+   "main": [
+    [
+     {
+      "node": "Кэш свежий?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Кэш свежий?": {
+   "main": [
+    [
+     {
+      "node": "Проверка совпадения с базой",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Список авторизованных пользователей",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Список авторизованных пользователей": {
+   "main": [
+    [
+     {
+      "node": "Кэш Admins: сохранить",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Кэш Admins: сохранить": {
+   "main": [
+    [
+     {
+      "node": "Проверка совпадения с базой",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Сессия: чтение": {
+   "main": [
+    [
+     {
+      "node": "Проверка сессии магазина",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Сессия: сохранить магазин": {
+   "main": [
+    [
+     {
+      "node": "Ответить на callback",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Точки: параметры": {
+   "main": [
+    [
+     {
+      "node": "Маршрут: точки",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Маршрут: точки": {
+   "main": [
+    [
+     {
+      "node": "Создание кнопок магазинов",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Страница: параметры": {
+   "main": [
+    [
+     {
+      "node": "Маршрут: точки (страница)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Маршрут: точки (страница)": {
+   "main": [
+    [
+     {
+      "node": "Клавиатура страницы",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Маршрут: выбранная точка": {
+   "main": [
+    [
+     {
+      "node": "Обработка выбора магазина",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Перерисовка: параметры": {
+   "main": [
+    [
+     {
+      "node": "Маршрут: точки (перерисовка)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Маршрут: точки (перерисовка)": {
+   "main": [
+    [
+     {
+      "node": "Клавиатура страницы1",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Буфер: фото": {
+   "main": [
+    [
+     {
+      "node": "Альбом?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Буфер: захват": {
+   "main": [
+    [
+     {
+      "node": "Буфер: группа",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Буфер: группа": {
+   "main": [
+    [
+     {
+      "node": "Моя пачка",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Моя пачка": {
+   "main": [
+    [
+     {
+      "node": "Сессия: чтение",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Буфер: в pending": {
+   "main": [
+    [
+     {
+      "node": "Точки: параметры",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Буфер: pending агента": {
+   "main": [
+    [
+     {
+      "node": "Есть отложенные?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Отложенные: пачка": {
+   "main": [
+    [
+     {
+      "node": "Удаление клавиатуры магазина",
+      "type": "main",
+      "index": 0
+     },
+     {
+      "node": "Фото обрабатывается",
+      "type": "main",
+      "index": 0
+     },
+     {
+      "node": "Сбор очереди (pending)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "active": true,
+ "settings": {
+  "executionOrder": "v1",
+  "binaryMode": "separate",
+  "availableInMCP": true
+ },
+ "nodeGroups": [],
+ "tags": []
+}

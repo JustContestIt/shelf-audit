@@ -1,0 +1,95 @@
+# docker compose up -d            -> postgres + api + frontend + mcp
+# LLM_MODE=replay PASS2_REFS=all docker compose up -d   -> the same, answering from recorded runs (demo, no key)
+# docker compose --profile setup run --rm index    -> build catalog.jsonl + vectors into pgvector (once, after `make data`)
+# docker compose --profile bot up -d bot            -> Telegram bot (needs TELEGRAM_BOT_TOKEN of a NEW test bot)
+# docker compose --profile jobs up -d jobs          -> daily export of approved rows (21:00 Asia/Almaty)
+name: shelf-audit
+
+x-api-env: &api-env
+  DATABASE_URL: postgresql://shelf:${POSTGRES_PASSWORD:-shelf}@postgres:5432/shelf
+  GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+  OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
+  OPENROUTER_MODEL: ${OPENROUTER_MODEL:-}
+  LLM_MODE: ${LLM_MODE:-live}
+  PROMPT_DETECT: ${PROMPT_DETECT:-detect_v7.5}
+  PROMPT_VERIFY: ${PROMPT_VERIFY:-verify_v9}
+  PASS2_MODE: ${PASS2_MODE:-gate}
+  PASS2_REFS: ${PASS2_REFS:-topk}
+  LANGSMITH_TRACING: ${LANGSMITH_TRACING:-false}
+  LANGSMITH_API_KEY: ${LANGSMITH_API_KEY:-}
+  LANGSMITH_PROJECT: ${LANGSMITH_PROJECT:-shelf-audit}
+  API_TOKEN: ${API_TOKEN:-}
+  CORS_ORIGINS: '["http://localhost:8080","http://localhost:5173"]'
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: shelf
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-shelf}
+      POSTGRES_DB: shelf
+    volumes: [pgdata:/var/lib/postgresql/data]
+    ports: ["5432:5432"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U shelf -d shelf"]
+      interval: 5s
+      retries: 20
+
+  api:
+    build: {context: ., dockerfile: backend/Dockerfile}
+    environment: *api-env
+    volumes:
+      - ./data:/app/data
+      - ./evals/results:/app/evals/results
+      - ./evals/cache:/app/evals/cache   # recorded answers: LLM_MODE=replay (demo without a key) / record
+    ports: ["8000:8000"]
+    depends_on:
+      postgres: {condition: service_healthy}
+
+  frontend:
+    build: ./frontend
+    ports: ["8080:80"]
+    depends_on: [api]
+
+  mcp:
+    build: ./mcp_server
+    environment:
+      API_BASE_URL: http://api:8000
+      API_TOKEN: ${API_TOKEN:-}
+      CABINET_URL: http://localhost:8080
+    ports: ["8765:8765"]
+    depends_on: [api]
+
+  index:
+    profiles: [setup]
+    build: {context: ., dockerfile: backend/Dockerfile}
+    environment: *api-env
+    volumes: [./data:/app/data]
+    command: ["sh", "-c", "python -m app.rag.ingest && python -m app.rag.build_index"]
+    depends_on:
+      postgres: {condition: service_healthy}
+
+  bot:
+    profiles: [bot]
+    build: ./bot
+    environment:
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN:-}  # the bot exits with a clear message if empty
+      API_BASE_URL: http://api:8000
+      API_TOKEN: ${API_TOKEN:-}
+    depends_on: [api]
+    restart: unless-stopped
+
+  jobs:
+    profiles: [jobs]
+    build: {context: ., dockerfile: backend/Dockerfile}
+    environment:
+      <<: *api-env
+      SHEETS_SPREADSHEET_ID: ${SHEETS_SPREADSHEET_ID:-}
+    volumes: [./data:/app/data]
+    command: ["python", "-m", "app.jobs.sheets_export", "--daily", "21:00"]
+    depends_on:
+      postgres: {condition: service_healthy}
+    restart: unless-stopped
+
+volumes:
+  pgdata:

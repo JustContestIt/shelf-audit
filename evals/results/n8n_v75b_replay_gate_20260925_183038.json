@@ -1,0 +1,246 @@
+{
+ "name": "n8n_v75b_replay_gate",
+ "description": "Same recorded answers, new merge rule: pass-2 names are applied only to uncertain groups (AI TEA with a pink-zone name or no name), healthy names from pass 1 stay. The pass-2 request is byte-identical to n8n (46 refs, full plan), so the recorded answer is valid; only the merge differs.",
+ "created_at": "2026-09-25T13:30:38+00:00",
+ "mode": "replay",
+ "config": {
+  "settings": {
+   "pass2_mode": "gate",
+   "pass2_refs": "all",
+   "temperature": 0,
+   "media_resolution": "MEDIA_RESOLUTION_ULTRA_HIGH",
+   "prompt_detect": "detect_v7.5",
+   "prompt_verify": "verify_v9",
+   "foreign_check": false
+  },
+  "frames": [
+   "IMG_0644",
+   "IMG_0643"
+  ],
+  "variants": [
+   "orig"
+  ],
+  "repeats": "replay_salts",
+  "prompt": "v7.5-bgcolor-noreven",
+  "verify_prompt": "v9-bgcolor-noreven",
+  "models": [
+   "gemini-3.5-flash",
+   "gemini-3-flash-preview"
+  ]
+ },
+ "summary": {
+  "count_exact_shelf_rate": 0.7778,
+  "count_mae": 0.2222,
+  "subtype_acc": 0.9487,
+  "subtype_acc_pink": 0.903,
+  "contamination": 0,
+  "pack_acc": 1.0,
+  "stability_sigma_subtype_err": 1.32,
+  "cost_usd_per_photo": 0.1423,
+  "latency_p50_s": null,
+  "latency_p95_s": null,
+  "n_runs": 6,
+  "n_failed": 0,
+  "n_frames": 2,
+  "n_shelves": 27,
+  "n_units": 357
+ },
+ "slices": {
+  "tier:gold": {
+   "count_exact_shelf_rate": 0.7778,
+   "subtype_acc": 0.9487,
+   "subtype_acc_pink": 0.903,
+   "contamination": 0,
+   "pack_acc": 1.0,
+   "n_runs": 6
+  },
+  "variant:orig": {
+   "count_exact_shelf_rate": 0.7778,
+   "subtype_acc": 0.9487,
+   "subtype_acc_pink": 0.903,
+   "contamination": 0,
+   "pack_acc": 1.0,
+   "n_runs": 6
+  },
+  "tag:foreign_nearby": {
+   "shelves": 6,
+   "count_exact_shelf_rate": 1.0,
+   "subtype_errors_per_shelf": 0.0
+  },
+  "tag:pink_zone": {
+   "shelves": 21,
+   "count_exact_shelf_rate": 0.7143,
+   "subtype_errors_per_shelf": 0.8571
+  },
+  "tag:mixed_packs": {
+   "shelves": 3,
+   "count_exact_shelf_rate": 0.0,
+   "subtype_errors_per_shelf": 0.6667
+  }
+ },
+ "per_frame": [
+  {
+   "frame_id": "IMG_0644",
+   "variant": "orig",
+   "repeat": "bench_test_bgcolor_compotai_img2_run_01",
+   "tier": "gold",
+   "status": "awaiting_review",
+   "shelves": 5,
+   "units_gt": 53,
+   "units_pred": 53,
+   "count_exact_shelves": 5,
+   "subtype_errors": 7,
+   "contamination": 0,
+   "pack_errors": 0,
+   "cost_usd": 0.14838,
+   "latency_s": null,
+   "pass2": {
+    "version": "v9-bgcolor-noreven",
+    "subtypes_changed": 9,
+    "needs_review": 0
+   },
+   "errors": [
+    "П3.9: клубника-киви → гуава-тропики",
+    "П3.10: клубника-киви → гуава-тропики",
+    "П3.11: клубника-киви → гуава-тропики",
+    "П4.9: клубника-киви → гуава-тропики",
+    "П4.10: клубника-киви → гуава-тропики",
+    "П5.9: клубника-киви → гуава-тропики",
+    "П5.10: клубника-киви → гуава-тропики"
+   ]
+  },
+  {
+   "frame_id": "IMG_0644",
+   "variant": "orig",
+   "repeat": "bench_test_bgcolor_compotai_img2_run_02",
+   "tier": "gold",
+   "status": "awaiting_review",
+   "shelves": 5,
+   "units_gt": 53,
+   "units_pred": 52,
+   "count_exact_shelves": 4,
+   "subtype_errors": 6,
+   "contamination": 0,
+   "pack_errors": 0,
+   "cost_usd": 0.15261,
+   "latency_s": null,
+   "pass2": {
+    "version": "v9-bgcolor-noreven",
+    "subtypes_changed": 4,
+    "needs_review": 0
+   },
+   "errors": [
+    "П3.9: клубника-киви → помело-цветок апельсина",
+    "П3.10: клубника-киви → помело-цветок апельсина",
+    "П3.11: клубника-киви → помело-цветок апельсина",
+    "П4.9: клубника-киви → манго-маракуйя",
+    "П4: потеряно единиц 1",
+    "П5.9: клубника-киви → манго-маракуйя",
+    "П5.10: клубника-киви → манго-маракуйя"
+   ]
+  },
+  {
+   "frame_id": "IMG_0644",
+   "variant": "orig",
+   "repeat": "bench_test_bgcolor_compotai_img2_run_03",
+   "tier": "gold",
+   "status": "awaiting_review",
+   "shelves": 5,
+   "units_gt": 53,
+   "units_pred": 51,
+   "count_exact_shelves": 3,
+   "subtype_errors": 3,
+   "contamination": 0,
+   "pack_errors": 0,
+   "cost_usd": 0.08048,
+   "latency_s": null,
+   "pass2": {
+    "version": "v9-bgcolor-noreven",
+    "subtypes_changed": 2,
+    "needs_review": 0
+   },
+   "errors": [
+    "П3.9: клубника-киви → помело-цветок апельсина",
+    "П3.10: клубника-киви → помело-цветок апельсина",
+    "П3: потеряно единиц 1",
+    "П5.5: помело-цветок апельсина → лимон-лайм-жасмин",
+    "П5: потеряно единиц 1"
+   ]
+  },
+  {
+   "frame_id": "IMG_0643",
+   "variant": "orig",
+   "repeat": "bench_test_bgcolor_compotai_img1_run_01",
+   "tier": "gold",
+   "status": "awaiting_review",
+   "shelves": 4,
+   "units_gt": 66,
+   "units_pred": 65,
+   "count_exact_shelves": 3,
+   "subtype_errors": 0,
+   "contamination": 0,
+   "pack_errors": 0,
+   "cost_usd": 0.22462,
+   "latency_s": null,
+   "pass2": {
+    "version": "v9-bgcolor-noreven",
+    "subtypes_changed": 0,
+    "needs_review": 0
+   },
+   "errors": [
+    "П2: потеряно единиц 1"
+   ]
+  },
+  {
+   "frame_id": "IMG_0643",
+   "variant": "orig",
+   "repeat": "bench_test_bgcolor_compotai_img1_run_02",
+   "tier": "gold",
+   "status": "awaiting_review",
+   "shelves": 4,
+   "units_gt": 66,
+   "units_pred": 65,
+   "count_exact_shelves": 3,
+   "subtype_errors": 2,
+   "contamination": 0,
+   "pack_errors": 0,
+   "cost_usd": 0.08876,
+   "latency_s": null,
+   "pass2": {
+    "version": "v9-bgcolor-noreven",
+    "subtypes_changed": 0,
+    "needs_review": 0
+   },
+   "errors": [
+    "П2.15: К. ягодный → К. сливовый",
+    "П2.17: К. гранатовый → К. вишневый",
+    "П2: потеряно единиц 1"
+   ]
+  },
+  {
+   "frame_id": "IMG_0643",
+   "variant": "orig",
+   "repeat": "bench_test_bgcolor_compotai_img1_run_03",
+   "tier": "gold",
+   "status": "awaiting_review",
+   "shelves": 4,
+   "units_gt": 66,
+   "units_pred": 65,
+   "count_exact_shelves": 3,
+   "subtype_errors": 0,
+   "contamination": 0,
+   "pack_errors": 0,
+   "cost_usd": 0.15901,
+   "latency_s": null,
+   "pass2": {
+    "version": "v9-bgcolor-noreven",
+    "subtypes_changed": 0,
+    "needs_review": 0
+   },
+   "errors": [
+    "П2: потеряно единиц 1"
+   ]
+  }
+ ],
+ "notes": ""
+}

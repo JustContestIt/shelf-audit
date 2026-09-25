@@ -1,0 +1,260 @@
+{
+ "frame_id": "IMG_0645",
+ "aliases": [],
+ "tier": "silver",
+ "file": "frames/examples/IMG_0645.JPG",
+ "size": [
+  3024,
+  4032
+ ],
+ "variants": [
+  "orig",
+  "tg1280"
+ ],
+ "source": "labels by zooms 25.09.2026 (Claude), to be confirmed by Nikita",
+ "notes": "Буратино stand, competitors (Tassay, Zigi-Zagi, Holiday, Alasu, Fanta) are clearly different products and are not part of the GT (the prompt does not box them). Shelf 1: the leftmost bottle is turned sideways (unsure). Shelf 5 (multipacks) is ignored.",
+ "ignore_shelves": [
+  5
+ ],
+ "shelves": [
+  {
+   "shelf_index": 1,
+   "units": [
+    {
+     "brand": "Буратино",
+     "subtype": "Буратино классический",
+     "format": null,
+     "unsure": true
+    },
+    {
+     "brand": "Буратино",
+     "subtype": "Буратино классический",
+     "format": null
+    },
+    {
+     "brand": "Буратино",
+     "subtype": "Буратино классический",
+     "format": null
+    },
+    {
+     "brand": "Буратино",
+     "subtype": "Буратино классический",
+     "format": null
+    },
+    {
+     "brand": "Буратино",
+     "subtype": "Буратино классический",
+     "format": null
+    },
+    {
+     "brand": "Буратино",
+     "subtype": "Буратино классический",
+     "format": null
+    },
+    {
+     "brand": "Буратино",
+     "subtype": "Буратино классический",
+     "format": null
+    },
+    {
+     "brand": "Буратино",
+     "subtype": "Буратино классический",
+     "format": null
+    },
+    {
+     "brand": "Буратино",
+     "subtype": "Буратино классический",
+     "format": null
+    },
+    {
+     "brand": "Буратино",
+     "subtype": "Буратино классический",
+     "format": null
+    },
+    {
+     "brand": "Буратино",
+     "subtype": "Буратино классический",
+     "format": null
+    },
+    {
+     "brand": "Буратино",
+     "subtype": "Буратино классический",
+     "format": null
+    },
+    {
+     "brand": "Буратино",
+     "subtype": "Буратино классический",
+     "format": null
+    }
+   ],
+   "tags": [
+    "unsure_labels"
+   ],
+   "units_gt": 13
+  },
+  {
+   "shelf_index": 2,
+   "units": [
+    {
+     "brand": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 1 л"
+    },
+    {
+     "brand": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 1 л"
+    },
+    {
+     "brand": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 1 л"
+    },
+    {
+     "brand": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 1 л"
+    },
+    {
+     "brand": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 1 л"
+    },
+    {
+     "brand": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 1 л"
+    },
+    {
+     "brand": "Буратино",
+     "subtype": "Буратино дыня-мята",
+     "format": "ПЭТ 1 л"
+    },
+    {
+     "brand": "Буратино",
+     "subtype": "Буратино дыня-мята",
+     "format": "ПЭТ 1 л"
+    },
+    {
+     "brand": "Буратино",
+     "subtype": "Буратино дыня-мята",
+     "format": "ПЭТ 1 л"
+    },
+    {
+     "brand": "Буратино",
+     "subtype": "Буратино дыня-мята",
+     "format": "ПЭТ 1 л"
+    }
+   ],
+   "tags": [
+    "pack_geo"
+   ],
+   "units_gt": 10
+  },
+  {
+   "shelf_index": 3,
+   "units": [
+    {
+     "brand": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 1,5 л"
+    },
+    {
+     "brand": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 1,5 л"
+    },
+    {
+     "brand": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 1,5 л"
+    },
+    {
+     "brand": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 1,5 л"
+    },
+    {
+     "brand": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 1,5 л"
+    },
+    {
+     "brand": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 1,5 л"
+    },
+    {
+     "brand": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 1,5 л"
+    },
+    {
+     "brand": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 1,5 л"
+    },
+    {
+     "brand": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 1,5 л"
+    }
+   ],
+   "tags": [
+    "pack_geo"
+   ],
+   "units_gt": 9
+  },
+  {
+   "shelf_index": 4,
+   "units": [
+    {
+     "brand": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 2 л"
+    },
+    {
+     "brand": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 2 л"
+    },
+    {
+     "brand": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 2 л"
+    },
+    {
+     "brand": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 2 л"
+    },
+    {
+     "brand": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 2 л"
+    },
+    {
+     "brand": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 2 л"
+    },
+    {
+     "brand": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 2 л"
+    },
+    {
+     "brand": "Буратино",
+     "subtype": "Буратино классический",
+     "format": "ПЭТ 2 л"
+    }
+   ],
+   "tags": [
+    "pack_geo"
+   ],
+   "units_gt": 8
+  }
+ ],
+ "units_gt": 40,
+ "foreign_gt": 0
+}

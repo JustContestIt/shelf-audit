@@ -1,0 +1,16 @@
+name: smoke_replay
+description: 'CI smoke: two recorded n8n answers through the whole graph (needs data/frames).'
+mode: replay
+settings:
+  pass2_mode: always
+  pass2_refs: all
+  temperature: 0
+  media_resolution: MEDIA_RESOLUTION_ULTRA_HIGH
+  prompt_detect: detect_v7.5
+  prompt_verify: verify_v9
+  foreign_check: false
+replay_salts:
+  IMG_0644:
+  - bench_test_bgcolor_img1_run_01
+  IMG_0643:
+  - bench_test_bgcolor_img2_run_01

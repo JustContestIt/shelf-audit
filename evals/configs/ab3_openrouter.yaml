@@ -1,0 +1,19 @@
+name: ab3_openrouter
+description: 'A/B-3: pass 1 through OpenRouter (set OPENROUTER_MODEL, e.g. openai/gpt-5.6; the GPT harness of 04.08
+  on IMG_0643 is the prior).'
+mode: record
+settings:
+  prompt_detect: detect_v7.5
+  prompt_verify: verify_v9
+  pass2_mode: gate
+  pass2_refs: topk
+  rag_top_k: 3
+  temperature: 0
+  detect_models: []
+  verify_models: []
+frames:
+- IMG_0643
+- IMG_0644
+variants:
+- orig
+repeats: 3
